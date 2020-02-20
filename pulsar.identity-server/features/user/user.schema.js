@@ -9,6 +9,11 @@ const userAccountSchema = new Schema({
         require: true,
         unique: true
     },
+    login: {
+        type: String,
+        required: true,
+        unique: true
+    },
     password: {
         type: String,
         required: true,
@@ -18,6 +23,9 @@ const userAccountSchema = new Schema({
         type: String,
         required: true,
         unique: true
+    },
+    IsConfirmed: {
+        type: Boolean
     }
 });
 

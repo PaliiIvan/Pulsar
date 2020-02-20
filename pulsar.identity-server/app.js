@@ -3,13 +3,15 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const authRoutes = require('./routes/auth.routes');
-const UserRepo = require('./entities/user/user.repository');
+const { errorHandling } = require('./middleware/application-error.middleware');
 
 const app = express();
 
 app.use(bodyParser.json());
 
 app.use(authRoutes);
+app.use(errorHandling);
+
 
 mongoose.connect('mongodb://127.0.0.1:27017/Pulsar',
     {

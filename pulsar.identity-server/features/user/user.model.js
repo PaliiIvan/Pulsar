@@ -6,13 +6,14 @@ class UserAccount {
      * @param {String} password 
      * @param {String} token 
      */
-    constructor(email, password, emailToken)
+    constructor(email, login, password, emailToken)
     {
         this.email = email;
+        this.login = login
         this.password = password;
-        this.emailToken = token;
+        this.emailToken = emailToken;
         this.IsConfirmed = false;
     }
 }
 
-module.exports = User;
+module.exports = UserAccount;

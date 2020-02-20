@@ -1,10 +1,15 @@
 const router = require('express').Router();
 
 const authController = require('../controllers/auth.controller');
+const { SignUpValidation, LoginValidation } = require('../features/user/user.validation');
 
-router.post('/signin',authController.SignIn);
 
-router.post('/login', authController.LogIn);
+
+router.post('/signup', SignUpValidation, authController.SignUp);
+
+router.get('/complete-auth' ,authController.CompleteAuth)
+
+router.post('/login', LoginValidation, authController.LogIn);
 
 router.get('/logout', authController.LogOut);
 
