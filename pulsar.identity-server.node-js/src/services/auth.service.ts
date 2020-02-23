@@ -1,12 +1,12 @@
 import { hash } from "bcrypt";
 import uuid from "uuid/v1";
-import * as sendGrid from "@sendgrid/mail";
+import sendGrid from "@sendgrid/mail";
 import { readFileSync } from "fs";
 
 import { SaveUser, RemoveUser, GetUserById, UpdateUser } from "../features/user/user.repository";
 import { formatString } from "../extensions/string.extensions";
 
-sendGrid.setApiKey("send_grid");
+sendGrid.setApiKey(process.env["SENDGRID_KEY"]);
 
 
 export async function SignUp(email: string, login: string, password: string) {
@@ -85,8 +85,8 @@ export function generateEmail(userId: string, userEmail: string, login: string, 
 
     const path = __dirname;
     let emailTemplate = readFileSync("resources/mail/confirmation-email.html", {encoding: "utf8"});
-    
-    const confirmationEmailLink =  formatString("confirmationEmailLink", [userId, emailToken]);
+
+    const confirmationEmailLink =  formatString(process.env["CONFIRMATION_EMAIL_LINK"], [userId, emailToken]);
 
     emailTemplate = formatString(emailTemplate, [login, confirmationEmailLink]);
 

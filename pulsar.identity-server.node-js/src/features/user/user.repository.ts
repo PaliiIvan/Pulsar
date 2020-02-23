@@ -7,16 +7,16 @@ import { Types } from "mongoose";
  * @param {any} id
  * @returns {UserAccaunt} user
  */
-export async function GetUserById(id: string | Types.ObjectId) {
+export async function GetUserById(id: string | Types.ObjectId): Promise<UserAccount> {
     const user = await userAccountSchema.findById(id);
-    return user.toObject();
+    return user;
 }
 
 /**
  * @param {UserAccaunt} user
  * @returns {UserAccaunt} createdUser
  */
-export async function SaveUser(user: UserAccount) {
+export async function SaveUser(user: UserAccount): Promise<UserAccount> {
     const result = await userAccountSchema.create(user);
     return result.toObject();
 }
@@ -24,7 +24,7 @@ export async function SaveUser(user: UserAccount) {
 /**
  * @param {UserAccaunt} user
  */
-export async function UpdateUser(user: UserAccount) {
+export async function UpdateUser(user: UserAccount): Promise<UserAccount> {
     const updateResult = await userAccountSchema.findByIdAndUpdate(user._id, user);
     return updateResult.toObject();
 }
@@ -41,7 +41,7 @@ export async function RemoveUser(id: string) {
  * 
  * @param {any} query Query for seartching
  */
-export async function FindOne(query: any) {
+export async function FindOne(query: any): Promise<UserAccount> {
     const user = await userAccountSchema.findOne(query);
     return user.toObject();
 }

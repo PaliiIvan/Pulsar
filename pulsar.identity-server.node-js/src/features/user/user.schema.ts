@@ -1,9 +1,12 @@
-import { Schema as _Schema, model } from "mongoose";
+import { Schema as _Schema, model, Types, Document } from "mongoose";
+import UserAccount from "./user.model";
 const Schema = _Schema;
 
-import UserAccount from "./user.model";
+interface UserAccountsSchemaModel extends Document, UserAccount {
+   
+}
 
-const userAccountSchemaDef = new Schema<UserAccount>({
+const userAccountSchemaDef = new Schema({
     email: {
         type: String,
         require: true,
@@ -29,5 +32,5 @@ const userAccountSchemaDef = new Schema<UserAccount>({
     }
 });
 
-export const userAccountSchema = model("UserAccounts", userAccountSchemaDef);
+export const userAccountSchema = model<UserAccountsSchemaModel>("UserAccounts", userAccountSchemaDef);
 

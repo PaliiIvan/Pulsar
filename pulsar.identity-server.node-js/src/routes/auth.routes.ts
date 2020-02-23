@@ -16,4 +16,4 @@ router.get("/logout", LogOut);
 router.get("/check-token", CheckToken);
 
 
-export const Router = router;
+export const AuthRouters = router;

@@ -5,7 +5,7 @@ import { getErrors } from "../util/error.formater";
 import { NextFunction } from "express";
 
 
-export async function SignUp (req: Request, res: Response, next: NextFunction) {
+export async function SignUp (req: any, res: any, next: any) {
     const email = req.body.email;
     const login = req.body.login;
     const password = req.body.password;
