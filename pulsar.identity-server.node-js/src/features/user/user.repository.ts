@@ -18,14 +18,14 @@ export async function GetUserById(id: string | Types.ObjectId): Promise<UserAcco
  */
 export async function SaveUser(user: UserAccount): Promise<UserAccount> {
     const result = await userAccountSchema.create(user);
-    return result?.toObject({getters: true});
+    return result?.toObject();
 }
 
 /**
  * @param {UserAccaunt} user
  */
 export async function UpdateUser(user: UserAccount): Promise<UserAccount> {
-    const updateResult = await userAccountSchema.findByIdAndUpdate(user._id, user);
+    const updateResult = await userAccountSchema.findByIdAndUpdate(user.id, user);
     return updateResult?.toObject();
 }
 

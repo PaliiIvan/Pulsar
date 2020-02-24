@@ -30,7 +30,8 @@ const userAccountSchemaDef = new Schema({
     IsConfirmed: {
         type: Boolean
     }
-}, { id: true});
+});
+userAccountSchemaDef.set('toObject', { getters: true })
 
 export const userAccountSchema = model<UserAccountsSchemaModel>("UserAccounts", userAccountSchemaDef);
 
