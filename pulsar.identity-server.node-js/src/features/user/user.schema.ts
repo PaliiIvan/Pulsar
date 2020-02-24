@@ -1,9 +1,12 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import { Schema as _Schema, model, Types, Document } from "mongoose";
+import UserAccount from "./user.model";
+const Schema = _Schema;
 
-const UserAccount = require('./user.model');
+interface UserAccountsSchemaModel extends UserAccount, Document {
+   
+}
 
-const userAccountSchema = new Schema({
+const userAccountSchemaDef = new Schema({
     email: {
         type: String,
         require: true,
@@ -28,6 +31,7 @@ const userAccountSchema = new Schema({
         type: Boolean
     }
 });
+userAccountSchemaDef.set('toObject', { getters: true })
 
-module.exports = mongoose.model('UserAccounts', userAccountSchema);
+export const userAccountSchema = model<UserAccountsSchemaModel>("UserAccounts", userAccountSchemaDef);
 
