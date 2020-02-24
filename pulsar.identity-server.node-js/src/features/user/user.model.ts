@@ -1,7 +1,6 @@
-import { Types, Document } from "mongoose";
 
 interface UserAccount {
-    _id: any;
+    id?: any
     email: string;
     login: string;
     password: string;

@@ -2,7 +2,7 @@ import { Schema as _Schema, model, Types, Document } from "mongoose";
 import UserAccount from "./user.model";
 const Schema = _Schema;
 
-interface UserAccountsSchemaModel extends Document, UserAccount {
+interface UserAccountsSchemaModel extends UserAccount, Document {
    
 }
 
@@ -30,7 +30,7 @@ const userAccountSchemaDef = new Schema({
     IsConfirmed: {
         type: Boolean
     }
-});
+}, { id: true});
 
 export const userAccountSchema = model<UserAccountsSchemaModel>("UserAccounts", userAccountSchemaDef);
 

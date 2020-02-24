@@ -18,7 +18,7 @@ export async function GetUserById(id: string | Types.ObjectId): Promise<UserAcco
  */
 export async function SaveUser(user: UserAccount): Promise<UserAccount> {
     const result = await userAccountSchema.create(user);
-    return result.toObject();
+    return result?.toObject({getters: true});
 }
 
 /**
@@ -26,15 +26,15 @@ export async function SaveUser(user: UserAccount): Promise<UserAccount> {
  */
 export async function UpdateUser(user: UserAccount): Promise<UserAccount> {
     const updateResult = await userAccountSchema.findByIdAndUpdate(user._id, user);
-    return updateResult.toObject();
+    return updateResult?.toObject();
 }
 
 /**
  * @param {String} id User Id
  */
-export async function RemoveUser(id: string) {
+export async function RemoveUser(id?: string) {
     const removeResult = await userAccountSchema.remove(id);
-    return removeResult.ok;
+    return removeResult?.ok;
 }
 
 /**
@@ -43,7 +43,7 @@ export async function RemoveUser(id: string) {
  */
 export async function FindOne(query: any): Promise<UserAccount> {
     const user = await userAccountSchema.findOne(query);
-    return user.toObject();
+    return user?.toObject();
 }
 
 

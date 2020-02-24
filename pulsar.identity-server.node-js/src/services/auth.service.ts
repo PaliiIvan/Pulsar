@@ -2,12 +2,16 @@ import { hash } from "bcrypt";
 import uuid from "uuid/v1";
 import sendGrid from "@sendgrid/mail";
 import { readFileSync } from "fs";
+import { dirname } from "path";
 
-import { SaveUser, RemoveUser, GetUserById, UpdateUser } from "../features/user/user.repository";
+import * as userRepo from "../features/user/user.repository";
 import { formatString } from "../extensions/string.extensions";
+import { constants } from "../configs/global.variables";
+import { SEND_GRID } from "../util/secrets";
 
-sendGrid.setApiKey(process.env["SENDGRID_KEY"]);
 
+sendGrid.setApiKey(SEND_GRID);
+const rootFolder = dirname(require.main.filename);
 
 export async function SignUp(email: string, login: string, password: string) {
 
@@ -15,19 +19,19 @@ export async function SignUp(email: string, login: string, password: string) {
     const emailToken = uuid();
     let message;
     
-    const createdUser = await SaveUser({ _id: null, email, login, password: passwordHash, emailToken, IsConfirmed: false });
+    const createdUser = await userRepo.SaveUser({ email, login, password: passwordHash, emailToken, IsConfirmed: false });
 
-    const mailMessage = generateEmail(createdUser._id, createdUser.email, createdUser.login, createdUser.emailToken);
+    const mailMessage = generateEmail(createdUser.id, createdUser.email, createdUser.login, createdUser.emailToken);
 
     const result = await sendGrid.send(mailMessage);
     
-    if(result.every(x => x)) {
+    if(result[0].statusCode == 202) {
         message = {
             message: "Email Send Success",
             isSuccess: true
         };
     } else {
-        const removeResult = await RemoveUser(createdUser._id);
+        const removeResult = await userRepo.RemoveUser(createdUser.id);
         message = {
             message: "Email not Send",
             isSuccess: false
@@ -45,13 +49,12 @@ export async function SignUp(email: string, login: string, password: string) {
  */
 export async function CheckEmail(userId: string, emailToken: string) {
     
-    const user = await GetUserById(userId);
-    let updateResult;
+    const user = await userRepo.GetUserById(userId);
 
    if(user.emailToken === emailToken) {
        user.IsConfirmed = true;
        user.emailToken = null;
-       await UpdateUser(user);
+       await userRepo.UpdateUser(user);
 
        return {
         message: "Confirm Email Succes",
@@ -65,12 +68,27 @@ export async function CheckEmail(userId: string, emailToken: string) {
 }
 
 
-export function LogIn(email: string, password: string, repeatPassword: string) {
-    console.log();
-    
+export async function LogIn(email: string, password: string) {
+    const user = await userRepo.FindOne({email: email});
+    if(user == null) {
+        return {
+            message: "This Email does not exist",
+            isSuccess: false
+        }
+    }
+
+    var passwordHash = await hash(password, 10);
+    if(passwordHash !== user.password) {
+        return {
+            message: "Email or password is incorect",
+            isSuccess: false
+        }
+    }
+
+
 }
 
-export function LogOut(email: string, password: string, repeatPassword: string) {
+export function LogOut(email: string, password: string) {
     console.log();
 }
 
@@ -84,9 +102,9 @@ export function LogOut(email: string, password: string, repeatPassword: string) 
 export function generateEmail(userId: string, userEmail: string, login: string, emailToken: string) {
 
     const path = __dirname;
-    let emailTemplate = readFileSync("resources/mail/confirmation-email.html", {encoding: "utf8"});
+    let emailTemplate = readFileSync(`${rootFolder}/resources/mail/confirmation-email.html`, {encoding: "utf8"});
 
-    const confirmationEmailLink =  formatString(process.env["CONFIRMATION_EMAIL_LINK"], [userId, emailToken]);
+    const confirmationEmailLink =  formatString(constants.CONFIRMATION_EMAIL_LINK, [userId, emailToken]);
 
     emailTemplate = formatString(emailTemplate, [login, confirmationEmailLink]);
 
