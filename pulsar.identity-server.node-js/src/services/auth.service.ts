@@ -2,16 +2,16 @@ import { hash } from "bcrypt";
 import uuid from "uuid/v1";
 import sendGrid from "@sendgrid/mail";
 import { readFileSync } from "fs";
-import { dirname } from "path";
+import path, { join } from "path";
 
 import * as userRepo from "../features/user/user.repository";
 import { formatString } from "../extensions/string.extensions";
-import { constants } from "../configs/global.variables";
-import { SEND_GRID } from "../util/secrets";
+import { constants, files } from "../configs/global.variables";
+import { SEND_GRID, BASE_URL } from "../util/secrets";
 
 
 sendGrid.setApiKey(SEND_GRID);
-const rootFolder = dirname(require.main.filename);
+
 
 export async function SignUp(email: string, login: string, password: string) {
 
@@ -101,10 +101,12 @@ export function LogOut(email: string, password: string) {
  */
 export function generateEmail(userId: string, userEmail: string, login: string, emailToken: string) {
 
-    const path = __dirname;
-    let emailTemplate = readFileSync(`${rootFolder}/resources/mail/confirmation-email.html`, {encoding: "utf8"});
+    const rootFolder = path.dirname(require.main.filename);
+    const fileLocation = join(rootFolder, files.CONFIRMATION_EMAIL_TEMPLATE_FILE);
 
-    const confirmationEmailLink =  formatString(constants.CONFIRMATION_EMAIL_LINK, [userId, emailToken]);
+    let emailTemplate = readFileSync(fileLocation, {encoding: "utf8"});
+
+    const confirmationEmailLink =  formatString(constants.CONFIRMATION_EMAIL_LINK, [BASE_URL,userId, emailToken]);
 
     emailTemplate = formatString(emailTemplate, [login, confirmationEmailLink]);
 

@@ -10,7 +10,7 @@ import { AuthRouters } from "./routes/auth.routes";
 const app = express();
 
 // Connect to MongoDB
-app.set("port", process.env.PORT || 3000);
+app.set("port", process.env.PORT || 3001);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

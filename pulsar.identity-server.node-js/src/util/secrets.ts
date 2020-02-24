@@ -12,6 +12,7 @@ const prod = ENVIRONMENT === "production"; // Anything else is treated as 'dev'
 
 export const MONGODB_URI = prod ? process.env["MONGODB_URI"] : process.env["MONGODB_URI_LOCAL"];
 export const SEND_GRID = process.env["SENDGRID_KEY"];
+export const BASE_URL = process.env["BASE_URL"];
 
 if (!MONGODB_URI) {
     if (prod) {
