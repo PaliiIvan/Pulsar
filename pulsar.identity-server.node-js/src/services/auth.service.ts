@@ -1,14 +1,14 @@
-import { hash } from "bcrypt";
+import { hash, compareSync } from "bcrypt";
 import uuid from "uuid/v1";
 import sendGrid from "@sendgrid/mail";
 import { readFileSync } from "fs";
-import path, { join } from "path";
+import path from "path";
 
 import * as userRepo from "../features/user/user.repository";
 import { formatString } from "../extensions/string.extensions";
 import { constants, files } from "../configs/global.variables";
-import { SEND_GRID, BASE_URL } from "../util/secrets";
-
+import { SEND_GRID, BASE_URL, AUTH_SECRET_KEY } from "../configs/secrets";
+import * as jwb from "jsonwebtoken";
 
 sendGrid.setApiKey(SEND_GRID);
 
@@ -70,22 +70,28 @@ export async function CheckEmail(userId: string, emailToken: string) {
 
 export async function LogIn(email: string, password: string) {
     const user = await userRepo.FindOne({email: email});
-    if(user == null) {
-        return {
-            message: "This Email does not exist",
-            isSuccess: false
-        }
+    
+
+    if(user == null) 
+        throw new Error("Email or password is incorect")
+
+    var isPasswordCorect = compareSync(password, user.password);
+
+    if(!isPasswordCorect) 
+        throw new Error("Email or password is incorect")
+
+    var jsonWebToken = jwb.sign({
+                            email: user.email,
+                            login: user.login,
+                            userId: user.id
+                        }, AUTH_SECRET_KEY, {expiresIn: '2h'});
+
+    return {
+        id: user.id,
+        email:user.email,
+        login: user.login,
+        token: jsonWebToken
     }
-
-    var passwordHash = await hash(password, 10);
-    if(passwordHash !== user.password) {
-        return {
-            message: "Email or password is incorect",
-            isSuccess: false
-        }
-    }
-
-
 }
 
 export function LogOut(email: string, password: string) {
@@ -102,7 +108,7 @@ export function LogOut(email: string, password: string) {
 export function generateEmail(userId: string, userEmail: string, login: string, emailToken: string) {
 
     const rootFolder = path.dirname(require.main.filename);
-    const fileLocation = join(rootFolder, files.CONFIRMATION_EMAIL_TEMPLATE_FILE);
+    const fileLocation = path.join(rootFolder, files.CONFIRMATION_EMAIL_TEMPLATE_FILE);
 
     let emailTemplate = readFileSync(fileLocation, {encoding: "utf8"});
 
