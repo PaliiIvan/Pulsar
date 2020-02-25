@@ -31,32 +31,31 @@
         "@types/jsonwebtoken": "^8.3.7",
         "@types/uuid": "^3.4.7",
         "acorn": "^7.1.0",
-        "async": "^3.1.0",
+        "async": "^3.2.0",
         "bcrypt": "^4.0.0",
         "body-parser": "^1.19.0",
         "compression": "^1.7.4",
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
-        "express-validator": "^6.2.0",
-        "mongoose": "^5.7.1"
-        
+        "express-validator": "^6.4.0",
+        "mongoose": ">=5.7.5"
     },
     "devDependencies": {
-        "@types/async": "^3.0.2",
-        "@types/body-parser": "^1.17.1",
+        "@types/async": "^3.0.8",
+        "@types/body-parser": "^1.19.0",
         "@types/concurrently": "^4.1.0",
-        "@types/eslint": "^6.1.1",
-        "@types/express": "^4.17.1",
-        "@types/mongoose": "^5.5.18",
-        "@types/node": "^12.7.8",
+        "@types/eslint": "^6.1.8",
+        "@types/express": "^4.17.2",
+        "@types/mongoose": "^5.7.1",
+        "@types/node": "^12.12.28",
         "@types/shelljs": "^0.8.6",
-        "@typescript-eslint/eslint-plugin": "^2.3.1",
-        "@typescript-eslint/parser": "^2.3.1",
-        "typescript": "^3.8.2",
+        "@typescript-eslint/eslint-plugin": "^2.21.0",
+        "@typescript-eslint/parser": "^2.21.0",
         "concurrently": "^5.0.0",
-        "eslint": "^6.4.0",
-        "nodemon": "^1.19.2",
+        "eslint": "^6.8.0",
+        "nodemon": "^1.19.4",
         "shelljs": "^0.8.3",
-        "ts-node": "^8.4.1"
+        "ts-node": "^8.6.2",
+        "typescript": "^3.8.2"
     }
 }
