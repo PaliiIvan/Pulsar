@@ -17,7 +17,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(AuthRouters);
 app.use(errorHandling);
-
+app.use((req, res, next) => {
+    console.log(req.url, req.body, req.method);
+    next();
+})
 
 
 // Express configuration

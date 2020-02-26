@@ -1,5 +1,5 @@
 import { ValidationError } from "express-validator";
-
+import { errorParser } from "./error.parser";
 export class ValidationExeption {
 
     errors: ValidationErrorMessage[];
@@ -18,3 +18,5 @@ export class ValidationErrorMessage {
         this.message = message;
     }
 }
+
+export  {errorParser};

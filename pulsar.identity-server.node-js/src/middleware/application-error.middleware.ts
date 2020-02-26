@@ -9,10 +9,15 @@ export function errorHandling(err: any, req: Request, res: Response, next: any) 
         
         res.status(400).json({
             message: "Validation Filed",
-            errors: validationError.errors
+            errors: validationError.errors,
+            isSuccess: false
         })
         return next();
     }
 
+    res.status(500).json({
+        message: err.message,
+        isSuccess: false,
+    })
     return next();
 }

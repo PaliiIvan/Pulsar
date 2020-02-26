@@ -1,19 +1,17 @@
-const router = require("express").Router();
-
-import { SignUp, CompleteAuth, LogIn, LogOut, CheckToken } from "../controllers/auth.controller";
+import { Router } from "express";
+import { SignUp, CompleteAuth, LogIn, CheckUserToken } from "../controllers/auth.controller";
 import { SignUpValidation, LoginValidation } from "../features/user/user.validation";
 
+const router = Router();
 
 
 router.post("/signup", SignUpValidation, SignUp);
 
-router.get("/complete-auth" ,CompleteAuth);
+router.get("/complete-auth", CompleteAuth);
 
 router.post("/login", LoginValidation, LogIn);
 
-router.get("/logout", LogOut);
-
-router.get("/check-token", CheckToken);
+router.post("/check-token", CheckUserToken);
 
 
 export const AuthRouters = router;

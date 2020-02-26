@@ -1,12 +1,17 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 
 
 import * as authService from "../services/auth.service";
-import { ValidationExeption } from "../util/exeptions/authentification.exeption";
+import { ValidationExeption, errorParser } from "../util/exeptions/authentification.exeption";
 
-export async function SignUp(req: any, res: any, next: any) {
 
+//POST
+export async function SignUp(req: Request, res: Response, next: NextFunction) {
+    var errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        return errorParser(errors, next);
+    }
 
     const email = req.body.email;
     const login = req.body.login;
@@ -14,60 +19,53 @@ export async function SignUp(req: any, res: any, next: any) {
 
     try {
         const authResult = await authService.SignUp(email, login, password);
-        res.json({ Message: authResult });
+        res.json(authResult);
     } catch (err) {
-        next(err);
+        return next(err);
     }
 
 }
 
-
-export async function CompleteAuth(req: Request, res: Response, next: any) {
+//GET
+export async function CompleteAuth(req: Request, res: Response, next: NextFunction) {
     const userId = req.query.id;
     const userEmailToken = req.query.token;
     let confirmationEmailResult: any;
 
     try {
-        confirmationEmailResult = await authService.CheckEmail(userId, userEmailToken);
+        const confirmationEmailResult = await authService.CheckEmail(userId, userEmailToken);
     } catch(err) {
-        next(err);
+        return next(err);
     }
 
-    res.json(confirmationEmailResult);
+    res.redirect("http://localhost:3000");
 }
 
-
-export async function LogIn(req: Request, res: Response, next: any) {
-
+//POST
+export async function LogIn(req: Request, res: Response, next: NextFunction) {
     var errors = validationResult(req);
     if(!errors.isEmpty()) {
-        const error = new  ValidationExeption(errors.array())
-        return next(error);
+        return errorParser(errors, next);
     }
 
     const email = req.body.email;
     const password = req.body.password;
-
-    let logInResult: any;  
+ 
     try {
-        logInResult = await authService.LogIn(email, password);
+        const logInResult = await authService.LogIn(email, password);
         res.json(logInResult);
     } catch(err) {
         return next(err);
     }
 }
 
-
-export function LogOut(req: Request, res: Response, next: any) {
-    const email = req.body.email;
-    const password = req.body.password;
-    const repetPassword = req.body.repetPassword;
-    return res.json({ Message: "LogOut" });
-}
-
-
-export async function CheckToken(req: Request, res: Response, next: any) {
+//POST
+export async function CheckUserToken(req: Request, res: Response, next: NextFunction) {
     const token = req.body.token;
     const userId = req.body.id;
+
+    const checkTokenResult = authService.CheckUserToken(userId, token);
+
+    res.json(checkTokenResult);
 }
 
