@@ -1,17 +1,16 @@
 import { hash, compareSync } from "bcrypt";
+import { readFileSync } from "fs";
+import * as jwb from "jsonwebtoken";
 import uuid from "uuid/v1";
 import sendGrid from "@sendgrid/mail";
-import { readFileSync } from "fs";
 import path from "path";
 
 import * as userRepo from "../features/user/user.repository";
 import { formatString } from "../extensions/string.extensions";
 import { constants, files } from "../configs/global.variables";
 import { SEND_GRID, BASE_URL, AUTH_SECRET_KEY } from "../configs/secrets";
-import * as jwb from "jsonwebtoken";
 
 sendGrid.setApiKey(SEND_GRID);
-
 
 export async function SignUp(email: string, login: string, password: string) {
 
@@ -32,14 +31,8 @@ export async function SignUp(email: string, login: string, password: string) {
         };
     } else {
         const removeResult = await userRepo.RemoveUser(createdUser.id);
-        return {
-            message: "Email not Send",
-            isSuccess: false
-        };
+        throw new Error("Email Sending Error");
     }
-
-    return message;
-
 }
 
 /**
@@ -79,7 +72,7 @@ export async function LogIn(email: string, password: string) {
         email: user.email,
         login: user.login,
         userId: user.id
-    }, AUTH_SECRET_KEY, { expiresIn: '1s' });
+    }, AUTH_SECRET_KEY, { expiresIn: '1d' });
 
     return {
         id: user.id,
@@ -105,6 +98,16 @@ export function CheckUserToken(userId: string, token: string) {
     }
 
 }
+
+export function InitiateChangePassword(userEmail: string) {
+    const user = userRepo.FindOne({email: userEmail});
+
+    if(user == null) {
+        throw new Error("Email not found");
+    }
+    
+}
+
 
 
 /**

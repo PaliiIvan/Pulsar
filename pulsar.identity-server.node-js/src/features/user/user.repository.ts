@@ -1,7 +1,7 @@
-import UserAccaunt from "./user.model";
+import { Types } from "mongoose";
+
 import { userAccountSchema } from "./user.schema";
 import UserAccount from "./user.model";
-import { Types } from "mongoose";
 
 /**
  * @param {any} id
@@ -9,7 +9,7 @@ import { Types } from "mongoose";
  */
 export async function GetUserById(id: string | Types.ObjectId): Promise<UserAccount> {
     const user = await userAccountSchema.findById(id);
-    return user;
+    return user?.toObject();
 }
 
 /**
