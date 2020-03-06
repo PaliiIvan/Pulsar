@@ -15,10 +15,11 @@ namespace StreamService.Controllers
     {
 
         private readonly ILogger<StreamController> _logger;
-
-        public StreamController(ILogger<StreamController> logger)
+        private readonly IAuth _authentification;
+        public StreamController(ILogger<StreamController> logger, IAuth authentification)
         {
             _logger = logger;
+            _authentification = authentification;
         }
 
         [HttpGet]
@@ -29,9 +30,11 @@ namespace StreamService.Controllers
         [HttpPut]
         public void StartStream([FromQuery] string stream)
         {
+            DirectoryInfo di = Directory.CreateDirectory($@"wwwroot/{stream}/");
+
             if (stream.Contains(".m3u8"))
             {
-                using (var indexFile = System.IO.File.OpenWrite($@"Streams/{stream}"))
+                using (var indexFile = System.IO.File.OpenWrite($@"wwwroot/index.m3u8"))
                 {
                     Request.Body.CopyTo(indexFile);
                 }
