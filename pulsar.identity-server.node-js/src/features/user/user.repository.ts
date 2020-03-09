@@ -1,22 +1,22 @@
-import UserAccaunt from "./user.model";
+import { Types } from "mongoose";
+
 import { userAccountSchema } from "./user.schema";
 import UserAccount from "./user.model";
-import { Types } from "mongoose";
 
 /**
  * @param {any} id
  * @returns {UserAccaunt} user
  */
-export async function GetUserById(id: string | Types.ObjectId): Promise<UserAccount> {
+export async function getUserById(id: string | Types.ObjectId): Promise<UserAccount> {
     const user = await userAccountSchema.findById(id);
-    return user;
+    return user?.toObject();
 }
 
 /**
  * @param {UserAccaunt} user
  * @returns {UserAccaunt} createdUser
  */
-export async function SaveUser(user: UserAccount): Promise<UserAccount> {
+export async function saveUser(user: UserAccount): Promise<UserAccount> {
     const result = await userAccountSchema.create(user);
     return result?.toObject();
 }
@@ -24,7 +24,7 @@ export async function SaveUser(user: UserAccount): Promise<UserAccount> {
 /**
  * @param {UserAccaunt} user
  */
-export async function UpdateUser(user: UserAccount): Promise<UserAccount> {
+export async function updateUser(user: UserAccount): Promise<UserAccount> {
     const updateResult = await userAccountSchema.findByIdAndUpdate(user.id, user);
     return updateResult?.toObject();
 }
@@ -32,7 +32,7 @@ export async function UpdateUser(user: UserAccount): Promise<UserAccount> {
 /**
  * @param {String} id User Id
  */
-export async function RemoveUser(id?: string) {
+export async function removeUser(id?: string) {
     const removeResult = await userAccountSchema.remove(id);
     return removeResult?.ok;
 }
@@ -41,7 +41,7 @@ export async function RemoveUser(id?: string) {
  * 
  * @param {any} query Query for seartching
  */
-export async function FindOne(query: any): Promise<UserAccount> {
+export async function findOne(query: any): Promise<UserAccount> {
     const user = await userAccountSchema.findOne(query);
     return user?.toObject();
 }

@@ -3,11 +3,11 @@ import { validationResult } from "express-validator";
 
 
 import * as authService from "../services/auth.service";
-import { ValidationExeption, errorParser } from "../util/exeptions/authentification.exeption";
-
+import { errorParser } from "../util/exeptions/authentification.exeption";
+import { constants } from "../configs/global.variables";
 
 //POST
-export async function SignUp(req: Request, res: Response, next: NextFunction) {
+export async function signUp(req: Request, res: Response, next: NextFunction) {
     var errors = validationResult(req);
     if(!errors.isEmpty()) {
         return errorParser(errors, next);
@@ -18,7 +18,7 @@ export async function SignUp(req: Request, res: Response, next: NextFunction) {
     const password = req.body.password;
 
     try {
-        const authResult = await authService.SignUp(email, login, password);
+        const authResult = await authService.signUp(email, login, password);
         res.json(authResult);
     } catch (err) {
         return next(err);
@@ -27,22 +27,21 @@ export async function SignUp(req: Request, res: Response, next: NextFunction) {
 }
 
 //GET
-export async function CompleteAuth(req: Request, res: Response, next: NextFunction) {
+export async function completeAuth(req: Request, res: Response, next: NextFunction) {
     const userId = req.query.id;
     const userEmailToken = req.query.token;
     let confirmationEmailResult: any;
 
     try {
-        const confirmationEmailResult = await authService.CheckEmail(userId, userEmailToken);
+        const confirmationEmailResult = await authService.checkEmail(userId, userEmailToken);
+        res.redirect(constants.CLIENT_URL);
     } catch(err) {
         return next(err);
     }
-
-    res.redirect("http://localhost:3000");
 }
 
 //POST
-export async function LogIn(req: Request, res: Response, next: NextFunction) {
+export async function logIn(req: Request, res: Response, next: NextFunction) {
     var errors = validationResult(req);
     if(!errors.isEmpty()) {
         return errorParser(errors, next);
@@ -52,7 +51,7 @@ export async function LogIn(req: Request, res: Response, next: NextFunction) {
     const password = req.body.password;
  
     try {
-        const logInResult = await authService.LogIn(email, password);
+        const logInResult = await authService.logIn(email, password);
         res.json(logInResult);
     } catch(err) {
         return next(err);
@@ -60,12 +59,23 @@ export async function LogIn(req: Request, res: Response, next: NextFunction) {
 }
 
 //POST
-export async function CheckUserToken(req: Request, res: Response, next: NextFunction) {
+export async function checkUserToken(req: Request, res: Response, next: NextFunction) {
     const token = req.body.token;
     const userId = req.body.id;
+    let checkTokenResult: any;
 
-    const checkTokenResult = authService.CheckUserToken(userId, token);
-
-    res.json(checkTokenResult);
+    try {
+        checkTokenResult = authService.checkUserToken(userId, token);
+        res.json(checkTokenResult);
+    } catch(err) {
+        return next(err);
+    }
 }
 
+//GET
+//TODO: Not implemented
+export async function initiateChangePassword(req: Request, res: Response, next: NextFunction) {
+    const userEmail = req.params.email;
+
+    const initiateChangePasswordResult = authService.InitiateChangePassword(userEmail);
+}

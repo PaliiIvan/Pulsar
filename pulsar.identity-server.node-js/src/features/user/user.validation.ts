@@ -24,8 +24,7 @@ const signUpValidation = [
             .withMessage(new ValidationErrorMessage('login', 'Login lenght should be: min: 3, max: 30 characters'))
         .custom(login => {
             if(login != null)
-                return !Number.isInteger(login[0])
-        })
+                return !Number.isInteger(login[0])})
             .withMessage(new ValidationErrorMessage('login', 'Login should start with leter'))
         .custom(async (login) => {
             const user = await FindOne({ login: login });
