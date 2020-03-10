@@ -1,6 +1,6 @@
 import { hash, compareSync } from "bcrypt";
 import { readFileSync } from "fs";
-import * as jwb from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import uuid from "uuid/v1";
 import sendGrid from "@sendgrid/mail";
 import path from "path";
@@ -9,19 +9,21 @@ import * as userRepo from "../features/user/user.repository";
 import { formatString } from "../extensions/string.extensions";
 import { constants, files } from "../configs/global.variables";
 import { SEND_GRID, BASE_URL, AUTH_SECRET_KEY } from "../configs/secrets";
+import logger from "../util/logger";
+import { NotFoundError, NotAuthorizeError, ServerError } from "../util/exeptions/server-errors";
 
 sendGrid.setApiKey(SEND_GRID);
 
 export async function signUp(email: string, login: string, password: string) {
+
+    logger.info("SignUp in process");
 
     const passwordHash = await hash(password, 10);
     const emailToken = uuid();
     let message: any;
 
     const createdUser = await userRepo.saveUser({ email, login, password: passwordHash, emailToken, IsConfirmed: false });
-
     const mailMessage = _generateEmail(createdUser.id, createdUser.email, createdUser.login, createdUser.emailToken);
-
     const result = await sendGrid.send(mailMessage);
 
     if (result[0].statusCode == 202) {
@@ -30,8 +32,11 @@ export async function signUp(email: string, login: string, password: string) {
             isSuccess: true
         };
     } else {
+
+        logger.error("Email sending Error", {user: createdUser, emailMess: result});
+
         const removeResult = await userRepo.removeUser(createdUser.id);
-        throw new Error("Email Sending Error");
+        throw new ServerError("Email Sending Error");
     }
 }
 
@@ -42,7 +47,14 @@ export async function signUp(email: string, login: string, password: string) {
  */
 export async function checkEmail(userId: string, emailToken: string) {
 
+    logger.info("Email checking in process");
+
     const user = await userRepo.getUserById(userId);
+
+    if(user == null) {
+        logger.error("User not Found", {userId: userId, emailToken: emailToken});
+        throw new NotFoundError("User not found");
+    }
 
     if (user.emailToken === emailToken) {
         user.IsConfirmed = true;
@@ -50,25 +62,31 @@ export async function checkEmail(userId: string, emailToken: string) {
         await userRepo.updateUser(user);
 
         return {
-            message: "Confirm Email Succes",
+            message: "Email confirmation is successful.",
             isSuccess: true
         };
     }
-    throw new Error("Confirm Email Failed");
+
+    logger.error("Email confirmation is failed", {userId: userId, emailToken: emailToken});
+    throw new ServerError("Email confirmation is failed");
 }
 
 
 export async function logIn(email: string, password: string) {
+
+    logger.info("LogIn in process");
+    
     const user = await userRepo.findOne({ email: email, IsConfirmed: true });
+
     if (user == null)
-        throw new Error("Email or password is incorect")
+        throw new NotFoundError("Email or password is incorect")
 
     var isPasswordCorect = compareSync(password, user.password);
 
     if (!isPasswordCorect)
-        throw new Error("Email or password is incorect")
+        throw new NotFoundError("Email or password is incorect")
 
-    var jsonWebToken = jwb.sign({
+    var jsonWebToken = jwt.sign({
         email: user.email,
         login: user.login,
         userId: user.id
@@ -82,21 +100,23 @@ export async function logIn(email: string, password: string) {
     }
 }
 
-export function checkUserToken(userId: string, token: string) {
+export async function checkUserToken(token: string) {
+
+    logger.info("Checking User Token in process");
+    var user;
 
     try {
-        const decodedToken = jwb.verify(token, AUTH_SECRET_KEY);
-    } catch (err) {
-        return {
-            message: "Token validation filed",
-            isSuccess: false
-        }
-    }
-    return {
-        message: "Token validation success",
-        isSuccess: true
-    }
+        const verifuResult = jwt.verify(token, AUTH_SECRET_KEY);
+        const decodedToken = jwt.decode(token);
+        const userId = decodedToken["userId"];
 
+        const user = await userRepo.getUserById(userId);
+        return {...user, password: null};
+
+    } catch (err) {
+        logger.error("Token validation filed", {token});
+        throw new NotAuthorizeError("Token validation filed");
+    }
 }
 
 export function initiateChangePassword(userEmail: string) {

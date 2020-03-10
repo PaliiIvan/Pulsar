@@ -3,8 +3,9 @@ import { validationResult } from "express-validator";
 
 
 import * as authService from "../services/auth.service";
-import { errorParser } from "../util/exeptions/authentification.exeption";
 import { constants } from "../configs/global.variables";
+import { errorParser } from "../util/exeptions/auth-error.parser";
+import { ResponceResult } from "../api.models/responce.model";
 
 //POST
 export async function signUp(req: Request, res: Response, next: NextFunction) {
@@ -19,7 +20,7 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
 
     try {
         const authResult = await authService.signUp(email, login, password);
-        res.json(authResult);
+        res.json(new ResponceResult("Sign Up", authResult));
     } catch (err) {
         return next(err);
     }
@@ -52,7 +53,8 @@ export async function logIn(req: Request, res: Response, next: NextFunction) {
  
     try {
         const logInResult = await authService.logIn(email, password);
-        res.json(logInResult);
+
+        res.json(new ResponceResult("LogIn", logInResult));
     } catch(err) {
         return next(err);
     }
@@ -61,12 +63,10 @@ export async function logIn(req: Request, res: Response, next: NextFunction) {
 //POST
 export async function checkUserToken(req: Request, res: Response, next: NextFunction) {
     const token = req.body.token;
-    const userId = req.body.id;
-    let checkTokenResult: any;
 
     try {
-        checkTokenResult = authService.checkUserToken(userId, token);
-        res.json(checkTokenResult);
+        const checkTokenResult = authService.checkUserToken(token);
+        res.json(new ResponceResult("User token result", checkTokenResult));
     } catch(err) {
         return next(err);
     }
@@ -77,5 +77,5 @@ export async function checkUserToken(req: Request, res: Response, next: NextFunc
 export async function initiateChangePassword(req: Request, res: Response, next: NextFunction) {
     const userEmail = req.params.email;
 
-    const initiateChangePasswordResult = authService.InitiateChangePassword(userEmail);
+    const initiateChangePasswordResult = authService.initiateChangePassword(userEmail);
 }

@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 
 import { errorHandling } from "./middleware/application-error.middleware";
 import { AuthRouters } from "./routes/auth.routes";
+import logger from "./util/logger";
 
 
 const app = express();
@@ -26,7 +27,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/Pulsar",
         console.log("MongoDb status: Succes");
     })
     .catch(err => {
-        console.error(err);
+        logger.error("Data base connection Error", err);
     });
 
 export default app;

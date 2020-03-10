@@ -1,20 +1,36 @@
 import { Request, Response } from "express";
-import { ValidationExeption } from "../util/exeptions/authentification.exeption";
+import logger from "../util/logger";
+import { NotFoundError, ErrorResponce, ServerError, NotAuthorizeError } from "../util/exeptions/server-errors";
+import { ValidationExeption } from "../util/exeptions/auth-error.parser";
+
 
 export function errorHandling(err: any, req: Request, res: Response, next: any) {
     
     if(err instanceof (ValidationExeption)) {
-        res.status(400).json({
-            message: "Validation Filed",
-            errors: err.errors,
-            isSuccess: false
-        })
+        logger.error("ViewModel validation filed", err);
+        res.status(400).json(new ErrorResponce("Validation filed", err.errors));
         return next();
     }
 
-    res.status(500).json({
-        message: err.message,
-        isSuccess: false,
-    })
+    if(err instanceof (NotFoundError)) {
+        logger.error("Resource not found error", err);
+        res.status(err.statusCode).json(new ErrorResponce(err.message, err.metadata));
+        return next();
+    }
+
+    if(err instanceof (ServerError)) {
+        logger.error("Server Error", err);
+        res.status(err.statusCode).json(new ErrorResponce(err.message, err.metadata));
+        return next();
+    }
+
+    if(err instanceof (NotAuthorizeError)) {
+        logger.error("User is not Authorize", err);
+        res.status(err.statusCode).json(new ErrorResponce(err.message, err.metadata));
+        return next();
+    }
+
+    logger.error("Inner server error", err);
+    res.status(500).json(new ErrorResponce("Server error"));
     return next();
 }

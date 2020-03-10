@@ -1,18 +1,17 @@
-// import winston from "winston";
+import { createLogger, transports, format } from "winston";
+const { combine, timestamp, simple } = format;
 
-// const options: winston.LoggerOptions = {
-//     transports: [
-//         new winston.transports.Console({
-//             level: process.env.NODE_ENV === "production" ? "error" : "debug"
-//         }),
-//         new winston.transports.File({ filename: "debug.log", level: "debug" })
-//     ]
-// };
+const logger = createLogger({
+    format: combine(timestamp(), simple()),
 
-// const logger = winston.createLogger(options);
+    transports: [
+        new transports.File({ filename: "error.log", level: "error" }),
+        new transports.File({ filename: "combine.log" })
+    ]
+});
 
-// if (process.env.NODE_ENV !== "production") {
-//     logger.debug("Logging initialized at debug level");
-// }
+if (process.env.NODE_ENV !== "production") {
+    logger.add(new transports.Console({ format: format.simple() }));
+}
 
-// export default logger;
+export default logger;
