@@ -15,9 +15,9 @@ export async function getGenerateStreamKey(req: Request, res: Response, next: Ne
     const userId = req.body.Id;
     logger.info("Generate stream key");
 
-    try {
-        
+    try {   
         const user = await userRepo.getUserById(userId);
+        
         if(user == null)
             throw new NotFoundError("User not found", {userId: userId});
         
