@@ -11,4 +11,4 @@ export const MONGODB_URI = prod ? process.env["MONGODB_URI"] : process.env["MONG
 export const SEND_GRID = process.env["SENDGRID_KEY"];
 export const BASE_URL = process.env["BASE_URL"];
 export const AUTH_SECRET_KEY = process.env["AUTH_SECRET_KEY"];
-
+export const STREAM_SECRET_KEY = process.env["STREAM_SECRET_KEY"];
