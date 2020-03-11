@@ -42,7 +42,7 @@ namespace StreamService
             }
             catch (Exception ex)
             {
-                _logger.LogError("Token Validation Filed", ex);
+                _logger.LogError("Token validation filed", ex);
                 throw;
             }
 
