@@ -7,7 +7,7 @@ export interface IErrorMetadata {
 
 export class ServerError extends Error implements IErrorMetadata {
     metadata: any;
-    description: "Server Error";
+    description: "Server Error\n";
     statusCode: 500;
 
     constructor(message: string, metadata?: any){
@@ -18,7 +18,7 @@ export class ServerError extends Error implements IErrorMetadata {
 
 export class NotFoundError extends Error implements IErrorMetadata {
     metadata: any;
-    description: "Resource not found";
+    description: "Resource not found\n";
     statusCode: 404;
 
     constructor(message: string, metadata?: any){
@@ -29,7 +29,7 @@ export class NotFoundError extends Error implements IErrorMetadata {
 
 export class NotAuthorizeError extends Error implements IErrorMetadata {
     metadata: any;
-    description: "Access denied";
+    description: "Access denied\n";
     statusCode: 401;
 
     constructor(message: string, metadata?: any){

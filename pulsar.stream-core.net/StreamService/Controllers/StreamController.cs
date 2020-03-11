@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using JWT;
+using JWT.Algorithms;
+using JWT.Serializers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace StreamService.Controllers
 {
@@ -13,35 +18,35 @@ namespace StreamService.Controllers
     [Route("/")]
     public class StreamController : ControllerBase
     {
-
-        private readonly ILogger<StreamController> _logger;
-        private readonly IAuth _authentification;
-        public StreamController(ILogger<StreamController> logger, IAuth authentification)
+        private readonly ITokenValidationService _tokenValidationService;
+        public StreamController(ITokenValidationService tokenValidationService, ILogger<TokenValidationService> logger)
         {
-            _logger = logger;
-            _authentification = authentification;
+          _tokenValidationService = tokenValidationService;
         }
 
         [HttpGet]
-        public string CheckAction()
+        public void CheckAction(string token)
         {
-            return "Hello world";
+           var tokenMetaData = _tokenValidationService.ValidateToken(token);
         }
         [HttpPut]
         public void StartStream([FromQuery] string stream)
         {
-            DirectoryInfo di = Directory.CreateDirectory($@"wwwroot/{stream}/");
+            string token = Regex.Replace(stream, @"[0-9,\.]+ts", string.Empty).Replace(".m3u8", string.Empty);
+            var tokenMetaData = _tokenValidationService.ValidateToken(token);
+
+            string directoryToSave = Directory.CreateDirectory($@"wwwroot/{tokenMetaData.StreamId}/").FullName;
 
             if (stream.Contains(".m3u8"))
             {
-                using (var indexFile = System.IO.File.OpenWrite($@"wwwroot/index.m3u8"))
+                using (var indexFile = System.IO.File.OpenWrite($"{directoryToSave}/index.m3u8"))
                 {
                     Request.Body.CopyTo(indexFile);
                 }
             }
             else
             {
-                using (var tsStream = new System.IO.FileStream($@"wwwroot/{stream}", FileMode.OpenOrCreate))
+                using (var tsStream = new System.IO.FileStream($"{directoryToSave}/{stream}", FileMode.OpenOrCreate))
                 {
                     Request.Body.CopyTo(tsStream);
                 }

@@ -18,7 +18,7 @@ export class ValidationExeption {
     }
 }
 
-class ValidationErrorMessage {
+export class ValidationErrorMessage {
 
     property: string;
     message: string
