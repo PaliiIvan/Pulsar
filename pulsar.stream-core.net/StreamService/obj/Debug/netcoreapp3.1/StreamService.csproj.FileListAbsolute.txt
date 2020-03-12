@@ -16,3 +16,6 @@ C:\Users\ivan.palii\Documents\ProjectsFS\Stream-Platform\pulsar.stream-core.net\
 C:\Users\ivan.palii\Documents\ProjectsFS\Stream-Platform\pulsar.stream-core.net\StreamService\obj\Debug\netcoreapp3.1\StreamService.RazorTargetAssemblyInfo.cache
 C:\Users\ivan.palii\Documents\ProjectsFS\Stream-Platform\pulsar.stream-core.net\StreamService\obj\Debug\netcoreapp3.1\StreamService.dll
 C:\Users\ivan.palii\Documents\ProjectsFS\Stream-Platform\pulsar.stream-core.net\StreamService\obj\Debug\netcoreapp3.1\StreamService.pdb
+C:\Users\ivan.palii\Documents\ProjectsFS\Stream-Platform\pulsar.stream-core.net\StreamService\bin\Debug\netcoreapp3.1\JWT.dll
+C:\Users\ivan.palii\Documents\ProjectsFS\Stream-Platform\pulsar.stream-core.net\StreamService\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\Users\ivan.palii\Documents\ProjectsFS\Stream-Platform\pulsar.stream-core.net\StreamService\obj\Debug\netcoreapp3.1\StreamService.csproj.CopyComplete

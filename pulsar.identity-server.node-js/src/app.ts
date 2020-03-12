@@ -2,9 +2,10 @@ import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 
+import logger from "./util/logger";
 import { errorHandling } from "./middleware/application-error.middleware";
 import { AuthRouters } from "./routes/auth.routes";
-import logger from "./util/logger";
+import { StreamRoutes } from "./routes/stream.routes";
 
 
 const app = express();
@@ -12,10 +13,13 @@ const app = express();
 
 app.set("port", process.env.PORT || 3001);
 
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(AuthRouters);
+app.use(StreamRoutes)
+
 app.use(errorHandling);
 
 mongoose.connect("mongodb://127.0.0.1:27017/Pulsar",

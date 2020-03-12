@@ -14,19 +14,19 @@ export function errorHandling(err: any, req: Request, res: Response, next: any) 
 
     if(err instanceof (NotFoundError)) {
         logger.error("Resource not found error", err);
-        res.status(err.statusCode).json(new ErrorResponce(err.message, err.metadata));
+        res.status(404).json(new ErrorResponce(err.message, err.metadata));
         return next();
     }
 
     if(err instanceof (ServerError)) {
         logger.error("Server Error", err);
-        res.status(err.statusCode).json(new ErrorResponce(err.message, err.metadata));
+        res.status(500).json(new ErrorResponce(err.message, err.metadata));
         return next();
     }
 
     if(err instanceof (NotAuthorizeError)) {
         logger.error("User is not Authorize", err);
-        res.status(err.statusCode).json(new ErrorResponce(err.message, err.metadata));
+        res.status(401).json(new ErrorResponce(err.message, err.metadata));
         return next();
     }
 

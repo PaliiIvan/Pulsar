@@ -1,8 +1,8 @@
 
 import { check } from 'express-validator';
 
-import { FindOne } from './user.repository';
-import { ValidationErrorMessage } from "../../util/exeptions/authentification.exeption";
+import { findOne } from './user.repository';
+import { ValidationErrorMessage } from "../../util/exeptions/auth-error.parser";
 
 
 
@@ -11,7 +11,7 @@ const signUpValidation = [
         .isEmail()
             .withMessage(new ValidationErrorMessage('email', 'Email validation failed'))
         .custom(async (email) => {
-             const user = await FindOne({ email: email });
+             const user = await findOne({ email: email });
             if (user != null) {
                 return Promise.reject();
             }
@@ -27,7 +27,7 @@ const signUpValidation = [
                 return !Number.isInteger(login[0])})
             .withMessage(new ValidationErrorMessage('login', 'Login should start with leter'))
         .custom(async (login) => {
-            const user = await FindOne({ login: login });
+            const user = await findOne({ login: login });
             if (user != null) {
                 return Promise.reject();
             }
