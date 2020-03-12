@@ -11,9 +11,8 @@ export async function getGenerateStreamKey(req: Request, res: Response, next: Ne
     logger.info("Generate stream key");
     
     const userId = req.query.userId;
-    try {
-        console.log(userId);
-        
+    
+    try {    
         const streamKey = await generateStreamKey(userId);
 
         return res.json(new ResponceResult("Stream key", {key: streamKey}));
