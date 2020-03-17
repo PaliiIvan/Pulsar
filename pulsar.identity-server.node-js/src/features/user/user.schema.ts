@@ -32,7 +32,7 @@ const userAccountSchemaDef = new Schema({
     }
 }, { timestamps: true });
 
-userAccountSchemaDef.set('toObject', { getters: true })
+userAccountSchemaDef.set("toObject", { getters: true });
 
 export const userAccountSchema = model<UserAccountsSchemaModel>("UserAccounts", userAccountSchemaDef);
 

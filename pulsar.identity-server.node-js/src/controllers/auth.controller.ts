@@ -9,7 +9,7 @@ import { ResponceResult } from "../api.models/responce.model";
 
 //POST
 export async function signUp(req: Request, res: Response, next: NextFunction) {
-    var errors = validationResult(req);
+    const errors = validationResult(req);
     if(!errors.isEmpty()) {
         return errorParser(errors, next);
     }
@@ -43,7 +43,7 @@ export async function completeAuth(req: Request, res: Response, next: NextFuncti
 
 //POST
 export async function logIn(req: Request, res: Response, next: NextFunction) {
-    var errors = validationResult(req);
+    const errors = validationResult(req);
     if(!errors.isEmpty()) {
         return errorParser(errors, next);
     }

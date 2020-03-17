@@ -79,31 +79,31 @@ export async function logIn(email: string, password: string) {
     const user = await userRepo.findOne({ email: email, IsConfirmed: true });
 
     if (user == null)
-        throw new NotFoundError("Email or password is incorect")
+        throw new NotFoundError("Email or password is incorect");
 
-    var isPasswordCorect = compareSync(password, user.password);
+    const isPasswordCorect = compareSync(password, user.password);
 
     if (!isPasswordCorect)
-        throw new NotFoundError("Email or password is incorect")
+        throw new NotFoundError("Email or password is incorect");
 
-    var jsonWebToken = jwt.sign({
+    const jsonWebToken = jwt.sign({
         email: user.email,
         login: user.login,
         userId: user.id
-    }, AUTH_SECRET_KEY, { expiresIn: '1d' });
+    }, AUTH_SECRET_KEY, { expiresIn: "1d" });
 
     return {
         id: user.id,
         email: user.email,
         login: user.login,
         token: jsonWebToken
-    }
+    };
 }
 
 export async function checkUserToken(token: string) {
 
     logger.info("Checking User Token in process");
-    var user;
+    let user;
 
     try {
         const verifuResult = jwt.verify(token, AUTH_SECRET_KEY);

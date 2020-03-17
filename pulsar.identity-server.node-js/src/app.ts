@@ -5,7 +5,6 @@ import mongoose from "mongoose";
 import logger from "./util/logger";
 import { errorHandling } from "./middleware/application-error.middleware";
 import { AuthRouters } from "./routes/auth.routes";
-import { StreamRoutes } from "./routes/stream.routes";
 
 
 const app = express();
@@ -18,7 +17,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(AuthRouters);
-app.use(StreamRoutes)
+
 
 app.use(errorHandling);
 
