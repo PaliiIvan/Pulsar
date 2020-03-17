@@ -1,6 +1,6 @@
 
 interface UserAccount {
-    id?: any
+    id?: any;
     email: string;
     login: string;
     password: string;

@@ -1,11 +1,11 @@
 
-export interface IErrorMetadata {
+export interface ErrorMetadata {
     metadata: any;
     description: string;
     statusCode: number;
 }
 
-export class ServerError extends Error implements IErrorMetadata {
+export class ServerError extends Error implements ErrorMetadata {
     metadata: any;
     description: "Server Error\n";
     statusCode: 500;
@@ -16,7 +16,7 @@ export class ServerError extends Error implements IErrorMetadata {
     }
 }
 
-export class NotFoundError extends Error implements IErrorMetadata {
+export class NotFoundError extends Error implements ErrorMetadata {
     metadata: any;
     description: "Resource not found\n";
     statusCode: 404;
@@ -27,7 +27,7 @@ export class NotFoundError extends Error implements IErrorMetadata {
     }
 }
 
-export class NotAuthorizeError extends Error implements IErrorMetadata {
+export class NotAuthorizeError extends Error implements ErrorMetadata {
     metadata: any;
     description: "Access denied\n";
     statusCode: 401;
