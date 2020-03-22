@@ -1,1 +1,63 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,body{ margin:0;padding:0 }
+
+.border {
+    border: 1px solid black;
+    border-radius: 5px;
+
+    &--btm {
+        border: none;
+        border-bottom: 1px solid black;
+    }
+
+    &--top {
+        border: none;
+        border-bottom: 1px solid black;
+    }
+    &--lft {
+        border: none;
+        border-bottom: 1px solid black;
+    }
+    &--rht {
+        border: none;
+        border-bottom: 1px solid black;
+    }
+}
+
+.forms__group {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    &__input {
+      border-radius: 3px;
+      height: 25px;
+      padding-left: 8px;
+      border: 2px solid #3b3b3b;
+      background: #a8a8a87e;
+        &:focus {
+            outline: none;
+            background-color: #ffffff;
+            border: 2px solid #a8a8a880;
+        }
+    }
+    &__label {
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+}
+
+
+.btn {
+    background-color: white;
+    border: 1px solid black;
+    width: 100%;
+    height: 28px;
+    cursor: pointer;
+
+    &__submit {
+        background-color: #f3df7a;
+    }
+}

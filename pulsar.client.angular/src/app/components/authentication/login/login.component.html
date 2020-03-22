@@ -1,0 +1,27 @@
+<div class="auth">
+    <div class="auth__container">
+        <div class="auth__container__title border--btm">
+            <span class="login__title"> Log In </span>
+        </div>
+        <div class="auth__container__forms">
+            <form [formGroup]="logInForm" (ngSubmit)="logIn()">
+                <div class="forms">
+                    <div class="forms__group">
+                        <label class="forms__group__label" for="login">Email</label>
+                        <input class="forms__group__input" formControlName = "email" type="text" name="login" id="login">
+                    </div>
+                    <div class="forms__group">
+                        <label class="forms__group__label" for="password">Password</label>
+                        <input class="forms__group__input" formControlName = "password" type="password" name="password" id="password">
+                    </div>
+                    <button class="btn  btn__submit  btn__auth" type="submit">Log In</button>
+                </div>
+            </form>
+        </div>
+        <div class="or">
+            <div class="or__separator"></div>
+            <div class="or__text">or..</div>
+            <div class="or__separator"></div>
+        </div>
+    </div>
+</div>
