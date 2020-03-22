@@ -1,0 +1,19 @@
+.nav-bar-container {
+    height: 60px;
+    background-color: rgb(78, 77, 77);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.auth-btn {
+    width: 70px;
+    height: 30px;
+    margin-right: 5px;
+    border: none;
+
+    &:hover {
+        cursor: pointer;
+    }
+}

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { StreamService } from 'src/app/services/stream.service';
 
 @Component({
   selector: 'app-home-page',
@@ -8,14 +7,13 @@ import { StreamService } from 'src/app/services/stream.service';
 })
 export class HomePageComponent implements OnInit {
 
-  constructor(private streamService: StreamService) { }
+  constructor() { }
   value: string;
   ngOnInit() {
+    console.log("Hello");
   }
 
   startStream() {
-    this.streamService.getData().subscribe(x => {
-      this.value = x;
-    });
+
   }
 }
