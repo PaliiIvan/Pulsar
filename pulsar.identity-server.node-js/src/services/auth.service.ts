@@ -88,8 +88,7 @@ export async function logIn(email: string, password: string) {
 
     const jsonWebToken = jwt.sign({
         email: user.email,
-        login: user.login,
-        userId: user.id
+        id: user.id
     }, AUTH_SECRET_KEY, { expiresIn: "1d" });
 
     return {
