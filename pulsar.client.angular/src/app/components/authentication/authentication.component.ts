@@ -19,6 +19,5 @@ export class AuthenticationComponent implements OnInit {
   closeAuthWindow(event: MouseEvent) {
     this.authenticationOff.emit();
     console.log(event);
-    
   }
 }

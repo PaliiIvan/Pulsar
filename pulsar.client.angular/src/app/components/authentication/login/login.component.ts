@@ -15,6 +15,8 @@ export class LogInComponent implements OnInit {
     password: new FormControl('')
   });
 
+  validationErr: ErrorResponce;
+
   constructor(private authService: AuthenticationService) { }
 
   ngOnInit(): void {
@@ -26,10 +28,9 @@ export class LogInComponent implements OnInit {
 
     this.authService.logIn(email, password).subscribe(res => {
       if (res instanceof User) {
-        console.log(res, 'user');
       }
       if (res instanceof ErrorResponce) {
-        console.log(res, 'Error');
+        this.validationErr = res;
       }
 
     });

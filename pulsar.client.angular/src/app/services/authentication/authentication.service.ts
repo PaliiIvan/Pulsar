@@ -6,7 +6,6 @@ import { User } from '../../models/user.model';
 import { catchError, tap, mapTo, map } from 'rxjs/operators';
 import { RequestResult } from '../../models/server-entities/request-result.server.model';
 import { ErrorResponce } from '../../models/server-entities/error-result.server.model';
-import { join } from 'path';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +13,11 @@ import { join } from 'path';
 export class AuthenticationService {
 
   User = new BehaviorSubject<User>(null);
-
+  readonly api = environment.identityserverurl;
   constructor(private http: HttpClient) { }
 
   logIn(email: string, password: string) {
-    return this.http.post(environment.identityserver + '/login', { email, password })
+    return this.http.post(`${this.api}/login`, { email, password })
       .pipe(
         catchError(err => of(new ErrorResponce(err.error.message, err.error.metadata))),
         map<any | ErrorResponce, User | ErrorResponce>(res => {
