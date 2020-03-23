@@ -4,7 +4,7 @@
         <div *ngIf="user" class="user__container">
             {{user.login}}
         </div>
-        <div class="auth__b__container" *ngIf="!user">
+        <div class="auth__b__container" *ngIf="user == null">
             <button (click)="authProcessStarted(false)" class="auth-btn">Log In</button>
             <button (click)="authProcessStarted(true)" class="auth-btn">Sign In</button>
         </div>

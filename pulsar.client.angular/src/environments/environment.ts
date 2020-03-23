@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  identityserver: 'http://localhost:3001'
+  identityserverurl: 'http://localhost:3001'
 };
 
 /*
