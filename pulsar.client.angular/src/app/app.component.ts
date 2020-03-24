@@ -14,7 +14,18 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     const user: User = JSON.parse(localStorage.getItem('user'));
-    this.authService.User.next(user);
+
+    if (user != null) {
+      this.authService.checkToken(user.token)
+      .subscribe(isValidToken => {
+        if (isValidToken) {
+          console.log(isValidToken);
+          this.authService.User.next(user);
+        } else {
+          this.authService.regenerateToken(user.token);
+        }
+      });
+    }
   }
 
 }

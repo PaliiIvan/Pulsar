@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { BehaviorSubject, of, throwError, ObservableInput } from 'rxjs';
 import { User } from '../../models/user.model';
@@ -31,4 +31,33 @@ export class AuthenticationService {
           return user;
         }));
   }
+
+  checkToken(token: string) {
+    return this.http.post(`${this.api}/check-token`, { token })
+      .pipe(
+        catchError(err => {
+          const httpError = err as HttpErrorResponse;
+          if (httpError.status === 401) {
+            return of(err.error);
+          }
+        }),
+        map(res => res.status)
+      );
+  }
+
+  regenerateToken(token: string) {
+    this.http.post(`${this.api}/regenerate-token`, { token }).pipe(
+      catchError(err => of(new ErrorResponce(err.error.message, err.error.metadata))))
+      .subscribe(res => {
+          if (res instanceof ErrorResponce) {
+            return res;
+          }
+          const data = (res as any).data;
+
+          const user = new User(data.id, data.email, data.login, data.token);
+          this.User.next(user);
+          localStorage.setItem('user', JSON.stringify(user));
+        });
+  }
+
 }

@@ -33,7 +33,7 @@ export async function signUp(email: string, login: string, password: string) {
         };
     } else {
 
-        logger.error("Email sending Error", {user: createdUser, emailMess: result});
+        logger.error("Email sending Error", { user: createdUser, emailMess: result });
 
         const removeResult = await userRepo.removeUser(createdUser.id);
         throw new ServerError("Email Sending Error");
@@ -51,8 +51,8 @@ export async function checkEmail(userId: string, emailToken: string) {
 
     const user = await userRepo.getUserById(userId);
 
-    if(user == null) {
-        logger.error("User not Found", {userId: userId, emailToken: emailToken});
+    if (user == null) {
+        logger.error("User not Found", { userId: userId, emailToken: emailToken });
         throw new NotFoundError("User not found");
     }
 
@@ -67,7 +67,7 @@ export async function checkEmail(userId: string, emailToken: string) {
         };
     }
 
-    logger.error("Email confirmation is failed", {userId: userId, emailToken: emailToken});
+    logger.error("Email confirmation is failed", { userId: userId, emailToken: emailToken });
     throw new ServerError("Email confirmation is failed");
 }
 
@@ -75,7 +75,7 @@ export async function checkEmail(userId: string, emailToken: string) {
 export async function logIn(email: string, password: string) {
 
     logger.info("LogIn in process");
-    
+
     const user = await userRepo.findOne({ email: email, IsConfirmed: true });
 
     if (user == null)
@@ -89,7 +89,7 @@ export async function logIn(email: string, password: string) {
     const jsonWebToken = jwt.sign({
         email: user.email,
         id: user.id
-    }, AUTH_SECRET_KEY, { expiresIn: "1d" });
+    }, AUTH_SECRET_KEY, { expiresIn: "10s" });
 
     return {
         id: user.id,
@@ -102,7 +102,6 @@ export async function logIn(email: string, password: string) {
 export async function checkUserToken(token: string) {
 
     logger.info("Checking User Token in process");
-    let user;
 
     try {
         const verifuResult = jwt.verify(token, AUTH_SECRET_KEY);
@@ -110,23 +109,47 @@ export async function checkUserToken(token: string) {
         const userId = decodedToken["userId"];
 
         const user = await userRepo.getUserById(userId);
-        return {...user, password: null};
+        return { ...user, password: null };
 
     } catch (err) {
-        logger.error("Token validation filed", {token});
+        logger.error("Token validation filed", { token });
         throw new NotAuthorizeError("Token validation filed");
     }
 }
 
 export function initiateChangePassword(userEmail: string) {
-    const user = userRepo.findOne({email: userEmail});
+    const user = userRepo.findOne({ email: userEmail });
 
-    if(user == null) {
-        throw new Error("Email not found");
+    if (user == null) {
+        throw new NotFoundError("Email not found");
     }
-    
+
 }
 
+export async function regenerateToken(token: string) {
+    logger.info("Regeneration Token in process");
+
+    const decodedToken = jwt.decode(token);
+    const userId = decodedToken["id"];
+
+    const user = await userRepo.getUserById(userId);
+
+    if (user == null)
+        throw new NotFoundError("User not found", {userId: userId});
+
+    const jsonWebToken = jwt.sign({
+        email: user.email,
+        id: user.id
+    }, AUTH_SECRET_KEY, { expiresIn: "10s" });
+
+    return {
+        id: user.id,
+        email: user.email,
+        login: user.login,
+        token: jsonWebToken
+    };
+
+}
 
 
 /**

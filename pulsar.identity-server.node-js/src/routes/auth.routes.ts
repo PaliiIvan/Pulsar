@@ -13,5 +13,6 @@ router.post("/login", LoginValidation, authController.logIn);
 
 router.post("/check-token", authController.checkUserToken);
 
+router.post("/regenerate-token", authController.regenerateToken);
 
 export const AuthRouters = router;
