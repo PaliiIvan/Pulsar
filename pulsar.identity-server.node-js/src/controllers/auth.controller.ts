@@ -65,8 +65,20 @@ export async function checkUserToken(req: Request, res: Response, next: NextFunc
     const token = req.body.token;
 
     try {
-        const checkTokenResult = authService.checkUserToken(token);
+        const checkTokenResult = await authService.checkUserToken(token);
         res.json(new ResponceResult("User token result", checkTokenResult));
+    } catch(err) {
+        return next(err);
+    }
+}
+
+//POST
+export async function regenerateToken(req: Request, res: Response, next: NextFunction) {
+    const token = req.body.token;
+
+    try {
+        const tokenRegenerationResult = await authService.regenerateToken(token)
+        res.json(new ResponceResult("Regenerate Token", tokenRegenerationResult));
     } catch(err) {
         return next(err);
     }
