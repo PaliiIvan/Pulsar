@@ -11,6 +11,7 @@ import { constants, files } from "../configs/global.variables";
 import { SEND_GRID, BASE_URL, AUTH_SECRET_KEY } from "../configs/secrets";
 import logger from "../util/logger";
 import { NotFoundError, NotAuthorizeError, ServerError } from "../util/exeptions/server-errors";
+import { AuthResult } from "../api.models/auth-result.model";
 
 sendGrid.setApiKey(SEND_GRID);
 
@@ -27,6 +28,7 @@ export async function signUp(email: string, login: string, password: string) {
     const result = await sendGrid.send(mailMessage);
 
     if (result[0].statusCode == 202) {
+        logger.info("SignUp successful");
         return {
             message: "Email send Success",
             isSuccess: true
@@ -60,7 +62,7 @@ export async function checkEmail(userId: string, emailToken: string) {
         user.IsConfirmed = true;
         user.emailToken = null;
         await userRepo.updateUser(user);
-
+        logger.info("Email checking in finished");
         return {
             message: "Email confirmation is successful.",
             isSuccess: true
@@ -75,7 +77,7 @@ export async function checkEmail(userId: string, emailToken: string) {
 export async function logIn(email: string, password: string) {
 
     logger.info("LogIn in process");
-
+    const tokenExparationDateInMs =  new Date().getTime() + constants.TOKEN_EXPARATION * 1000;
     const user = await userRepo.findOne({ email: email, IsConfirmed: true });
 
     if (user == null)
@@ -89,14 +91,9 @@ export async function logIn(email: string, password: string) {
     const jsonWebToken = jwt.sign({
         email: user.email,
         id: user.id
-    }, AUTH_SECRET_KEY, { expiresIn: "10s" });
+    }, AUTH_SECRET_KEY, { expiresIn: constants.TOKEN_EXPARATION });
 
-    return {
-        id: user.id,
-        email: user.email,
-        login: user.login,
-        token: jsonWebToken
-    };
+    return new AuthResult(user.id, user.login, user.email, jsonWebToken, tokenExparationDateInMs);;
 }
 
 export async function checkUserToken(token: string) {
@@ -109,7 +106,9 @@ export async function checkUserToken(token: string) {
         const userId = decodedToken["userId"];
 
         const user = await userRepo.getUserById(userId);
-        return { ...user, password: null };
+
+        logger.info("Checking User Token finished");
+        return true;
 
     } catch (err) {
         logger.error("Token validation filed", { token });
@@ -131,7 +130,7 @@ export async function regenerateToken(token: string) {
 
     const decodedToken = jwt.decode(token);
     const userId = decodedToken["id"];
-
+    const tokenExparationDateInMs =  new Date().getTime() + constants.TOKEN_EXPARATION * 1000;
     const user = await userRepo.getUserById(userId);
 
     if (user == null)
@@ -139,15 +138,11 @@ export async function regenerateToken(token: string) {
 
     const jsonWebToken = jwt.sign({
         email: user.email,
-        id: user.id
-    }, AUTH_SECRET_KEY, { expiresIn: "10s" });
-
-    return {
         id: user.id,
-        email: user.email,
-        login: user.login,
-        token: jsonWebToken
-    };
+    }, AUTH_SECRET_KEY, { expiresIn: constants.TOKEN_EXPARATION });
+
+    logger.info("Regeneration Token finished ");
+    return new AuthResult(user.id, user.login, user.email, jsonWebToken, tokenExparationDateInMs);
 
 }
 

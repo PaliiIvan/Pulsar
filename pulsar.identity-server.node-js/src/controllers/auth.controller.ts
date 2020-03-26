@@ -66,7 +66,7 @@ export async function checkUserToken(req: Request, res: Response, next: NextFunc
 
     try {
         const checkTokenResult = await authService.checkUserToken(token);
-        res.json(new ResponceResult("User token result", checkTokenResult));
+        res.json(checkTokenResult);
     } catch(err) {
         return next(err);
     }
