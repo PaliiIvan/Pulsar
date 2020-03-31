@@ -3,10 +3,11 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { User } from '../../../models/user.model';
 import { ErrorResponce } from '../../../models/server-entities/error-result.server.model';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss', '../authentication.component.scss']
 })
 export class LogInComponent implements OnInit {
 

@@ -40,7 +40,7 @@ const signUpValidation = [
             .withMessage(new ValidationErrorMessage("password", "Password lenght should be: min: 3, max: 30 characters"))
         .trim()
         .custom((value, { req }) => {
-            if (value === req.body.repetPassword) {
+            if (value === req.body.repeatPassword) {
                 return true;
             }
             return false;

@@ -1,36 +1,4 @@
-.auth__container {
-    display: flex;
-    flex-direction: column;
-    margin-left: 6px;
-    margin-right: 6px;
-}
-.auth__container__title {
-    display: flex;
-    justify-content: space-around;
-    flex-direction: row;
-    margin-top: 5px;
-    height: 40px;
-    
-    .login__title {
-        font-size: 20px;
-    }
-}
 
-.auth__container__forms {
-    margin-top: 20px;
-    margin-bottom: 40px;
-}
-
-
-.or {
-    display: flex;
-    justify-content: space-between;
-    &__separator {
-        border-bottom: 2px solid darkcyan;
-        width: 40%;
-        align-self: center;
-    }
-}
 
 .btn__auth {
     margin-top: 10px;

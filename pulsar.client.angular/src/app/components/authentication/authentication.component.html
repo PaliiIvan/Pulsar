@@ -1,7 +1,20 @@
+<div class="authentication__container" (mousedown)="closeAuthWindow($event)">
+    <div class="authentication__container__content" (mousedown)="$event.stopPropagation()"
+        (mousedown)="$event.stopPropagation()">
 
-<div class="authentication__container" (mousedown) = "closeAuthWindow($event)">
-    <div class="authentication__container__content" (mousedown)= "$event.stopPropagation()" (mousedown)= "$event.stopPropagation()">
-        <app-login *ngIf="!isSignIn"></app-login>
-        <app-signin *ngIf="isSignIn"></app-signin>
+
+        <div class="auth">
+            <div class="auth__container">
+                <div class="auth__container__title border--btm">
+                    <span class="login__title"> {{ isSignIn ? "Sign In" : "Log In"}} </span>
+                </div>
+
+                <app-login *ngIf="!isSignIn"></app-login>
+                <app-signin *ngIf="isSignIn"></app-signin>
+
+            </div>
+        </div>
+
+
     </div>
 </div>
