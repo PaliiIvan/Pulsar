@@ -1,7 +1,21 @@
 import * as channelRepo from "../features/channel/channel.repository";
+import jwt from "jsonwebtoken"
+import { STREAM_SECRET_KEY } from "../configs/secrets";
 
-export async function createChannel(userId: string, login: string) {
-    const streamToken = "Super Stream Token";
-    const result = await channelRepo.createChannel(userId,login, streamToken);
+export async function createChannel(userId: string, channelName: string) {
+    const streamToken = generateStreamToken(userId, channelName);
+    const result = await channelRepo.createChannel(userId, channelName, streamToken);
     return result;
+}
+
+
+/**
+ * This method generate new Stream token that include User Id and Channel Name
+ * @param userId User Id
+ * @param channelName User login is channel Name
+ * @returns Generated token
+ */
+function generateStreamToken(userId: string, channelName: string) {
+    const streamToken = jwt.sign({userId, channelName}, STREAM_SECRET_KEY!);
+    return streamToken;
 }

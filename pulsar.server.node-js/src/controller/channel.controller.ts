@@ -8,9 +8,9 @@ import * as channelService from "../services/channel.service";
 */
 export async function postCreateChannel(req: Request, res: Response, next: NextFunction) {
     const userId = req.body.userId;
-    const login = req.body.logIn;
+    const channelName = req.body.channelName;
 
-    const createdChannel = await channelService.createChannel(userId, login); 
+    const createdChannel = await channelService.createChannel(userId, channelName); 
     res.json(createdChannel);
     return next();
 }

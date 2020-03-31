@@ -10,7 +10,8 @@ const channelSchemaDef = new Schema({
     },
     channelName: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     description: {
         type: String,
@@ -19,7 +20,8 @@ const channelSchemaDef = new Schema({
 
     streamToken: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     
     currentStream: streamSchemaDef,
@@ -37,4 +39,4 @@ const channelSchemaDef = new Schema({
 
 channelSchemaDef.set("toObject", { getters: true});
 
-export const channelSchema = model<Channel>("Channel", channelSchemaDef);
+export const channelSchema = model<Channel>("channel", channelSchemaDef);
