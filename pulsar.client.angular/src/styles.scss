@@ -35,12 +35,12 @@ html,body{ margin:0;padding:0 }
       border-radius: 3px;
       height: 25px;
       padding-left: 8px;
-      border: 2px solid #3b3b3b;
-      background: #a8a8a87e;
+      background-color: #f2f2f2;
+      border: 2px solid #f2f2f2;
         &:focus {
             outline: none;
             background-color: #ffffff;
-            border: 2px solid #a8a8a880;
+            border: 2px solid #eec950;
         }
     }
     &__label {

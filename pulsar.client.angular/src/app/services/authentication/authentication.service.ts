@@ -13,8 +13,12 @@ import { ErrorResponce } from '../../models/server-entities/error-result.server.
 export class AuthenticationService {
 
   User = new BehaviorSubject<User>(null);
-  readonly api = environment.identityserverurl;
+  readonly api = environment.identityServerUrl;
   constructor(private http: HttpClient) { }
+
+  signUp(email: string, login: string, password: string, repeatPassword: string) {
+    return this.http.post(`${this.api}/signup`, {email, login, password, repeatPassword});
+  }
 
   logIn(email: string, password: string) {
     return this.http.post(`${this.api}/login`, { email, password })
@@ -59,5 +63,4 @@ export class AuthenticationService {
           localStorage.setItem('user', JSON.stringify(user));
         });
   }
-
 }
