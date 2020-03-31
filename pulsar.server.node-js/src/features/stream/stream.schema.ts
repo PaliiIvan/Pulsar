@@ -26,7 +26,7 @@ export const streamSchemaDef = new Schema({
 
 streamSchemaDef.set("toObject", {getters: true});
 
-export const streamSchema = model<Stream>("Stream", streamSchemaDef);
+export const streamSchema = model<Stream>("stream", streamSchemaDef);
 
 
 
