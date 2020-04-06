@@ -5,7 +5,7 @@ import { streamSchemaDef } from "../stream/stream.schema";
 const channelSchemaDef = new Schema({
     userId: {
         type: Schema.Types.ObjectId,
-        ref: "UserAccounts",
+        ref: "user-accounts",
         required: true
     },
     channelName: {
@@ -28,7 +28,7 @@ const channelSchemaDef = new Schema({
 
     savedStreams: {
         type: Schema.Types.ObjectId,
-        ref: "Stream"
+        ref: "stream"
     },
     
     isOnline: {
