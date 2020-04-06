@@ -1,15 +1,23 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { StoreModule } from '@ngrx/store';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
-import { HttpClientModule } from '@angular/common/http';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { LogInComponent } from './components/authentication/login/login.component';
 import { AuthenticationComponent } from './components/authentication/authentication.component';
 import { SigninComponent } from './components/authentication/signin/signin.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { environment } from '../environments/environment';
+
+import * as navBar from './components/nav-bar/store/nav-bar.reducer';
+import { ErrorPageComponent } from './pages/error-page/error-page.component';
+import * as fromApp from './store/app.reducer';
 
 @NgModule({
   declarations: [
@@ -18,13 +26,17 @@ import { ReactiveFormsModule } from '@angular/forms';
     LogInComponent,
     AuthenticationComponent,
     NavBarComponent,
-    SigninComponent
+    SigninComponent,
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    StoreModule.forRoot(fromApp.appReducer),
+    StoreDevtoolsModule.instrument({}),
+    StoreRouterConnectingModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
