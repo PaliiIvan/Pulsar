@@ -28,16 +28,7 @@ export class AuthenticationService {
   }
 
   checkToken(token: string) {
-    return this.http.post(`${this.api}/check-token`, { token })
-      .pipe(
-        catchError(err => {
-          const httpError = err as HttpErrorResponse;
-          if (httpError.status === 401) {
-            return of(err.error);
-          }
-        }),
-        map(res => res.status)
-      );
+    return this.http.post<RequestResult<boolean>>(`${this.api}/check-token`, { token });
   }
 
   regenerateToken(token: string) {

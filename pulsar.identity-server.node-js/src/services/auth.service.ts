@@ -115,8 +115,9 @@ export async function checkUserToken(token: string) {
         return true;
 
     } catch (err) {
-        logger.error("Token validation filed", { token });
-        throw new NotAuthorizeError("Token validation filed");
+        logger.info("Token validation filed", { token });
+
+        return false;
     }
 }
 
