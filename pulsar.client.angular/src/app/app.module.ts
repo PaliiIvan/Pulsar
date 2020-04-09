@@ -2,9 +2,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,10 +14,11 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { LogInComponent } from './components/authentication/login/login.component';
 import { AuthenticationComponent } from './components/authentication/authentication.component';
 import { SigninComponent } from './components/authentication/signin/signin.component';
-import { environment } from '../environments/environment';
-
-import * as navBar from './components/nav-bar/store/nav-bar.reducer';
 import { ErrorPageComponent } from './pages/error-page/error-page.component';
+import { AuthenticationEffects } from './components/authentication/store/authentication.effects';
+import { LogInEffects } from './components/authentication/login/store/login.effects';
+import { HttpErrorInterceptor } from './utils/interceptors/http-error.interceptor';
+
 import * as fromApp from './store/app.reducer';
 
 @NgModule({
@@ -36,9 +38,16 @@ import * as fromApp from './store/app.reducer';
     ReactiveFormsModule,
     StoreModule.forRoot(fromApp.appReducer),
     StoreDevtoolsModule.instrument({}),
-    StoreRouterConnectingModule.forRoot()
+    StoreRouterConnectingModule.forRoot(),
+    EffectsModule.forRoot([LogInEffects, AuthenticationEffects])
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

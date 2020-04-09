@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
-import logger from "../util/logger";
 import { NotFoundError, ErrorResponce, ServerError, NotAuthorizeError } from "../util/exeptions/server-errors";
+
 import { ValidationExeption } from "../util/exeptions/auth-error.parser";
+import logger from "../util/logger";
 
 
 export function errorHandling(err: any, req: Request, res: Response, next: any) {
     
     if(err instanceof (ValidationExeption)) {
-        res.status(400).json(new ErrorResponce("Validation filed", err.errors));
+        res.status(400).json(new ErrorResponce("Validation filed", err.metadata));
         return next();
     }
 

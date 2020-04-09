@@ -1,7 +1,7 @@
 import { ActionReducerMap } from '@ngrx/store';
 
 import * as navBar from '../components/nav-bar/store/nav-bar.reducer';
-import * as logIn from '../components/authentication/login/store/store.reducer';
+import * as logIn from '../components/authentication/login/store/login.reducer';
 
 
 export interface AppState {
@@ -12,4 +12,6 @@ export interface AppState {
 export const appReducer: ActionReducerMap<AppState> = {
     navBar: navBar.reducer,
     logIn: logIn.reducer
-}
+};
+
+
