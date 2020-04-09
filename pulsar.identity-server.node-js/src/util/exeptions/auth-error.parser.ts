@@ -1,6 +1,8 @@
 import { NextFunction } from "express";
 import { Result, ValidationError } from "express-validator";
 
+import { ErrorMetadata } from "./server-errors";
+
 /**
  * 
  * @param errors Validation Error
@@ -11,11 +13,20 @@ export function errorParser(errors: Result, next: NextFunction) {
     return next(error);
 }
 
-export class ValidationExeption {
-    errors: ValidationErrorMessage[];
-    constructor(errors: ValidationError[]) {
-        this.errors = errors.map(err => err.msg);
+export class ValidationExeption extends Error implements ErrorMetadata {
+
+    constructor(errors: ValidationError[] | { propery: string, message: string }[]) {
+        super("Validation Error");
+
+        if('param' in errors)
+            this.metadata = (<ValidationError[]>errors).map(err => err.msg);
+        else
+            this.metadata = errors;
     }
+
+    metadata: any;
+    description: string;
+    statusCode: number;
 }
 
 export class ValidationErrorMessage {

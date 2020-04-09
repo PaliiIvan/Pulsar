@@ -1,17 +1,21 @@
 import { hash, compareSync } from "bcrypt";
 import { readFileSync } from "fs";
+
 import jwt from "jsonwebtoken";
 import uuid from "uuid/v1";
 import sendGrid from "@sendgrid/mail";
 import path from "path";
 
-import * as userRepo from "../features/user/user.repository";
-import { formatString } from "../extensions/string.extensions";
-import { constants, files } from "../configs/global.variables";
-import { SEND_GRID, BASE_URL, AUTH_SECRET_KEY } from "../configs/secrets";
 import logger from "../util/logger";
+
+import { formatString } from "../extensions/string.extensions";
 import { NotFoundError, NotAuthorizeError, ServerError } from "../util/exeptions/server-errors";
+import { constants, files } from "../configs/global.variables";
 import { AuthResult } from "../api.models/auth-result.model";
+import { SEND_GRID, BASE_URL, AUTH_SECRET_KEY } from "../configs/secrets";
+import { ValidationExeption } from "../util/exeptions/auth-error.parser";
+
+import * as userRepo from "../features/user/user.repository";
 
 sendGrid.setApiKey(SEND_GRID);
 
@@ -81,19 +85,19 @@ export async function logIn(email: string, password: string) {
     const user = await userRepo.findOne({ email: email, IsConfirmed: true });
 
     if (user == null)
-        throw new NotFoundError("Email or password is incorect");
+        throw new ValidationExeption([{ propery: '', message: 'Email or password is incorect' }]);
 
     const isPasswordCorect = compareSync(password, user.password);
 
     if (!isPasswordCorect)
-        throw new NotFoundError("Email or password is incorect");
+    throw new ValidationExeption([{ propery: '', message: 'Email or password is incorect' }]);
 
     const jsonWebToken = jwt.sign({
         email: user.email,
         id: user.id
     }, AUTH_SECRET_KEY, { expiresIn: constants.TOKEN_EXPARATION });
 
-    return new AuthResult(user.id, user.login, user.email, jsonWebToken, tokenExparationDateInMs);;
+    return new AuthResult(user.id, user.login, user.email, jsonWebToken, tokenExparationDateInMs);
 }
 
 export async function checkUserToken(token: string) {
