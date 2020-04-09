@@ -1,5 +1,7 @@
 import { Schema as _Schema, model, Types, Document } from "mongoose";
+
 import UserAccount from "./user.model";
+
 const Schema = _Schema;
 
 interface UserAccountsSchemaModel extends UserAccount, Document {
@@ -34,5 +36,5 @@ const userAccountSchemaDef = new Schema({
 
 userAccountSchemaDef.set("toObject", { getters: true });
 
-export const userAccountSchema = model<UserAccountsSchemaModel>("user-accounts", userAccountSchemaDef);
+export const userAccountSchema = model<UserAccountsSchemaModel>("useraccounts", userAccountSchemaDef);
 
