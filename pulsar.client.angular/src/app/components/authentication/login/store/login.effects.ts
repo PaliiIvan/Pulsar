@@ -38,8 +38,6 @@ export class LogInEffects {
             map(res => this.logInUser(res.authRes)),
         ));
 
-
-    setTokenExparationTimer$ = createEffect(() => this.actions$.pipe());
     //#endregion
 
 

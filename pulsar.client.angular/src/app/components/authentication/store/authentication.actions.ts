@@ -26,4 +26,8 @@ export const regenerateToken = createAction(
     '[User Auth] Regenerate User Token'
 );
 
+export const setTokenValidationResult = createAction(
+    '[User Auth] Set Token Validation result',
+    props<{isTokenValid: boolean}>()
+);
 
