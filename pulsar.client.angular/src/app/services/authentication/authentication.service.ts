@@ -32,17 +32,6 @@ export class AuthenticationService {
   }
 
   regenerateToken(token: string) {
-    this.http.post(`${this.api}/regenerate-token`, { token }).pipe(
-      catchError(err => of(new ErrorResponce(err.error.message, err.error.metadata))))
-      .subscribe(res => {
-          if (res instanceof ErrorResponce) {
-            return res;
-          }
-          const data = (res as any).data;
-
-          const user = new User(data.id, data.email, data.login, data.token);
-          this.User.next(user);
-          localStorage.setItem('user', JSON.stringify(user));
-        });
+    return this.http.post<RequestResult<AuthResult>>(`${this.api}/regenerate-token`, { token });
   }
 }

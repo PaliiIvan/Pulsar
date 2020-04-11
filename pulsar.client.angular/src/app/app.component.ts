@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+
 import { AuthenticationService } from './services/authentication/authentication.service';
 import { User } from './models/user.model';
+import { AppState } from './store/app.reducer';
+
+import * as fromAuthActions from '../app/components/authentication/store/authentication.actions';
+import * as fromLogIn from '../app/components/authentication/login/store/login.actions';
 
 @Component({
   selector: 'app-root',
@@ -10,19 +16,19 @@ import { User } from './models/user.model';
 export class AppComponent implements OnInit {
   title = 'Pulsar';
 
-  constructor(private authService: AuthenticationService) {}
+  constructor(private authService: AuthenticationService, private store: Store<AppState>) { }
 
   ngOnInit(): void {
+    localStorage.removeItem('user');
     const user: User = JSON.parse(localStorage.getItem('user'));
 
     if (user != null) {
-      this.authService.checkToken(user.token)
-      .subscribe(isValidToken => {
-        if (isValidToken) {
-          console.log(isValidToken);
-          this.authService.User.next(user);
+      this.store.dispatch(fromAuthActions.checkTokenValidity({ token: user.token }));
+      this.store.select(state => state.authState.isTokenValid).subscribe(isTokenValid => {
+        if (isTokenValid) {
+          this.store.dispatch(fromAuthActions.userAuthenticationSuccess({ user }));
         } else {
-          this.authService.regenerateToken(user.token);
+          this.store.dispatch(fromAuthActions.regenerateToken({ token: user.token }));
         }
       });
     }
