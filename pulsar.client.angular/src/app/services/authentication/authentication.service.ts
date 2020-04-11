@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { catchError map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { BehaviorSubject, of } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
@@ -28,30 +28,10 @@ export class AuthenticationService {
   }
 
   checkToken(token: string) {
-    return this.http.post(`${this.api}/check-token`, { token })
-      .pipe(
-        catchError(err => {
-          const httpError = err as HttpErrorResponse;
-          if (httpError.status === 401) {
-            return of(err.error);
-          }
-        }),
-        map(res => res.status)
-      );
+    return this.http.post<RequestResult<boolean>>(`${this.api}/check-token`, { token });
   }
 
   regenerateToken(token: string) {
-    this.http.post(`${this.api}/regenerate-token`, { token }).pipe(
-      catchError(err => of(new ErrorResponce(err.error.message, err.error.metadata))))
-      .subscribe(res => {
-          if (res instanceof ErrorResponce) {
-            return res;
-          }
-          const data = (res as any).data;
-
-          const user = new User(data.id, data.email, data.login, data.token);
-          this.User.next(user);
-          localStorage.setItem('user', JSON.stringify(user));
-        });
+    return this.http.post<RequestResult<AuthResult>>(`${this.api}/regenerate-token`, { token });
   }
 }
