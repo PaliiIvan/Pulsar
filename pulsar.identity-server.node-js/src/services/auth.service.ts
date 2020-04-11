@@ -16,6 +16,7 @@ import { SEND_GRID, BASE_URL, AUTH_SECRET_KEY } from "../configs/secrets";
 import { ValidationExeption } from "../util/exeptions/auth-error.parser";
 
 import * as userRepo from "../features/user/user.repository";
+import { SignInUser } from "../api.models/sign-in.model";
 
 sendGrid.setApiKey(SEND_GRID);
 
@@ -33,10 +34,7 @@ export async function signUp(email: string, login: string, password: string) {
 
     if (result[0].statusCode == 202) {
         logger.info("SignUp successful");
-        return {
-            message: "Email send Success",
-            isSuccess: true
-        };
+        return new SignInUser(createdUser.id, createdUser.login);
     } else {
 
         logger.error("Email sending Error", { user: createdUser, emailMess: result });

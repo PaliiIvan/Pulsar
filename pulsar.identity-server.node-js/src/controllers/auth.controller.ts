@@ -20,7 +20,7 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
 
     try {
         const authResult = await authService.signUp(email, login, password);
-        res.json(new ResponceResult("Sign Up", authResult));
+        res.json(authResult);
     } catch (err) {
         return next(err);
     }
