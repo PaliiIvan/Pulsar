@@ -8,6 +8,7 @@ import { RequestResult } from '../../models/server-entities/request-result.serve
 import { User } from '../../models/user.model';
 import { ErrorResponce } from '../../models/server-entities/error-result.server.model';
 import { AuthResult } from '../../models/server-entities/auth-result.model';
+import { SignInUser } from '../../models/server-entities/signup-user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class AuthenticationService {
   constructor(private http: HttpClient) { }
 
   signUp(email: string, login: string, password: string, repeatPassword: string) {
-    return this.http.post(`${this.api}/signup`, {email, login, password, repeatPassword});
+    return this.http.post<SignInUser>(`${this.api}/signup`, {email, login, password, repeatPassword});
   }
 
   logIn(email: string, password: string) {

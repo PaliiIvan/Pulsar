@@ -20,6 +20,7 @@ import { LogInEffects } from './components/authentication/login/store/login.effe
 import { HttpErrorInterceptor } from './utils/interceptors/http-error.interceptor';
 
 import * as fromApp from './store/app.reducer';
+import { SignInEffects } from './components/authentication/signin/store/signin.effects';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,7 @@ import * as fromApp from './store/app.reducer';
     StoreModule.forRoot(fromApp.appReducer),
     StoreDevtoolsModule.instrument({}),
     StoreRouterConnectingModule.forRoot(),
-    EffectsModule.forRoot([LogInEffects, AuthenticationEffects])
+    EffectsModule.forRoot([LogInEffects, AuthenticationEffects, SignInEffects])
   ],
   providers: [
     {
