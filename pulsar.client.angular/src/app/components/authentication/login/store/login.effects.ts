@@ -34,8 +34,10 @@ export class LogInEffects {
     succesLogIn$ = createEffect(() => this.actions$
         .pipe(
             ofType(logInActions.logInSuccess),
-            tap(action => fromAuthActions.setTokentExparationTimer({tokenExpDate: action.authRes.tokenExparation})),
-            map(res => this.logInUser(res.authRes)),
+            switchMap(action => [
+                this.logInUser(action.authRes),
+                fromAuthActions.setTokentExparationTimer({token: action.authRes.token, exparationData: action.authRes.tokenExparation})]
+            )
         ));
 
     //#endregion
@@ -46,9 +48,9 @@ export class LogInEffects {
 
     private logInUser(authResult: AuthResult) {
         console.log('User Saved');
-        const user = new User(authResult.id, authResult.email, authResult.login, authResult.token);
+        const user = new User(authResult.id, authResult.email, authResult.login, authResult.token, authResult.tokenExparation);
         localStorage.setItem('user', JSON.stringify(user));
-        return fromAuthActions.userAuthenticationSuccess(user);
+        return fromAuthActions.userAuthenticationSuccess({user});
     }
 
     //#endregion
