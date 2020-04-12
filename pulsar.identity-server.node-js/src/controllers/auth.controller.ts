@@ -29,13 +29,13 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
 
 //GET
 export async function completeAuth(req: Request, res: Response, next: NextFunction) {
-    const userId = req.query.id;
-    const userEmailToken = req.query.token;
+    const userId = req.body.id;
+    const userEmailToken = req.body.token;
     let confirmationEmailResult: any;
 
     try {
         const confirmationEmailResult = await authService.checkEmail(userId, userEmailToken);
-        res.redirect(constants.CLIENT_URL);
+        res.json(confirmationEmailResult);
     } catch(err) {
         return next(err);
     }

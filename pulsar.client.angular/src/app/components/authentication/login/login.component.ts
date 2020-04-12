@@ -9,7 +9,7 @@ import { ErrorResponce } from '../../../models/server-entities/error-result.serv
 import { AppState } from '../../../store/app.reducer';
 import { ValidationError } from '../../../models/errors/validation-error.model';
 
-import * as loginActions from './store/login.actions';
+import * as loginActions from './_store/login.actions';
 
 @Component({
   selector: 'app-login',

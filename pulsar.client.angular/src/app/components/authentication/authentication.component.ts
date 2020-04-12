@@ -8,7 +8,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class AuthenticationComponent implements OnInit {
 
-  @Input() isSignIn: boolean;
+  @Input() isSignUp: boolean;
   @Output() authenticationOff = new EventEmitter();
 
   constructor() { }

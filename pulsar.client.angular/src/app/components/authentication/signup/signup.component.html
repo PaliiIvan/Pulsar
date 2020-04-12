@@ -1,0 +1,40 @@
+<div *ngIf='!(showsignUpResultMessage |async)'>
+    <div class="auth__container__forms">
+        <form [formGroup]="signUpForm" (submit)="signUp()">
+            <div class="forms">
+                <div class="forms__group">
+                    <label class="forms__group__label" for="email">Email</label>
+                    <input class="forms__group__input" type="text" name="email" id="email"  formControlName="email"/>
+                </div>
+    
+                <div class="forms__group">
+                    <label class="forms__group__label" for="login">Login</label>
+                    <input class="forms__group__input" type="text" name="login" id="login" formControlName="login"/>
+                </div>
+                
+                <div class="forms__group">
+                    <label class="forms__group__label" for="password">Password</label>
+                    <input class="forms__group__input" type="password" name="password" id="password" formControlName="password"/>
+                </div>
+    
+                <div class="forms__group">
+                    <label class="forms__group__label" for="repeatpassword">Repeat password</label>
+                    <input class="forms__group__input" type="password" name="repeatpassword" id="repeatpassword" formControlName="repeatPassword"/>
+                </div>
+                <button class="btn  btn__submit  btn__auth" type="submit">Sign In</button>
+            </div>
+        </form>
+    </div>
+    <div class="or">
+        <div class="or__separator"></div>
+        <div class="or__text">or..</div>
+        <div class="or__separator"></div>
+    </div>
+</div>
+
+<div *ngIf='(showsignUpResultMessage |async)'>
+    <span>
+        Accaunt was created and confirmation link was send to you email.
+        Please confirm you email.
+    </span>
+</div>

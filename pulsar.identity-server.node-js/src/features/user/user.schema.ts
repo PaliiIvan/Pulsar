@@ -36,5 +36,5 @@ const userAccountSchemaDef = new Schema({
 
 userAccountSchemaDef.set("toObject", { getters: true });
 
-export const userAccountSchema = model<UserAccountsSchemaModel>("useraccounts", userAccountSchemaDef);
+export const userAccountSchema = model<UserAccountsSchemaModel>("user-accounts", userAccountSchemaDef);
 

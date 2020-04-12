@@ -2,13 +2,13 @@ import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 import { ChannelService } from '../../../../services/channel/channel.service.service';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, tap } from 'rxjs/operators';
 
-import * as fromSignInActions from './signin.actions';
+import * as fromsignUpActions from './signup.actions';
 
 
 @Injectable()
-export class SignInEffects {
+export class SignUpEffects {
 
     constructor(
         private action$: Actions,
@@ -18,19 +18,25 @@ export class SignInEffects {
 
     signUpSend$ = createEffect(() => this.action$
     .pipe(
-        ofType(fromSignInActions.signInSend),
+        ofType(fromsignUpActions.sendSignUpData),
         switchMap(action => this.authService.signUp(action.email, action.logIn, action.password, action.repeatPassword)
             .pipe(
-                map(res => fromSignInActions.createChannel({userId: res.userId, login: res.login}))
+                map(res => fromsignUpActions.createChannel({userId: res.userId, login: res.login}))
             ))
     ));
 
     createChannel$ = createEffect(() => this.action$
         .pipe(
-            ofType(fromSignInActions.createChannel),
+            ofType(fromsignUpActions.createChannel),
             switchMap(action => this.channelService.createChannel(action.userId, action.login)
                 .pipe(
-                    map(res => (fromSignInActions.signInSucces()))
+                    map(res => fromsignUpActions.signUpSucces())
                 ))
         ));
+
+        confirmEmail$ = createEffect(() => this.action$
+        .pipe(
+            ofType(fromsignUpActions.emailValidationSuccess),
+            switchMap(action => this.authService.confirmEmail(action.userId, action.emailToken))
+        ), {dispatch: false });
 }

@@ -8,8 +8,8 @@ import { AppState } from '../../../store/app.reducer';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 
 import * as fromAuthActions from './authentication.actions';
-import * as fromligInActions from '../login/store/login.actions';
-import * as fromNavBar from '../../nav-bar/store/nav-bar.action';
+import * as fromligInActions from '../login/_store/login.actions';
+import * as fromNavBar from '../../nav-bar/_store/nav-bar.action';
 @Injectable()
 export class AuthenticationEffects {
 

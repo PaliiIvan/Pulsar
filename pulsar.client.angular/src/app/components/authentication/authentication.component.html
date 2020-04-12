@@ -6,12 +6,11 @@
         <div class="auth">
             <div class="auth__container">
                 <div class="auth__container__title border--btm">
-                    <span class="login__title"> {{ isSignIn ? "Sign In" : "Log In"}} </span>
+                    <span class="login__title"> {{ isSignUp ? "Sign In" : "Log In"}} </span>
                 </div>
 
-                <app-login *ngIf="!isSignIn"></app-login>
-                <app-signin *ngIf="isSignIn"></app-signin>
-
+                <app-login *ngIf="!isSignUp"></app-login>
+                <app-signup *ngIf="isSignUp"></app-signup>
             </div>
         </div>
 

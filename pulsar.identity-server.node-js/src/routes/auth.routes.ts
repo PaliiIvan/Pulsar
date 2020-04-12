@@ -7,7 +7,7 @@ const router = Router();
 
 router.post("/signup", SignUpValidation, authController.signUp);
 
-router.get("/complete-auth", authController.completeAuth);
+router.post("/complete-auth", authController.completeAuth);
 
 router.post("/login", LoginValidation, authController.logIn);
 

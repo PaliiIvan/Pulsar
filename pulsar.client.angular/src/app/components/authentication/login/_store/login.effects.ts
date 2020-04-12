@@ -11,8 +11,8 @@ import { ValidationError } from '../../../../models/errors/validation-error.mode
 import { AppState } from '../../../../store/app.reducer';
 import { AuthResult } from '../../../../models/server-entities/auth-result.model';
 
-import * as logInActions from '../store/login.actions';
-import * as fromAuthActions from '../../store/authentication.actions';
+import * as logInActions from './login.actions';
+import * as fromAuthActions from '../../_store/authentication.actions';
 
 @Injectable()
 export class LogInEffects {
