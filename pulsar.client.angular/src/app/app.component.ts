@@ -5,8 +5,8 @@ import { AuthenticationService } from './services/authentication/authentication.
 import { User } from './models/user.model';
 import { AppState } from './store/app.reducer';
 
-import * as fromAuthActions from '../app/components/authentication/store/authentication.actions';
-import * as fromLogIn from '../app/components/authentication/login/store/login.actions';
+import * as fromAuthActions from './components/authentication/_store/authentication.actions';
+import * as fromLogIn from './components/authentication/login/_store/login.actions';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
 
     if (user != null) {
       this.store.dispatch(fromAuthActions.checkTokenValidity({ token: user.token }));
-      this.store.select(state => state.authState.isTokenValid).subscribe(isTokenValid => {
+      this.store.select(state => state.auth.isTokenValid).subscribe(isTokenValid => {
         if (isTokenValid) {
           this.store.dispatch(fromAuthActions.userAuthenticationSuccess({ user }));
         } else {

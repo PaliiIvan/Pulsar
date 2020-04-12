@@ -16,7 +16,7 @@ import { SEND_GRID, BASE_URL, AUTH_SECRET_KEY } from "../configs/secrets";
 import { ValidationExeption } from "../util/exeptions/auth-error.parser";
 
 import * as userRepo from "../features/user/user.repository";
-import { SignInUser } from "../api.models/sign-in.model";
+import { SignUpUser } from "../api.models/sign-in.model";
 
 sendGrid.setApiKey(SEND_GRID);
 
@@ -34,7 +34,7 @@ export async function signUp(email: string, login: string, password: string) {
 
     if (result[0].statusCode == 202) {
         logger.info("SignUp successful");
-        return new SignInUser(createdUser.id, createdUser.login);
+        return new SignUpUser(createdUser.id, createdUser.login);
     } else {
 
         logger.error("Email sending Error", { user: createdUser, emailMess: result });
@@ -59,12 +59,15 @@ export async function checkEmail(userId: string, emailToken: string) {
         logger.error("User not Found", { userId: userId, emailToken: emailToken });
         throw new NotFoundError("User not found");
     }
+    if(user.emailToken == null) {
+        return { message: 'Email is confirmed', isSuccess: true };
+    }
 
     if (user.emailToken === emailToken) {
         user.IsConfirmed = true;
         user.emailToken = null;
         await userRepo.updateUser(user);
-        logger.info("Email checking in finished");
+        logger.info("Email checking is finished");
         return {
             message: "Email confirmation is successful.",
             isSuccess: true
@@ -163,7 +166,7 @@ function _generateEmail(userId: string, userEmail: string, login: string, emailT
 
     let emailTemplate = readFileSync(fileLocation, { encoding: "utf8" });
 
-    const confirmationEmailLink = formatString(constants.CONFIRMATION_EMAIL_LINK, [BASE_URL, userId, emailToken]);
+    const confirmationEmailLink = formatString(constants.CONFIRMATION_EMAIL_LINK, [constants.CLIENT_URL, userId, emailToken]);
 
     emailTemplate = formatString(emailTemplate, [login, confirmationEmailLink]);
 

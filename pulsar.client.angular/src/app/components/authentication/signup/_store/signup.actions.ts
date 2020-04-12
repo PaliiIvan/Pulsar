@@ -1,8 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 
 
-export const signInSend = createAction(
-    '[Sign In] Send User sign in data',
+export const sendSignUpData = createAction(
+    '[Sign In] Send signUp data',
     props<{email: string, logIn: string, password: string, repeatPassword: string}>()
 );
 
@@ -11,11 +11,11 @@ export const createChannel = createAction(
     props<{userId: string, login: string}>()
 );
 
-export const signInSucces = createAction(
+export const signUpSucces = createAction(
     '[Sign In] Sign in Succes & Channel created'
 );
 
-export const signInFinished = createAction(
-    '[Sign In] Sign in finished'
+export const emailValidationSuccess = createAction(
+    '[Sign In] Email Validation success',
+    props<{ userId: string, emailToken: string }>()
 );
-

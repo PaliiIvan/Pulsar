@@ -1,4 +1,4 @@
-export class SignInUser {
+export class SignUpUser {
     userId: string;
     login: string;
 

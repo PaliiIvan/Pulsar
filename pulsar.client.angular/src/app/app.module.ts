@@ -13,14 +13,17 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { LogInComponent } from './components/authentication/login/login.component';
 import { AuthenticationComponent } from './components/authentication/authentication.component';
-import { SigninComponent } from './components/authentication/signin/signin.component';
+import { SignupComponent } from './components/authentication/signup/signup.component';
 import { ErrorPageComponent } from './pages/error-page/error-page.component';
-import { AuthenticationEffects } from './components/authentication/store/authentication.effects';
-import { LogInEffects } from './components/authentication/login/store/login.effects';
+import { AuthenticationEffects } from './components/authentication/_store/authentication.effects';
+import { LogInEffects } from './components/authentication/login/_store/login.effects';
 import { HttpErrorInterceptor } from './utils/interceptors/http-error.interceptor';
 
 import * as fromApp from './store/app.reducer';
-import { SignInEffects } from './components/authentication/signin/store/signin.effects';
+import { SignUpEffects } from './components/authentication/signup/_store/signup.effects';
+import { VerifyEmailMessageComponent } from './components/email-verification/email-verification.component';
+import { EmailVerificationEffects } from './components/email-verification/_store/email-verification.effects';
+
 
 @NgModule({
   declarations: [
@@ -29,8 +32,9 @@ import { SignInEffects } from './components/authentication/signin/store/signin.e
     LogInComponent,
     AuthenticationComponent,
     NavBarComponent,
-    SigninComponent,
-    ErrorPageComponent
+    SignupComponent,
+    ErrorPageComponent,
+    VerifyEmailMessageComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +44,7 @@ import { SignInEffects } from './components/authentication/signin/store/signin.e
     StoreModule.forRoot(fromApp.appReducer),
     StoreDevtoolsModule.instrument({}),
     StoreRouterConnectingModule.forRoot(),
-    EffectsModule.forRoot([LogInEffects, AuthenticationEffects, SignInEffects])
+    EffectsModule.forRoot([LogInEffects, AuthenticationEffects, SignUpEffects, EmailVerificationEffects])
   ],
   providers: [
     {
