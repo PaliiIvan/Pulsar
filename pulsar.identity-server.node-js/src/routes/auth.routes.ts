@@ -15,4 +15,6 @@ router.post("/check-token", authController.checkUserToken);
 
 router.post("/regenerate-token", authController.regenerateToken);
 
+router.post("/authenticate-server-user", authController.checkUserToken);
+
 export const AuthRouters = router;

@@ -7,12 +7,16 @@ import { environment } from '../../../environments/environment';
 })
 export class ChannelService {
 
-  readonly webApi = environment.apiUrl;
+  readonly API = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
 
   createChannel(userId: string, logIn: string) {
-    return this.http.post(`${this.webApi}/create-channel`, {userId, logIn});
+    return this.http.post(`${this.API}/create-channel`, {userId, logIn});
+  }
+
+  getChannel(channelId: string) {
+    return this.http.get(`${this.API}/${channelId}`);
   }
 }
