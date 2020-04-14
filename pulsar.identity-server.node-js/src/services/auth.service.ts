@@ -91,7 +91,7 @@ export async function logIn(email: string, password: string) {
     const isPasswordCorect = compareSync(password, user.password);
 
     if (!isPasswordCorect)
-    throw new ValidationExeption([{ propery: '', message: 'Email or password is incorect' }]);
+        throw new ValidationExeption([{ propery: '', message: 'Email or password is incorect' }]);
 
     const jsonWebToken = jwt.sign({
         email: user.email,
@@ -116,7 +116,7 @@ export async function checkUserToken(token: string) {
         return true;
 
     } catch (err) {
-        logger.info("Token validation filed", { token });
+        logger.info("Token validation filed", { token, err });
 
         return false;
     }
@@ -152,6 +152,33 @@ export async function regenerateToken(token: string) {
 
 }
 
+export async function authApiRequest(token: string) {
+    logger.info("Checking User Token in process");
+    let userId: string;
+
+    try {
+        jwt.verify(token, AUTH_SECRET_KEY);
+        const decodedToken = jwt.decode(token);
+        userId = decodedToken["userId"];
+        
+    } catch(err) {
+        logger.error("Token validation filed", { token });
+        throw new Error(err);
+    }
+    try {
+        const user = await userRepo.getUserById(userId);
+
+        if (user == null)
+            throw new NotFoundError('User not found', {userId});
+
+        logger.info("Checking User Token finished");
+
+        return user;
+
+    } catch (err) {
+        throw new NotFoundError('User not found', err);
+    }
+}
 
 /**
  * @param {String} userId

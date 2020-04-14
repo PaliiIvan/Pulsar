@@ -1,6 +1,7 @@
-import  express from "express";
+import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
+import * as auhtMiddleware from "./middleware/authentication.middleware";
 import { Request, Response, NextFunction } from "express";
 
 import { ChannelRouter } from "./routes/chanal.routes";
@@ -17,20 +18,26 @@ app.use((req, res, next) => {
       res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH');
       return res.status(200).json({});
   };
-  next();
+  return next();
 });
   
 
-
 app.set("port", 8081);
+
+app.use(auhtMiddleware.useAuthentication);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(ChannelRouter);
 
+app.use((req, res, next) => {
+  console.log(req.user);
+  return next();
+});
 app.use((err: any, req: Request, res: Response, next: any) => {
   console.log(err);
+  console.log(req.user);
   return next();
 });
 
