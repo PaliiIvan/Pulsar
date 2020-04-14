@@ -11,6 +11,9 @@
     "baseUrl": ".",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "typeRoots": [
+      "@types"
+    ],
     "paths": {
       "*": [
         "node_modules/*",
