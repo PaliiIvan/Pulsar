@@ -15,7 +15,8 @@ export class StreamSettingsComponent implements OnInit {
   constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
-    this.store.select(state => state.auth.channel.streamKey).subscribe(streamKey => {
+    this.store.select(state => state.auth.channel.streamToken)
+    .subscribe(streamKey => {
       this.streamForm = new FormGroup({
         streamName: new FormControl(''),
         streamKey: new FormControl(streamKey)

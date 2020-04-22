@@ -49,7 +49,7 @@ import { AuthInterceptor } from './utils/interceptors/authentication.interceptor
     ReactiveFormsModule,
     StoreModule.forRoot(fromApp.appReducer),
     StoreDevtoolsModule.instrument({}),
-    StoreRouterConnectingModule.forRoot(),
+   // StoreRouterConnectingModule.forRoot(),
     EffectsModule.forRoot([LogInEffects, AuthenticationEffects, SignUpEffects, EmailVerificationEffects])
   ],
   providers: [

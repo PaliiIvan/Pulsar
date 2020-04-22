@@ -73,14 +73,10 @@ export class AuthenticationEffects {
     //#region Private methods
 
     private startTimer(token: string, timeForExp: number) {
-        console.log('Timer Started');
-        console.log('Token Regenerate Date', new Date(timeForExp));
-        console.log('ms to regenerateToken: ', timeForExp - new Date().getTime());
         const msToRegenerateToken = timeForExp - new Date().getTime();
-
         setTimeout(() => {
             console.log('Time to regenerate token');
-            this.store.dispatch(fromAuthActions.regenerateToken({token}));
+            this.store.dispatch(fromAuthActions.setTokenValidationResult({isTokenValid: false}));
         }, msToRegenerateToken);
     }
 
