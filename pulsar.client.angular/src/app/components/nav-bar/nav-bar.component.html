@@ -1,15 +1,15 @@
-<div class="nav-bar-container">
+<div class="nav__bar__container">
     <div class="logo">Logo</div>
     <div class="auth__container">
         <div *ngIf="(user | async)" class="user__container">
             {{(user | async).login}}
         </div>
         <div class="auth__b__container" *ngIf="(user | async) == null">
-            <button (click)="authProcessStarted(false)" class="auth-btn">Log In</button>
-            <button (click)="authProcessStarted(true)" class="auth-btn">Sign In</button>
+            <button (click)="authProcessStarted(false)" class="auth__btn">Log In</button>
+            <button (click)="authProcessStarted(true)" class="auth__btn">Sign In</button>
         </div>
         
     </div>
 </div>
 
-<app-authentication *ngIf="(isAuth | async)" [isSignUp]="isSignUp" (authenticationOff) = "closeAuthModal()"></app-authentication>
+<app-authentication *ngIf="(isAuth | async)" [isSignUp]="isSignUp"></app-authentication>

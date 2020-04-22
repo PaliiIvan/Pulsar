@@ -26,15 +26,15 @@ export class AuthenticationService {
 
   logIn(email: string, password: string) {
 
-    return this.http.post<RequestResult<AuthResult>>(`${this.API}/login`, { email, password });
+    return this.http.post<AuthResult>(`${this.API}/login`, { email, password });
   }
 
   checkToken(token: string) {
-    return this.http.post<RequestResult<boolean>>(`${this.API}/check-token`, { token });
+    return this.http.post<boolean>(`${this.API}/check-token`, { token });
   }
 
   regenerateToken(token: string) {
-    return this.http.post<RequestResult<AuthResult>>(`${this.API}/regenerate-token`, { token });
+    return this.http.post<AuthResult>(`${this.API}/regenerate-token`, { token });
   }
 
   confirmEmail(userId: string, emailToken: string) {

@@ -2,11 +2,17 @@ import { createAction, props } from '@ngrx/store';
 
 import { AuthResult } from '../../../models/server-entities/auth-result.model';
 import { User } from '../../../models/user.model';
+import { Channel } from '../../../models/channel.model';
 
 
 export const userAuthenticationSuccess = createAction (
     '[User Auth] User authenticated',
     props<{user: User}>()
+);
+
+export const setUserChannel = createAction(
+    '[User Auth] Set current user channel',
+    props<{channel: Channel}>()
 );
 
 export const userLogOut = createAction(

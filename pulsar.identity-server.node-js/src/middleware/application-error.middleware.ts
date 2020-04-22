@@ -7,7 +7,7 @@ import logger from "../util/logger";
 
 export function errorHandling(err: any, req: Request, res: Response, next: any) {
     
-    logger.error(err.message ?? 'Unespected server error', err.metadata);
+    logger.error(err.message ?? 'Unespected server error', [err.metadata, err.stack]);
 
     if(err instanceof (ValidationExeption)) {
       
