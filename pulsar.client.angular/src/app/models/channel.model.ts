@@ -1,5 +1,7 @@
 export class Channel {
     id: string;
-    name: string;
-    streamKey: string;
+    channelName: string;
+    streamToken: string;
+    isOnline: boolean;
+    userId: string;
 }

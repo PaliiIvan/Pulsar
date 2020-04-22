@@ -10,8 +10,6 @@ import { errorHandling } from "./middleware/application-error.middleware";
 const app = express();
 
 app.use((req, res, next) => {
-  console.log(req.body);
-  console.log("Helllo");
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   if (req.method === 'OPTIONS') {
@@ -41,11 +39,6 @@ app.use(auhtMiddleware.useAuthentication);
 //#region Routes
 
 app.use("/channel", ChannelRouter);
-
-app.all("*", (req, res, next) => {
-  res.status(404).json({error: 'Url not found'});
-  return next();
-})
 
 //#endregion
 
