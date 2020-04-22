@@ -1,19 +1,12 @@
-<div class="authentication__container" (mousedown)="closeAuthWindow($event)">
-    <div class="authentication__container__content" (mousedown)="$event.stopPropagation()"
-        (mousedown)="$event.stopPropagation()">
-
-
-        <div class="auth">
-            <div class="auth__container">
-                <div class="auth__container__title border--btm">
-                    <span class="login__title"> {{ isSignUp ? "Sign In" : "Log In"}} </span>
-                </div>
-
-                <app-login *ngIf="!isSignUp"></app-login>
-                <app-signup *ngIf="isSignUp"></app-signup>
+<app-modal (modalOff)='closeAuthWindow()'>
+    <div class="auth">
+        <div class="auth__container">
+            <div class="auth__container__title border--btm">
+                <span class="login__title"> {{ isSignUp ? "Sign In" : "Log In"}} </span>
             </div>
+
+            <app-login *ngIf="!isSignUp"></app-login>
+            <app-signup *ngIf="isSignUp"></app-signup>
         </div>
-
-
     </div>
-</div>
+</app-modal>

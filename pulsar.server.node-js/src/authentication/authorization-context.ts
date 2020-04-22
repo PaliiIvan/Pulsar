@@ -1,4 +1,6 @@
 import { User } from "./identity-user";
+import { NextFunction, Request, Response } from "express";
+import { UnAuthorizedError } from "../utils/errors/server.errors";
 
 let currentUser: User;
 
@@ -7,10 +9,16 @@ export function setUser(user: User) {
 }
 
 export function getUser() {
-    return User;
+    return currentUser;
 }
 
-export function isAuth() {
-    return currentUser == null ? false : true;
+
+export function isAuthenticated(req: Request, res: Response, next: NextFunction) {
+
+    if (req.user == null) {
+        throw new UnAuthorizedError();
+    }
+
+    return next();
 }
 

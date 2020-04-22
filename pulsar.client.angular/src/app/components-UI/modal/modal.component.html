@@ -1,0 +1,6 @@
+<div class="modal__container" (mousedown)="closeAuthWindow($event)">
+    <div class="modal__container__content" (mousedown)="$event.stopPropagation()"
+        (mousedown)="$event.stopPropagation()">
+        <ng-content></ng-content>
+    </div>
+</div>

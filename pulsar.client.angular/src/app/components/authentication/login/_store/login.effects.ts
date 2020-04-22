@@ -13,11 +13,16 @@ import { AuthResult } from '../../../../models/server-entities/auth-result.model
 
 import * as logInActions from './login.actions';
 import * as fromAuthActions from '../../_store/authentication.actions';
+import { ChannelService } from '../../../../services/channel/channel.service.service';
 
 @Injectable()
 export class LogInEffects {
 
-    constructor(private actions$: Actions, private authService: AuthenticationService, private store: Store<AppState>) { }
+    constructor(
+        private channelService: ChannelService,
+        private authService: AuthenticationService,
+        private actions$: Actions,
+        private store: Store<AppState>) { }
 
     //#region Effects
 
@@ -26,7 +31,7 @@ export class LogInEffects {
             ofType(logInActions.logInSubmit),
             switchMap((action) => this.authService.logIn(action.email, action.password)
             .pipe(
-                map(authResult => logInActions.logInSuccess({authRes: authResult.data})),
+                map(authResult => logInActions.logInSuccess({authRes: authResult})),
                 catchError((errors: ValidationError[]) => of(logInActions.logInValidationError({errors})))
             ))
         ));

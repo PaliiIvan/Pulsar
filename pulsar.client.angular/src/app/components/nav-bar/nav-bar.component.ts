@@ -32,8 +32,4 @@ export class NavBarComponent implements OnInit {
     this.store.dispatch(fromNavBarActions.authProcessStarted());
     this.isSignUp = isSignUp;
   }
-
-  closeAuthModal() {
-    this.store.dispatch(fromNavBarActions.authProcessFinished());
-  }
 }

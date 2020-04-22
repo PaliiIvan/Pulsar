@@ -55,7 +55,7 @@ export async function logIn(req: Request, res: Response, next: NextFunction) {
     try {
         const logInResult = await authService.logIn(email, password);
 
-        res.json(new ResponceResult("LogIn", logInResult));
+        res.json(logInResult);
     } catch(err) {
         return next(err);
     }
@@ -79,7 +79,7 @@ export async function regenerateToken(req: Request, res: Response, next: NextFun
 
     try {
         const tokenRegenerationResult = await authService.regenerateToken(token)
-        res.json(new ResponceResult("Regenerate Token", tokenRegenerationResult));
+        res.json(tokenRegenerationResult);
     } catch(err) {
         return next(err);
     }
