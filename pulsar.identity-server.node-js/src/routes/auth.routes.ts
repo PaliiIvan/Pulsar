@@ -1,6 +1,8 @@
 import { Router } from "express";
-import * as authController from "../controllers/auth.controller";
+
 import { SignUpValidation, LoginValidation } from "../features/user/user.validation";
+
+import * as authController from "../controllers/auth.controller";
 
 const router = Router();
 
@@ -14,5 +16,7 @@ router.post("/login", LoginValidation, authController.logIn);
 router.post("/check-token", authController.checkUserToken);
 
 router.post("/regenerate-token", authController.regenerateToken);
+
+router.post("/authenticate-server-user", authController.postCheckApiToken);
 
 export const AuthRouters = router;

@@ -10,17 +10,27 @@ import { AuthenticationService } from '../../../services/authentication/authenti
 import * as fromAuthActions from './authentication.actions';
 import * as fromligInActions from '../login/_store/login.actions';
 import * as fromNavBar from '../../nav-bar/_store/nav-bar.action';
+import { ChannelService } from '../../../services/channel/channel.service.service';
 @Injectable()
 export class AuthenticationEffects {
 
-    constructor(private actions$: Actions, private store: Store<AppState>, private authService: AuthenticationService) { }
+    constructor(
+        private actions$: Actions,
+        private store: Store<AppState>,
+        private authService: AuthenticationService,
+        private channelService: ChannelService
+        ) { }
 
     //#region Effects
 
     logInSuccess$ = createEffect(() => this.actions$
         .pipe(
             ofType(fromAuthActions.userAuthenticationSuccess),
-            map(res => fromNavBar.authProcessFinished())
+            switchMap(action => this.channelService.getChannelByUserId(action.user.id)
+                .pipe(switchMap(res => [
+                    fromAuthActions.setUserChannel({channel: res}),
+                    fromNavBar.authProcessFinished()
+            ])))
         ));
 
 
@@ -35,7 +45,7 @@ export class AuthenticationEffects {
             ofType(fromAuthActions.checkTokenValidity),
             switchMap((action) => this.authService.checkToken(action.token)
                 .pipe(
-                    map(response => fromAuthActions.setTokenValidationResult({isTokenValid: response.data}))
+                    map(response => fromAuthActions.setTokenValidationResult({isTokenValid: response}))
                 ))
         ));
 
@@ -44,7 +54,7 @@ export class AuthenticationEffects {
             ofType(fromAuthActions.regenerateToken),
             switchMap(action => this.authService.regenerateToken(action.token)
                 .pipe(
-                    map(result => fromligInActions.logInSuccess({authRes: result.data}))
+                    map(result => fromligInActions.logInSuccess({authRes: result}))
                 ))
         ));
 
@@ -63,14 +73,10 @@ export class AuthenticationEffects {
     //#region Private methods
 
     private startTimer(token: string, timeForExp: number) {
-        console.log('Timer Started');
-        console.log('Token Regenerate Date', new Date(timeForExp));
-        console.log('ms to regenerateToken: ', timeForExp - new Date().getTime());
         const msToRegenerateToken = timeForExp - new Date().getTime();
-
         setTimeout(() => {
             console.log('Time to regenerate token');
-            this.store.dispatch(fromAuthActions.regenerateToken({token}));
+            this.store.dispatch(fromAuthActions.setTokenValidationResult({isTokenValid: false}));
         }, msToRegenerateToken);
     }
 

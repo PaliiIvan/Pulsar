@@ -6,6 +6,7 @@ import * as authService from "../services/auth.service";
 import { constants } from "../configs/global.variables";
 import { errorParser } from "../util/exeptions/auth-error.parser";
 import { ResponceResult } from "../api.models/responce.model";
+import { User } from "../api.models/user.model";
 
 //POST
 export async function signUp(req: Request, res: Response, next: NextFunction) {
@@ -54,7 +55,7 @@ export async function logIn(req: Request, res: Response, next: NextFunction) {
     try {
         const logInResult = await authService.logIn(email, password);
 
-        res.json(new ResponceResult("LogIn", logInResult));
+        res.json(logInResult);
     } catch(err) {
         return next(err);
     }
@@ -78,7 +79,22 @@ export async function regenerateToken(req: Request, res: Response, next: NextFun
 
     try {
         const tokenRegenerationResult = await authService.regenerateToken(token)
-        res.json(new ResponceResult("Regenerate Token", tokenRegenerationResult));
+        res.json(tokenRegenerationResult);
+    } catch(err) {
+        return next(err);
+    }
+}
+
+/**
+* [POST]
+* Check if token from api is valid and send User data
+*/
+export async function postCheckApiToken(req: Request, res: Response, next: NextFunction) {
+    const token = req.body.token;
+       
+    try {
+        const user = await authService.authApiRequest(token);
+        res.json(new User(user.id, user.email, user.login));
     } catch(err) {
         return next(err);
     }

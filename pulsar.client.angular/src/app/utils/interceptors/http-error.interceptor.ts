@@ -14,16 +14,16 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler) {
         return next.handle(req)
-        .pipe(catchError((httpError: HttpErrorResponse) => {
-            if (httpError.status === 400) {
-                const validationError = httpError.error.metadata as ValidationError[];
-                console.log('httpError.error', httpError.error);
-                return throwError(validationError);
-            } else {
-               const httpServerError = httpError.error as HttpServerError;
-               return throwError(httpServerError);
-            }
-        }));
+            .pipe(catchError((httpError: HttpErrorResponse) => {
+                if (httpError.status === 400) {
+                    const validationError = httpError.error.metadata as ValidationError[];
+                    console.log('httpError.error', httpError.error);
+                    return throwError(validationError);
+                } else {
+                const httpServerError = httpError.error as HttpServerError;
+                return throwError(httpServerError);
+                }
+            }));
     }
 }
 

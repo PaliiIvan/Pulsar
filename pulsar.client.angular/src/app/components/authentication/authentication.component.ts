@@ -1,5 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store/app.reducer';
 
+import * as fromNavBarActions from '../nav-bar/_store/nav-bar.action';
 
 @Component({
   selector: 'app-authentication',
@@ -11,13 +14,13 @@ export class AuthenticationComponent implements OnInit {
   @Input() isSignUp: boolean;
   @Output() authenticationOff = new EventEmitter();
 
-  constructor() { }
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
+    console.log(this.isSignUp, 'is Sign up');
   }
 
-  closeAuthWindow(event: MouseEvent) {
-    this.authenticationOff.emit();
-    console.log(event);
+  closeAuthWindow() {
+    this.store.dispatch(fromNavBarActions.authProcessFinished());
   }
 }

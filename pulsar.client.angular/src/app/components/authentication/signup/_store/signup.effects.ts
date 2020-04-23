@@ -34,9 +34,4 @@ export class SignUpEffects {
                 ))
         ));
 
-        confirmEmail$ = createEffect(() => this.action$
-        .pipe(
-            ofType(fromsignUpActions.emailValidationSuccess),
-            switchMap(action => this.authService.confirmEmail(action.userId, action.emailToken))
-        ), {dispatch: false });
 }

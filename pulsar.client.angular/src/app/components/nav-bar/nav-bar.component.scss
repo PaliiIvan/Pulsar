@@ -1,4 +1,4 @@
-.nav-bar-container {
+.nav__bar__container {
     height: 60px;
     background-color: rgb(78, 77, 77);
     color: white;
@@ -7,7 +7,7 @@
     align-items: center;
 }
 
-.auth-btn {
+.auth__btn {
     width: 70px;
     height: 30px;
     margin-right: 5px;
@@ -16,4 +16,7 @@
     &:hover {
         cursor: pointer;
     }
+}
+.user__container {
+    margin-right: 20px;
 }

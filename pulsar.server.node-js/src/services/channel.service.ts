@@ -9,6 +9,13 @@ export async function createChannel(userId: string, channelName: string) {
 }
 
 
+export async function getChannelByUserId(userId: string) {
+    const channel = await channelRepo.getChannelByUserId(userId);
+    return channel;
+}
+
+
+
 /**
  * This method generate new Stream token that include User Id and Channel Name
  * @param userId User Id

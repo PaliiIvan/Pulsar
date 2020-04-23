@@ -23,6 +23,10 @@ import * as fromApp from './store/app.reducer';
 import { SignUpEffects } from './components/authentication/signup/_store/signup.effects';
 import { VerifyEmailMessageComponent } from './components/email-verification/email-verification.component';
 import { EmailVerificationEffects } from './components/email-verification/_store/email-verification.effects';
+import { StreamSettingsComponent } from './components/stream-settings/stream-settings.component';
+import { ModalComponent } from './components-UI/modal/modal.component';
+import { AuthInterceptor } from './utils/interceptors/authentication.interceptor';
+
 
 
 @NgModule({
@@ -34,7 +38,9 @@ import { EmailVerificationEffects } from './components/email-verification/_store
     NavBarComponent,
     SignupComponent,
     ErrorPageComponent,
-    VerifyEmailMessageComponent
+    VerifyEmailMessageComponent,
+    StreamSettingsComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,
@@ -43,13 +49,18 @@ import { EmailVerificationEffects } from './components/email-verification/_store
     ReactiveFormsModule,
     StoreModule.forRoot(fromApp.appReducer),
     StoreDevtoolsModule.instrument({}),
-    StoreRouterConnectingModule.forRoot(),
+   // StoreRouterConnectingModule.forRoot(),
     EffectsModule.forRoot([LogInEffects, AuthenticationEffects, SignUpEffects, EmailVerificationEffects])
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
       multi: true
     }
   ],

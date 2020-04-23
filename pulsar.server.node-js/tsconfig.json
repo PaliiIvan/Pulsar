@@ -4,6 +4,7 @@
     "module": "commonjs",
     "outDir": "dist",
     "strict": true,
+    "sourceMap": true,
     "noImplicitAny": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
@@ -11,6 +12,9 @@
     "baseUrl": ".",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "typeRoots": [
+      "@types"
+    ],
     "paths": {
       "*": [
         "node_modules/*",

@@ -59,7 +59,7 @@ export async function checkEmail(userId: string, emailToken: string) {
         logger.error("User not Found", { userId: userId, emailToken: emailToken });
         throw new NotFoundError("User not found");
     }
-    if(user.emailToken == null) {
+    if (user.emailToken == null) {
         return { message: 'Email is confirmed', isSuccess: true };
     }
 
@@ -82,7 +82,7 @@ export async function checkEmail(userId: string, emailToken: string) {
 export async function logIn(email: string, password: string) {
 
     logger.info("LogIn in process");
-    const tokenExparationDateInMs =  new Date().getTime() + constants.TOKEN_EXPARATION * 1000;
+    const tokenExparationDateInMs = new Date().getTime() + constants.TOKEN_EXPARATION * 1000;
     const user = await userRepo.findOne({ email: email, IsConfirmed: true });
 
     if (user == null)
@@ -91,7 +91,7 @@ export async function logIn(email: string, password: string) {
     const isPasswordCorect = compareSync(password, user.password);
 
     if (!isPasswordCorect)
-    throw new ValidationExeption([{ propery: '', message: 'Email or password is incorect' }]);
+        throw new ValidationExeption([{ propery: '', message: 'Email or password is incorect' }]);
 
     const jsonWebToken = jwt.sign({
         email: user.email,
@@ -110,13 +110,13 @@ export async function checkUserToken(token: string) {
         const decodedToken = jwt.decode(token);
         const userId = decodedToken["userId"];
 
-        const user = await userRepo.getUserById(userId);
+        const user = await userRepo.findOne({_id: userId, IsConfirmed: true});
 
         logger.info("Checking User Token finished");
         return true;
 
     } catch (err) {
-        logger.info("Token validation filed", { token });
+        logger.info("Token validation filed", { token, err });
 
         return false;
     }
@@ -136,11 +136,11 @@ export async function regenerateToken(token: string) {
 
     const decodedToken = jwt.decode(token);
     const userId = decodedToken["id"];
-    const tokenExparationDateInMs =  new Date().getTime() + constants.TOKEN_EXPARATION * 1000;
-    const user = await userRepo.getUserById(userId);
+    const tokenExparationDateInMs = new Date().getTime() + constants.TOKEN_EXPARATION * 1000;
+    const user = await userRepo.findOne({_id: userId, IsConfirmed: true});
 
     if (user == null)
-        throw new NotFoundError("User not found", {userId: userId});
+        throw new NotFoundError("User not found", { userId: userId });
 
     const jsonWebToken = jwt.sign({
         email: user.email,
@@ -152,6 +152,29 @@ export async function regenerateToken(token: string) {
 
 }
 
+export async function authApiRequest(token: string) {
+    logger.info("Checking User Api Token in process");
+    let userId: string;
+
+    try {
+        jwt.verify(token, AUTH_SECRET_KEY);
+        const decodedToken = jwt.decode(token);
+        userId = decodedToken["id"];
+
+    } catch (err) {
+        logger.error("Token validation filed", { token: token });
+        throw new Error(err);
+    }
+
+    const user = await userRepo.findOne({_id: userId, IsConfirmed: true});
+
+    if (user == null)
+        throw new NotFoundError('User not found', { userId: userId });
+
+    logger.info("Checking User Token finished");
+
+    return user;
+}
 
 /**
  * @param {String} userId
