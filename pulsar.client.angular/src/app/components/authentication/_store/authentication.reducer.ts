@@ -30,9 +30,9 @@ const authenticationReducer = createReducer<AuthenticationState>(
     on(fromaAuthActions.checkTokenValidity, (state) => ({...state, user: {...state.user}})),
     on(fromaAuthActions.regenerateToken, (state) => ({...state})),
     on(fromaAuthActions.setTokentExparationTimer, (state) => ({...state})),
-    on(fromaAuthActions.userLogOut, (state) => ({ ...state, tokenIsValid: false, user: null})),
-    on(fromaAuthActions.setTokenValidationResult, (state, action) => ({...state, tokenIsValid: action.isTokenValid})),
-    on(fromaAuthActions.reLoginUser, (state) => ({...state}))
+    on(fromaAuthActions.userLogOut, (state) => ({ ...state, isTokenValid: false, user: null})),
+    on(fromaAuthActions.setTokenValidationResult, (state, action) => ({...state, isTokenValid: action.isTokenValid})),
+    on(fromaAuthActions.reLoginUser, (state, action) => ({...state, user: action.user, isTokenValid: true}))
 );
 
 export function reducer(state: AuthenticationState | undefined, action: Action) {
