@@ -9,7 +9,7 @@ import { ErrorResponce } from '../../../models/server-entities/error-result.serv
 import { AppState } from '../../../store/app.reducer';
 import { ValidationError } from '../../../models/errors/validation-error.model';
 
-import * as loginActions from './_store/login.actions';
+import * as fromAuthActions from '../../authentication/_store/authentication.actions';
 
 @Component({
   selector: 'app-login',
@@ -23,19 +23,17 @@ export class LogInComponent implements OnInit {
     password: new FormControl('')
   });
 
-  validationErr: ValidationError[];
+  validationErr$: Observable<string>;
   constructor(private authService: AuthenticationService, private store: Store<AppState>) { }
 
   ngOnInit(): void {
-    this.store.select(store => store.logIn) .subscribe(x => {
-      this.validationErr = x.error;
-    });
+    this.validationErr$ = this.store.select(state => state.auth.error);
   }
 
   logIn() {
     const email = this.logInForm.get('email').value;
     const password = this.logInForm.get('password').value;
-    this.store.dispatch(loginActions.logInSubmit({email, password}));
+    this.store.dispatch(fromAuthActions.sendLogInData({email, password}));
   }
 
 }

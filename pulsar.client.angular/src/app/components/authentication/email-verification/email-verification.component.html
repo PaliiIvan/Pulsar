@@ -1,0 +1,12 @@
+<app-modal (modalOff)='closeAuthWindow()'>
+    <div style="width: 500px; height: 700px; background-color: white;">
+        <div *ngIf='!(emailConfirmationState |async)'>
+            <div *ngIf='(emailConfirmationState |async).isSuccess'>
+                Email confirmed!
+            </div>
+            <div *ngIf='!(emailConfirmationState |async).isSuccess'>
+                Email not confirmed
+            </div>
+        </div>
+    </div>
+</app-modal>

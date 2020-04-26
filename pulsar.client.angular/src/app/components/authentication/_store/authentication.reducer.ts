@@ -1,7 +1,8 @@
-import { createReducer, on, Action } from '@ngrx/store';
+import { createReducer, on, Action, State } from '@ngrx/store';
 
 import { User } from '../../../models/user.model';
 import { Channel } from '../../../models/channel.model';
+import { EmailConfirmation } from '../../../models/email-confirmation.model';
 
 import * as fromaAuthActions from './authentication.actions';
 
@@ -10,29 +11,65 @@ export interface AuthenticationState {
     user: User;
     channel: Channel;
     isTokenValid: boolean;
+    isAuthProccess: boolean;
+    isSignUp: boolean;
+    error: string;
+    showSignUpResultMessage: boolean;
+    emailConfirmationMessage: EmailConfirmation;
 }
 
 const initialState: AuthenticationState = {
     user: null,
     channel: null,
-    isTokenValid: false
+    isTokenValid: false,
+    isAuthProccess: false,
+    isSignUp: true,
+    error: '',
+    showSignUpResultMessage: false,
+    emailConfirmationMessage: null
 };
 
 
 const authenticationReducer = createReducer<AuthenticationState>(
     initialState,
-    on(fromaAuthActions.userAuthenticationSuccess, (state, action) => ({
-        user: {...state.user, email: action.user.email, id: action.user.id, login: action.user.login, token: action.user.token},
-        channel: null,
-        isTokenValid: true
+
+    on(fromaAuthActions.authenticationStarted, (state) => ({ ...state, isAuthProccess: true })),
+    on(fromaAuthActions.authenticationCompleted, (state) => ({ ...state, isAuthProccess: false })),
+    on(fromaAuthActions.authValidationErrors, (state, action) => ({ ...state, error: action.error })),
+    on(fromaAuthActions.logOut, (state) => ({ ...initialState })),
+
+    on(fromaAuthActions.logInStarted, (state) => ({ ...state, isSignUp: false })),
+    on(fromaAuthActions.sendLogInData, (state) => ({ ...state })),
+    on(fromaAuthActions.logInSucces, (state, action) => ({ ...state, user: action.user, isTokenValid: true })),
+    on(fromaAuthActions.setAuthTimer, (state) => ({ ...state })),
+
+    on(fromaAuthActions.signUpStarted, (state) => ({ ...state, isSignUp: true })),
+    on(fromaAuthActions.sendSignUpData, (state) => ({ ...state })),
+    on(fromaAuthActions.signUpSucces, (state) => ({ ...state })),
+    on(fromaAuthActions.createUserChannel, (state) => ({ ...state })),
+    on(fromaAuthActions.signUpSucces, (state) => ({ ...state, showSignUpResultMessage: true })),
+    on(fromaAuthActions.signUpFinisehd, (state => ({ ...state, showSignUpResultMessage: false }))),
+
+    on(fromaAuthActions.loadUserFromStore, (state, action) => ({ ...state})),
+    on(fromaAuthActions.checkUserToken, (state, action) => ({ ...state })),
+    on(fromaAuthActions.regenerateUserToken, (state, action) => ({ ...state })),
+    on(fromaAuthActions.updateUserLocalToken, (state, action) => ({ ...state, user: { ...state.user, token: action.token } })),
+
+    on(fromaAuthActions.getUserChannal, (state) => ({ ...state })),
+    on(fromaAuthActions.storeUserChannal, (state, action) => ({ ...state, channel: action.channel })),
+
+    on(fromaAuthActions.storeUserFromLocalStorage, (state, action) => ({...state, user: action.user})),
+
+
+    on(fromaAuthActions.emailConfirmationSuccessed, (state) => ({
+        ...state,
+        emailConfirmationMessage: { isSuccess: true, showMessage: true }
     })),
-    on(fromaAuthActions.setUserChannel, (state, action) => ({...state, channel: action.channel})),
-    on(fromaAuthActions.checkTokenValidity, (state) => ({...state, user: {...state.user}})),
-    on(fromaAuthActions.regenerateToken, (state) => ({...state})),
-    on(fromaAuthActions.setTokentExparationTimer, (state) => ({...state})),
-    on(fromaAuthActions.userLogOut, (state) => ({ ...state, isTokenValid: false, user: null})),
-    on(fromaAuthActions.setTokenValidationResult, (state, action) => ({...state, isTokenValid: action.isTokenValid})),
-    on(fromaAuthActions.reLoginUser, (state, action) => ({...state, user: action.user, isTokenValid: true}))
+    on(fromaAuthActions.emailConfirmationFailed, (stete) => ({
+        ...stete,
+        emailConfirmationMessage: { isSuccess: false, showMessage: true }
+    })),
+    on(fromaAuthActions.emailConfirmationFinished, (state) => ({...state, emailConfirmationMessage: null}))
 );
 
 export function reducer(state: AuthenticationState | undefined, action: Action) {

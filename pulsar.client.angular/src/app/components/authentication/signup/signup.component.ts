@@ -6,7 +6,7 @@ import { AuthenticationService } from '../../../services/authentication/authenti
 import { AppState } from '../../../store/app.reducer';
 import { ChannelService } from '../../../services/channel/channel.service.service';
 
-import * as fromSignUpActions from './_store/signup.actions';
+import * as fromAurhActions from '../_store/authentication.actions';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -29,7 +29,7 @@ export class SignupComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.showsignUpResultMessage = this.store.select(store => store.signUp.showsignUpResultMessage);
+    this.showsignUpResultMessage = this.store.select(store => store.auth.showSignUpResultMessage);
   }
 
   signUp(): void {
@@ -38,7 +38,7 @@ export class SignupComponent implements OnInit {
     const password = this.signUpForm.get('password').value;
     const repeatPassword = this.signUpForm.get('repeatPassword').value;
 
-    this.store.dispatch(fromSignUpActions.sendSignUpData({email, logIn, password, repeatPassword}));
+    this.store.dispatch(fromAurhActions.sendSignUpData({email, logIn, password, repeatPassword}));
 
     // this.authService.signUp(email, login, password, repeatPassword)
     // .subscribe(signUpResult => {

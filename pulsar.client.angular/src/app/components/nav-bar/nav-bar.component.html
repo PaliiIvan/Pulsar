@@ -1,15 +1,17 @@
 <div class="nav__bar__container">
     <div class="logo">Logo</div>
     <div class="auth__container">
-        <div *ngIf="(user | async)" class="user__container">
-            {{(user | async).login}}
+        <div *ngIf="(user$ | async)" class="user__container">
+            {{(user$ | async).login}}
+            <button (click)="streamInitStarted()" class="auth__btn">Stream</button>
         </div>
-        <div class="auth__b__container" *ngIf="(user | async) == null">
-            <button (click)="authProcessStarted(false)" class="auth__btn">Log In</button>
-            <button (click)="authProcessStarted(true)" class="auth__btn">Sign In</button>
+        <div class="auth__b__container" *ngIf="(user$ | async) == null">
+            <button (click)="authProcessStarted()" class="auth__btn">Sign Up</button>
         </div>
         
     </div>
 </div>
 
-<app-authentication *ngIf="(isAuth | async)" [isSignUp]="isSignUp"></app-authentication>
+<app-authentication *ngIf="(isAuth$ | async)"></app-authentication>
+<app-email-verification *ngIf="(isEmailConfirmationProccess$ | async) != null"></app-email-verification>
+<app-stream *ngIf="(isStreamProcess$ | async)"></app-stream>

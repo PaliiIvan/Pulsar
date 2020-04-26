@@ -2,7 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.reducer';
 
-import * as fromNavBarActions from '../nav-bar/_store/nav-bar.action';
+import * as fromAuthActions from '../authentication/_store/authentication.actions';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-authentication',
@@ -11,16 +12,17 @@ import * as fromNavBarActions from '../nav-bar/_store/nav-bar.action';
 })
 export class AuthenticationComponent implements OnInit {
 
-  @Input() isSignUp: boolean;
+  isSignUp$: Observable<boolean>;
+
   @Output() authenticationOff = new EventEmitter();
 
   constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
-    console.log(this.isSignUp, 'is Sign up');
+   this.isSignUp$ = this.store.select(state => state.auth.isSignUp);
   }
 
   closeAuthWindow() {
-    this.store.dispatch(fromNavBarActions.authProcessFinished());
+    this.store.dispatch(fromAuthActions.authenticationCompleted());
   }
 }

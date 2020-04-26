@@ -26,7 +26,7 @@ export class AuthenticationService {
 
   logIn(email: string, password: string) {
 
-    return this.http.post<AuthResult>(`${this.API}/login`, { email, password });
+    return this.http.post<User>(`${this.API}/login`, { email, password });
   }
 
   checkToken(token: string) {
@@ -38,7 +38,6 @@ export class AuthenticationService {
   }
 
   confirmEmail(userId: string, emailToken: string) {
-    console.log('Email checking');
-    return this.http.post(`${this.API}/complete-auth`, {id: userId, token: emailToken});
+    return this.http.post<boolean>(`${this.API}/complete-auth`, {id: userId, token: emailToken});
   }
 }

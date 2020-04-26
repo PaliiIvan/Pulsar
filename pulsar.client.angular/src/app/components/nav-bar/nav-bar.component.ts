@@ -9,7 +9,9 @@ import { NavBarState } from './_store/nav-bar.reducer';
 import { AppState } from '../../store/app.reducer';
 
 import * as fromNavBarActions from './_store/nav-bar.action';
-
+import * as fromAuthActions from '../authentication/_store/authentication.actions';
+import { ActivatedRoute } from '@angular/router';
+import { EmailConfirmation } from '../../models/email-confirmation.model';
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
@@ -17,19 +19,36 @@ import * as fromNavBarActions from './_store/nav-bar.action';
 })
 export class NavBarComponent implements OnInit {
 
-  user: Observable<User>;
-  isAuth: Observable<boolean>;
+  user$: Observable<User>;
+  isAuth$: Observable<boolean>;
   isSignUp: boolean;
+  isStreamProcess$: Observable<boolean>;
+  isEmailConfirmationProccess$: Observable<EmailConfirmation>;
 
-  constructor(private authService: AuthenticationService, private store: Store<AppState>) { }
+  constructor(private store: Store<AppState>, private router: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.isAuth = this.store.select(state => state.navBar.isAuthProcess);
-    this.user = this.store.select(state => state.auth.user);
+    this.isAuth$ = this.store.select(state => state.navBar.isAuthProcess);
+    this.user$ = this.store.select(state => state.auth.user);
+    this.isStreamProcess$ = this.store.select(state => state.navBar.isStreaminitProcess);
+    this.isEmailConfirmationProccess$ = this.store.select(state => state.auth.emailConfirmationMessage);
+
+    this.router.paramMap.subscribe(params => {
+      const message = params.get('msg');
+
+      if (message === 'confirm-email') {
+        const userId = this.router.snapshot.queryParamMap.get('id');
+        const emailToken = this.router.snapshot.queryParamMap.get('token');
+        this.store.dispatch(fromAuthActions.sendEmailConfirmation({ userId, emailToken }));
+      }
+    });
   }
 
-  authProcessStarted(isSignUp: boolean) {
-    this.store.dispatch(fromNavBarActions.authProcessStarted());
-    this.isSignUp = isSignUp;
+  authProcessStarted() {
+    this.store.dispatch(fromAuthActions.authenticationStarted());
+  }
+
+  streamInitStarted() {
+    this.store.dispatch(fromNavBarActions.streamInitStarted());
   }
 }
