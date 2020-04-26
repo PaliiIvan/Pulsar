@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StreamSettingsComponent } from './stream-settings.component';
+import { StreamInitComponent } from './stream-init.component';
 
-describe('StreamSettingsComponent', () => {
-  let component: StreamSettingsComponent;
-  let fixture: ComponentFixture<StreamSettingsComponent>;
+describe('StreamInitComponent', () => {
+  let component: StreamInitComponent;
+  let fixture: ComponentFixture<StreamInitComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StreamSettingsComponent ]
+      declarations: [ StreamInitComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StreamSettingsComponent);
+    fixture = TestBed.createComponent(StreamInitComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

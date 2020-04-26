@@ -3,12 +3,14 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.reducer';
 
+import * as fromNavBar from '../nav-bar/_store/nav-bar.action';
+
 @Component({
-  selector: 'app-stream-settings',
-  templateUrl: './stream-settings.component.html',
-  styleUrls: ['./stream-settings.component.scss']
+  selector: 'app-stream',
+  templateUrl: './stream.component.html',
+  styleUrls: ['./stream.component.scss']
 })
-export class StreamSettingsComponent implements OnInit {
+export class StreamComponent implements OnInit {
 
   streamForm: FormGroup;
 
@@ -24,4 +26,7 @@ export class StreamSettingsComponent implements OnInit {
     });
   }
 
+  closeWindow() {
+    this.store.dispatch(fromNavBar.streamInitFinished());
+  }
 }

@@ -11,7 +11,7 @@ import logger from "../util/logger";
 import { formatString } from "../extensions/string.extensions";
 import { NotFoundError, NotAuthorizeError, ServerError } from "../util/exeptions/server-errors";
 import { constants, files } from "../configs/global.variables";
-import { AuthResult } from "../api.models/auth-result.model";
+import { User } from "../api.models/user";
 import { SEND_GRID, BASE_URL, AUTH_SECRET_KEY } from "../configs/secrets";
 import { ValidationExeption } from "../util/exeptions/auth-error.parser";
 
@@ -60,7 +60,7 @@ export async function checkEmail(userId: string, emailToken: string) {
         throw new NotFoundError("User not found");
     }
     if (user.emailToken == null) {
-        return { message: 'Email is confirmed', isSuccess: true };
+        return true;
     }
 
     if (user.emailToken === emailToken) {
@@ -68,14 +68,11 @@ export async function checkEmail(userId: string, emailToken: string) {
         user.emailToken = null;
         await userRepo.updateUser(user);
         logger.info("Email checking is finished");
-        return {
-            message: "Email confirmation is successful.",
-            isSuccess: true
-        };
+        return true;
     }
 
     logger.error("Email confirmation is failed", { userId: userId, emailToken: emailToken });
-    throw new ServerError("Email confirmation is failed");
+    throw new ServerError("Email confirmation failed");
 }
 
 
@@ -98,7 +95,7 @@ export async function logIn(email: string, password: string) {
         id: user.id
     }, AUTH_SECRET_KEY, { expiresIn: constants.TOKEN_EXPARATION });
 
-    return new AuthResult(user.id, user.login, user.email, jsonWebToken, tokenExparationDateInMs);
+    return new User(user.id, user.login, user.email, jsonWebToken, tokenExparationDateInMs);
 }
 
 export async function checkUserToken(token: string) {
@@ -148,7 +145,7 @@ export async function regenerateToken(token: string) {
     }, AUTH_SECRET_KEY, { expiresIn: constants.TOKEN_EXPARATION });
 
     logger.info("Regeneration Token finished ");
-    return new AuthResult(user.id, user.login, user.email, jsonWebToken, tokenExparationDateInMs);
+    return new User(user.id, user.login, user.email, jsonWebToken, tokenExparationDateInMs);
 
 }
 

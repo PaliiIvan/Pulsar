@@ -16,16 +16,15 @@ import { AuthenticationComponent } from './components/authentication/authenticat
 import { SignupComponent } from './components/authentication/signup/signup.component';
 import { ErrorPageComponent } from './pages/error-page/error-page.component';
 import { AuthenticationEffects } from './components/authentication/_store/authentication.effects';
-import { LogInEffects } from './components/authentication/login/_store/login.effects';
 import { HttpErrorInterceptor } from './utils/interceptors/http-error.interceptor';
 
 import * as fromApp from './store/app.reducer';
-import { SignUpEffects } from './components/authentication/signup/_store/signup.effects';
-import { VerifyEmailMessageComponent } from './components/email-verification/email-verification.component';
-import { EmailVerificationEffects } from './components/email-verification/_store/email-verification.effects';
-import { StreamSettingsComponent } from './components/stream-settings/stream-settings.component';
+
+import { VerifyEmailMessageComponent } from './components/authentication/email-verification/email-verification.component';
+import { StreamComponent } from './components/stream/stream.component';
 import { ModalComponent } from './components-UI/modal/modal.component';
 import { AuthInterceptor } from './utils/interceptors/authentication.interceptor';
+import { StreamInitComponent } from './components/stream/stream-init/stream-init.component';
 
 
 
@@ -39,8 +38,9 @@ import { AuthInterceptor } from './utils/interceptors/authentication.interceptor
     SignupComponent,
     ErrorPageComponent,
     VerifyEmailMessageComponent,
-    StreamSettingsComponent,
-    ModalComponent
+    StreamComponent,
+    ModalComponent,
+    StreamInitComponent
   ],
   imports: [
     BrowserModule,

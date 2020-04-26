@@ -7,3 +7,12 @@ export const authProcessStarted = createAction(
 export const authProcessFinished = createAction(
     '[Nav Bar] Auth Finished'
 );
+
+export const streamInitStarted = createAction(
+    '[Nav Bar] Stream Init Started'
+);
+
+export const streamInitFinished = createAction(
+    '[Nav Bar] Stream Init Finished'
+);
+

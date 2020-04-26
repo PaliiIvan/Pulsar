@@ -10,10 +10,8 @@
                         <label class="forms__group__label" for="password">Password</label>
                         <input class="forms__group__input" formControlName = "password" type="password" name="password" id="password">
                     </div>
-                    <div *ngIf="validationErr != null"> 
-                       <div *ngFor="let err of validationErr">
-                        <span>{{err.message}}</span>
-                       </div>
+                    <div *ngIf="(validationErr$ | async) !== ''"> 
+                        <span>{{(validationErr$ | async)}}</span>
                     </div>
                     <button class="btn  btn__submit  btn__auth" type="submit">Log In</button>
                 </div>
