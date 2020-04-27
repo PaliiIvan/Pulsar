@@ -29,19 +29,24 @@ export async function signUp(email: string, login: string, password: string) {
     let message: any;
 
     const createdUser = await userRepo.saveUser({ email, login, password: passwordHash, emailToken, IsConfirmed: false });
-    const mailMessage = _generateEmail(createdUser.id, createdUser.email, createdUser.login, createdUser.emailToken);
-    const result = await sendGrid.send(mailMessage);
 
-    if (result[0].statusCode == 202) {
-        logger.info("SignUp successful");
-        return new SignUpUser(createdUser.id, createdUser.login);
-    } else {
+    try {
+        const mailMessage = _generateEmail(createdUser.id, createdUser.email, createdUser.login, createdUser.emailToken);
+        const result = await sendGrid.send(mailMessage);
 
-        logger.error("Email sending Error", { user: createdUser, emailMess: result });
+        if (result[0].statusCode == 202) {
+            logger.info("SignUp successful");
+            return new SignUpUser(createdUser.id, createdUser.login);
+        } else {
 
+            logger.error("Email sending Error", { user: createdUser, emailMess: result });
+            throw new ServerError("Email Sending Error");
+        }
+    } catch (err) {
         const removeResult = await userRepo.removeUser(createdUser.id);
-        throw new ServerError("Email Sending Error");
+        throw err;
     }
+
 }
 
 /**
@@ -107,7 +112,7 @@ export async function checkUserToken(token: string) {
         const decodedToken = jwt.decode(token);
         const userId = decodedToken["userId"];
 
-        const user = await userRepo.findOne({_id: userId, IsConfirmed: true});
+        const user = await userRepo.findOne({ _id: userId, IsConfirmed: true });
 
         logger.info("Checking User Token finished");
         return true;
@@ -134,7 +139,7 @@ export async function regenerateToken(token: string) {
     const decodedToken = jwt.decode(token);
     const userId = decodedToken["id"];
     const tokenExparationDateInMs = new Date().getTime() + constants.TOKEN_EXPARATION * 1000;
-    const user = await userRepo.findOne({_id: userId, IsConfirmed: true});
+    const user = await userRepo.findOne({ _id: userId, IsConfirmed: true });
 
     if (user == null)
         throw new NotFoundError("User not found", { userId: userId });
@@ -163,7 +168,7 @@ export async function authApiRequest(token: string) {
         throw new Error(err);
     }
 
-    const user = await userRepo.findOne({_id: userId, IsConfirmed: true});
+    const user = await userRepo.findOne({ _id: userId, IsConfirmed: true });
 
     if (user == null)
         throw new NotFoundError('User not found', { userId: userId });

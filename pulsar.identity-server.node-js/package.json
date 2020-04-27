@@ -19,7 +19,7 @@
         "build-ts": "tsc",
         "watch-ts": "tsc -w",
         "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
-        "copy-static-assets": "ts-node addStaticFiles.ts",
+        "copy-static-assets": "ts-node add-static-files.ts",
         "debug": "npm run build && npm run watch-debug",
         "serve-debug": "nodemon --inspect dist/server-identity.js",
         "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\""
