@@ -26,8 +26,7 @@ const userAccountSchemaDef = new Schema({
     },
     emailToken: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     IsConfirmed: {
         type: Boolean
