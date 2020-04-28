@@ -33,22 +33,26 @@ export class NavBarComponent implements OnInit {
     this.isStreamProcess$ = this.store.select(state => state.navBar.isStreaminitProcess);
     this.isEmailConfirmationProccess$ = this.store.select(state => state.auth.emailConfirmationMessage);
 
-    this.router.paramMap.subscribe(params => {
-      const message = params.get('msg');
+    this.router.queryParamMap.subscribe(params => {
+      const scope = params.get('scope');
 
-      if (message === 'confirm-email') {
-        const userId = this.router.snapshot.queryParamMap.get('id');
-        const emailToken = this.router.snapshot.queryParamMap.get('token');
+      if (scope === 'confirm-email' ) {
+        const userId = params.get('id');
+        const emailToken = params.get('token');
         this.store.dispatch(fromAuthActions.sendEmailConfirmation({ userId, emailToken }));
       }
     });
   }
 
   authProcessStarted() {
-    this.store.dispatch(fromAuthActions.authenticationStarted());
+    this.store.dispatch(fromNavBarActions.authProcessStarted());
   }
 
   streamInitStarted() {
     this.store.dispatch(fromNavBarActions.streamInitStarted());
+  }
+
+  logOut() {
+    this.store.dispatch(fromAuthActions.logOut());
   }
 }

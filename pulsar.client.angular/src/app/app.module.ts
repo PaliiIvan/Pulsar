@@ -50,7 +50,7 @@ import { StreamInitComponent } from './components/stream/stream-init/stream-init
     StoreModule.forRoot(fromApp.appReducer),
     StoreDevtoolsModule.instrument({}),
    // StoreRouterConnectingModule.forRoot(),
-    EffectsModule.forRoot([LogInEffects, AuthenticationEffects, SignUpEffects, EmailVerificationEffects])
+    EffectsModule.forRoot([ AuthenticationEffects])
   ],
   providers: [
     {

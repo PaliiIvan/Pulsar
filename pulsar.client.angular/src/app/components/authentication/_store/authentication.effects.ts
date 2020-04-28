@@ -21,78 +21,6 @@ export class AuthenticationEffects {
         private authService: AuthenticationService,
         private channelService: ChannelService
     ) { }
-
-    //#region Effects
-
-    // logInSuccess$ = createEffect(() => this.actions$
-    //     .pipe(
-    //         ofType(fromAuthActions.userAuthenticationSuccess),
-    //         switchMap(action => this.channelService.getChannelByUserId(action.user.id)
-    //             .pipe(switchMap(res => [
-    //                 fromAuthActions.setUserChannel({ channel: res }),
-    //                 fromNavBar.authProcessFinished()
-    //             ])))
-    //     ));
-
-
-    // setTokenExparationTimer$ = createEffect(() => this.actions$
-    //     .pipe(
-    //         ofType(fromAuthActions.setTokentExparationTimer),
-    //         tap(action => this.startTimer(action.token, action.exparationData))
-    //     ), { dispatch: false });
-
-    // checkTokenValidity$ = createEffect(() => this.actions$
-    //     .pipe(
-    //         ofType(fromAuthActions.checkTokenValidity),
-    //         switchMap((action) => this.authService.checkToken(action.token)
-    //             .pipe(
-    //                 map(response => fromAuthActions.setTokenValidationResult({ isTokenValid: response }))
-    //             ))
-    //     ));
-
-    // regenerateToken$ = createEffect(() => this.actions$
-    //     .pipe(
-    //         ofType(fromAuthActions.regenerateToken),
-    //         switchMap(action => this.authService.regenerateToken(action.token)
-    //             .pipe(
-    //                 map(result => fromligInActions.logInSuccess({ authRes: result }))
-    //             ))
-    //     ));
-
-    // reLogInUser$ = createEffect(() => this.actions$
-    //     .pipe(
-    //         ofType(fromAuthActions.reLoginUser),
-    //         map(action => fromAuthActions.checkTokenValidity({ token: action.user.token })
-    //         )));
-
-    // loadCurrentUserChannel$ = createEffect(() => this.actions$
-    //     .pipe(
-    //         ofType(fromAuthActions.loadUserChannel),
-    //         switchMap((action) => this.channelService.getChannelByUserId(action.userId)
-    //             .pipe(
-    //                 map(res =>
-    //                     fromAuthActions.setUserChannel({ channel: res }),
-    //                 )))
-    //     ));
-
-    //#endregion
-
-
-
-
-
-    //#region Private methods
-
-    // private startTimer(token: string, timeForExp: number) {
-    //     const msToRegenerateToken = timeForExp - new Date().getTime();
-    //     setTimeout(() => {
-    //         console.log('Time to regenerate token');
-    //         this.store.dispatch(fromAuthActions.setTokenValidationResult({ isTokenValid: false }));
-    //     }, msToRegenerateToken);
-    // }
-
-    //#endregion
-
         //#region LogIn Effects
 
         sendLogInData$ = createEffect(() => this.actions$
@@ -133,9 +61,14 @@ export class AuthenticationEffects {
         authCompleted$ = createEffect(() => this.actions$
         .pipe(
             ofType(fromAuthActions.storeUserChannal),
-            map(action => fromAuthActions.authenticationCompleted())
+            switchMap(action => [fromAuthActions.authenticationCompleted(), fromNavBar.authProcessFinished()])
         ));
 
+        logOut$ = createEffect(() => this.actions$
+            .pipe(
+                ofType(fromAuthActions.logOut),
+                tap(action => localStorage.removeItem('user'))
+            ), {dispatch: false});
 
         //#endregion
 
@@ -151,10 +84,14 @@ export class AuthenticationEffects {
             ))
         ));
 
-        signUpSucces$ = createEffect(() => this.actions$
+        createUserChannel$ = createEffect(() => this.actions$
         .pipe(
             ofType(fromAuthActions.createUserChannel),
-            map(action => fromAuthActions.signUpSucces)
+            switchMap(action => this.channelService.createChannel(action.userId, action.login)
+                .pipe(
+                    map(res => fromAuthActions.signUpSucces()),
+                    catchError(err => of(fromAuthActions.authValidationErrors({error: err})))
+                ))
         ));
 
         //#endregion
@@ -175,7 +112,7 @@ export class AuthenticationEffects {
 
         //#region ReLogIn User
 
-        loadUserFromLocalStore = createEffect(() => this.actions$
+        loadUserFromLocalStore$ = createEffect(() => this.actions$
         .pipe(
             ofType(fromAuthActions.loadUserFromStore),
             tap(action => this.getUserFromLocalStore())
@@ -192,6 +129,8 @@ export class AuthenticationEffects {
 
         //#endregion ReLohIn User
 
+        //#region  Private Methods
+
         private logInUser(user: User) {
             console.log('User Saved');
             localStorage.setItem('user', JSON.stringify(user));
@@ -200,10 +139,13 @@ export class AuthenticationEffects {
 
         private getUserFromLocalStore() {
             const user: User = JSON.parse(localStorage.getItem('user'));
-
             if (user != null) {
-                fromAuthActions.checkUserToken({token: user.token});
+                this.store.dispatch(fromAuthActions.checkUserToken({token: user.token}));
+            } else {
+                fromAuthActions.userInLocalStoreNotFound();
+                this.store.dispatch(fromAuthActions.userInLocalStoreNotFound());
             }
+
         }
 
         private completeRelogInProccess(validationRes: boolean) {
@@ -222,4 +164,6 @@ export class AuthenticationEffects {
                 this.store.dispatch(fromAuthActions.regenerateUserToken({token}));
             }, msToRegenerateToken);
         }
+
+        //#endregion Private Methods
 }

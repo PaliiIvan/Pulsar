@@ -4,6 +4,7 @@
         <div *ngIf="(user$ | async)" class="user__container">
             {{(user$ | async).login}}
             <button (click)="streamInitStarted()" class="auth__btn">Stream</button>
+            <button (click)="logOut()" class="auth__btn">LogOut</button>
         </div>
         <div class="auth__b__container" *ngIf="(user$ | async) == null">
             <button (click)="authProcessStarted()" class="auth__btn">Sign Up</button>

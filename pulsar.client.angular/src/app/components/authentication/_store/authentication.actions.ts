@@ -14,7 +14,7 @@ export const authenticationCompleted = createAction(
 );
 
 export const authValidationErrors = createAction(
-    '[User Auth] LogIn error',
+    '[User Auth] Authentication validation error',
     props<{ error: string }>()
 );
 
@@ -85,7 +85,9 @@ export const storeUserFromLocalStorage = createAction(
     '[User Auth] Get user from local storage and add it to state',
     props<{user: User}>()
 );
-
+export const userInLocalStoreNotFound = createAction(
+    '[User Auth] User from local store not found'
+);
 //#endregion
 
 //#region RelogIn Actions
