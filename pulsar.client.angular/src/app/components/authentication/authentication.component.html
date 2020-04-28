@@ -5,7 +5,7 @@
                 <span class="login__title"> {{( isSignUp$ | async) ? "Sign In" : "Log In"}} </span>
             </div>
 
-            <app-login *ngIf="!( isSignUp$ | async)"></app-login>
+            <!-- <app-login *ngIf="( isSignUp$ | async)"></app-login> -->
             <app-signup *ngIf="( isSignUp$ | async)"></app-signup>
         </div>
     </div>

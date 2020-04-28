@@ -15,23 +15,23 @@ import * as fromAuthActions from '../_store/authentication.actions';
 export class VerifyEmailMessageComponent implements OnInit {
 
   emailConfirmationState: Observable<EmailConfirmation>;
-  isEmailConfirmationSucces: Observable<boolean>;
 
   constructor(private store: Store<AppState>, private router: Router) { }
 
   ngOnInit(): void {
     this.emailConfirmationState = this.store.select(state => state.auth.emailConfirmationMessage);
 
-    this.isEmailConfirmationSucces.subscribe(res => {
+    this.emailConfirmationState.subscribe(res => {
       if (res) {
         setTimeout(() => {
+          console.log('Email finished');
           this.store.dispatch(fromAuthActions.emailConfirmationFinished());
         }, 3000);
       }
     });
   }
 
-  closeAuthWindow(event: MouseEvent) {
+  closeAuthWindow() {
     this.store.dispatch(fromAuthActions.emailConfirmationFinished());
   }
 

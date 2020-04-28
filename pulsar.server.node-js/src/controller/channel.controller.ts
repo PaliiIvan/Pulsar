@@ -9,7 +9,7 @@ import logger from "../utils/loging";
 */
 export async function postCreateChannel(req: Request, res: Response, next: NextFunction) {
     const userId = req.body.userId;
-    const channelName = req.body.channelName;
+    const channelName = req.body.logIn;
 
     logger.info('Create Channel', {userId, channelName});
     try {
