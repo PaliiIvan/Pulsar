@@ -1,5 +1,8 @@
-import { Schema, Types, model } from "mongoose";
+import { Schema, Types, model, Document } from "mongoose";
 import { Stream } from "./stream.model";
+
+
+interface StreamSchemaModel extends Stream, Document {}
 
 export const streamSchemaDef = new Schema({
     title: {
@@ -7,8 +10,7 @@ export const streamSchemaDef = new Schema({
         required: true
     },
     locationPath: {
-        type: String,
-        required: true
+        type: String
     },
     comments: [{
         data: String,
@@ -26,7 +28,7 @@ export const streamSchemaDef = new Schema({
 
 streamSchemaDef.set("toObject", {getters: true});
 
-export const streamSchema = model<Stream>("stream", streamSchemaDef);
+export const streamSchema = model<StreamSchemaModel>("stream", streamSchemaDef);
 
 
 

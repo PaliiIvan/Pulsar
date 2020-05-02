@@ -1,4 +1,5 @@
 import { Document } from "mongoose";
+import { Stream } from "../stream/stream.model";
 
 export interface Channel extends Document {
     id: any;
@@ -8,5 +9,5 @@ export interface Channel extends Document {
     savedStreams: string;
     isOnline: boolean;
     sreamToken: string;
-    currentStream: string;
+    currentStream: Stream;
 }
