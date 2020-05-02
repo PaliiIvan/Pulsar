@@ -1,8 +1,9 @@
 <app-modal (modalOff)='closeWindow()'>
     <div>
-        <form action="" method="post" [formGroup]="streamForm">
+        <form (ngSubmit)='submit()' action="" [formGroup]="streamForm">
             <input type="text" name="streamName" id="streamName" formControlName='streamName'>
             <input type="text" name="streamKey" id="streamKey" formControlName='streamKey'>
+            <button type="submit" class="btn btn__submit">Submit</button>
         </form>
     </div>
 </app-modal>

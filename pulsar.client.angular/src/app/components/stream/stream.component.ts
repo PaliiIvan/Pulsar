@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.reducer';
 
 import * as fromNavBar from '../nav-bar/_store/nav-bar.action';
+import { ChannelService } from '../../services/channel/channel.service.service';
 
 @Component({
   selector: 'app-stream',
@@ -14,7 +15,7 @@ export class StreamComponent implements OnInit {
 
   streamForm: FormGroup;
 
-  constructor(private store: Store<AppState>) { }
+  constructor(private store: Store<AppState>, private channelService: ChannelService) { }
 
   ngOnInit(): void {
     this.store.select(state => state.auth.channel.streamToken)
@@ -28,5 +29,10 @@ export class StreamComponent implements OnInit {
 
   closeWindow() {
     this.store.dispatch(fromNavBar.streamInitFinished());
+  }
+
+  submit() {
+    const streanName = this.streamForm.get('streamName').value;
+    this.channelService.initiateStream(streanName).subscribe(x => console.log(x));
   }
 }

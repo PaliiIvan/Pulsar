@@ -44,3 +44,17 @@ export async function getCurrentChannel(req: Request, res: Response, next: NextF
     return next();
 
 }
+
+/**
+* [POST]
+* Initiate new stream
+*/
+export async function initiateStream(req: Request, res: Response, next: NextFunction) {
+    const streamTitle = req.body.title;
+    try {
+        const res = await channelService.initiateStream(streamTitle, req.user?.id);
+    } catch(err) {
+        return next(err);
+    }
+    return next();
+}

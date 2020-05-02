@@ -26,6 +26,7 @@ export class VerifyEmailMessageComponent implements OnInit {
         setTimeout(() => {
           console.log('Email finished');
           this.store.dispatch(fromAuthActions.emailConfirmationFinished());
+          this.router.navigate(['']);
         }, 3000);
       }
     });

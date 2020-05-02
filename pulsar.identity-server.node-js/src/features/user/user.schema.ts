@@ -1,8 +1,5 @@
-import { Schema as _Schema, model, Types, Document } from "mongoose";
-
+import { Schema, model, Document } from "mongoose";
 import UserAccount from "./user.model";
-
-const Schema = _Schema;
 
 interface UserAccountsSchemaModel extends UserAccount, Document {
    
