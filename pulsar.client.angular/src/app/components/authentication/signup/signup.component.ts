@@ -38,12 +38,16 @@ export class SignupComponent implements OnInit {
     const password = this.signUpForm.get('password').value;
     const repeatPassword = this.signUpForm.get('repeatPassword').value;
 
-    this.store.dispatch(fromAurhActions.sendSignUpData({email, logIn, password, repeatPassword}));
+    this.store.dispatch(fromAurhActions.sendSignUpData({ email, logIn, password, repeatPassword }));
 
     // this.authService.signUp(email, login, password, repeatPassword)
     // .subscribe(signUpResult => {
     //   console.log(signUpResult);
     //   this.channelService.createChannel('5e568ce5209ef680a419e815', 'BloodShok').subscribe(x => console.log(x));
     // });
+  }
+
+  logInStarted() {
+    this.store.dispatch(fromAurhActions.logInStarted());
   }
 }

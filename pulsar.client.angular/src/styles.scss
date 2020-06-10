@@ -1,6 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 
-html,body{ margin:0;padding:0 }
+@import "../node_modules/uikit/dist/css/uikit.min.css";
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
 
 .border {
     border: 1px solid black;
@@ -32,11 +38,11 @@ html,body{ margin:0;padding:0 }
     margin-bottom: 10px;
 
     &__input {
-      border-radius: 3px;
-      height: 25px;
-      padding-left: 8px;
-      background-color: #f2f2f2;
-      border: 2px solid #f2f2f2;
+        border-radius: 3px;
+        height: 25px;
+        padding-left: 8px;
+        background-color: #f2f2f2;
+        border: 2px solid #f2f2f2;
         &:focus {
             outline: none;
             background-color: #ffffff;
@@ -48,7 +54,6 @@ html,body{ margin:0;padding:0 }
         font-size: 14px;
     }
 }
-
 
 .btn {
     background-color: white;

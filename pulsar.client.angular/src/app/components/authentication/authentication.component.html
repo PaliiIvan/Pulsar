@@ -2,11 +2,12 @@
     <div class="auth">
         <div class="auth__container">
             <div class="auth__container__title border--btm">
-                <span class="login__title"> {{( isSignUp$ | async) ? "Sign In" : "Log In"}} </span>
+                <span class="login__title"> {{( isSignUp$ | async) ? "Sign Up" : "Log In"}} </span>
             </div>
 
-            <app-login *ngIf="( isSignUp$ | async)"></app-login> 
-            <!-- <app-signup *ngIf="( isSignUp$ | async)"></app-signup> -->
+            <app-login *ngIf="!( isSignUp$ | async)"></app-login>
+
+            <app-signup *ngIf="( isSignUp$ | async)"></app-signup>
         </div>
     </div>
 </app-modal>
