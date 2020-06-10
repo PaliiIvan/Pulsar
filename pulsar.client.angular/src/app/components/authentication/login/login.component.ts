@@ -33,7 +33,11 @@ export class LogInComponent implements OnInit {
   logIn() {
     const email = this.logInForm.get('email').value;
     const password = this.logInForm.get('password').value;
-    this.store.dispatch(fromAuthActions.sendLogInData({email, password}));
+    this.store.dispatch(fromAuthActions.sendLogInData({ email, password }));
+  }
+
+  signUpStarted() {
+    this.store.dispatch(fromAuthActions.signUpStarted());
   }
 
 }

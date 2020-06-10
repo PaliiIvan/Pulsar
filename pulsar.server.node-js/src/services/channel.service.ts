@@ -2,6 +2,7 @@ import * as channelRepo from "../features/channel/channel.repository";
 import * as streamRepo from "../features/stream/stream.repository";
 import jwt from "jsonwebtoken"
 import { STREAM_SECRET_KEY } from "../configs/secrets";
+import logger from "../utils/loging";
 
 export async function createChannel(userId: string, channelName: string) {
     const streamToken = generateStreamToken(userId, channelName);
@@ -16,14 +17,14 @@ export async function getChannelByUserId(userId: string) {
 }
 
 export async function initiateStream(streamTitile: string, userId?: string) {
-    
-    const stream = await streamRepo.createStream({title: streamTitile});
+
+    const stream = await streamRepo.createStream({ title: streamTitile });
     const channel = await channelRepo.getChannelByUserId(userId);
 
     channel.currentStream = stream;
 
     const result = await channelRepo.updateChannel(channel);
-    
+
 }
 
 /**
@@ -33,6 +34,6 @@ export async function initiateStream(streamTitile: string, userId?: string) {
  * @returns Generated token
  */
 function generateStreamToken(userId: string, channelName: string) {
-    const streamToken = jwt.sign({userId, channelName}, STREAM_SECRET_KEY!);
-    return streamToken;
+    const streamToken = jwt.sign({ userId, channelName }, STREAM_SECRET_KEY!);
+    return streamToken + '__';
 }

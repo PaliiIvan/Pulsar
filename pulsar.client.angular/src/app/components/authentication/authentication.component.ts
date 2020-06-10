@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.reducer';
 
 import * as fromAuthActions from '../authentication/_store/authentication.actions';
+import * as fromNavBarActions from '../nav-bar/_store/nav-bar.action';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -19,10 +20,10 @@ export class AuthenticationComponent implements OnInit {
   constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
-   this.isSignUp$ = this.store.select(state => state.auth.isSignUp);
+    this.isSignUp$ = this.store.select(state => state.auth.isSignUp);
   }
 
   closeAuthWindow() {
-    this.store.dispatch(fromAuthActions.authenticationCompleted());
+    this.store.dispatch(fromNavBarActions.authProcessFinished());
   }
 }
