@@ -11,7 +11,7 @@ import { User } from "../api.models/user.model";
 //POST
 export async function signUp(req: Request, res: Response, next: NextFunction) {
     const errors = validationResult(req);
-    if(!errors.isEmpty()) {
+    if (!errors.isEmpty()) {
         return errorParser(errors, next);
     }
 
@@ -37,7 +37,7 @@ export async function completeAuth(req: Request, res: Response, next: NextFuncti
     try {
         const confirmationEmailResult = await authService.checkEmail(userId, userEmailToken);
         res.json(confirmationEmailResult);
-    } catch(err) {
+    } catch (err) {
         return next(err);
     }
 }
@@ -45,18 +45,18 @@ export async function completeAuth(req: Request, res: Response, next: NextFuncti
 //POST
 export async function logIn(req: Request, res: Response, next: NextFunction) {
     const errors = validationResult(req);
-    if(!errors.isEmpty()) {
+    if (!errors.isEmpty()) {
         return errorParser(errors, next);
     }
 
     const email = req.body.email;
     const password = req.body.password;
- 
+
     try {
         const logInResult = await authService.logIn(email, password);
 
         res.json(logInResult);
-    } catch(err) {
+    } catch (err) {
         return next(err);
     }
 }
@@ -68,7 +68,7 @@ export async function checkUserToken(req: Request, res: Response, next: NextFunc
     try {
         const checkTokenResult = await authService.checkUserToken(token);
         res.json(checkTokenResult);
-    } catch(err) {
+    } catch (err) {
         return next(err);
     }
 }
@@ -80,7 +80,7 @@ export async function regenerateToken(req: Request, res: Response, next: NextFun
     try {
         const tokenRegenerationResult = await authService.regenerateToken(token)
         res.json(tokenRegenerationResult);
-    } catch(err) {
+    } catch (err) {
         return next(err);
     }
 }
@@ -91,11 +91,11 @@ export async function regenerateToken(req: Request, res: Response, next: NextFun
 */
 export async function postCheckApiToken(req: Request, res: Response, next: NextFunction) {
     const token = req.body.token;
-       
+
     try {
         const user = await authService.authApiRequest(token);
         res.json(new User(user.id, user.email, user.login));
-    } catch(err) {
+    } catch (err) {
         return next(err);
     }
 }
@@ -103,6 +103,7 @@ export async function postCheckApiToken(req: Request, res: Response, next: NextF
 //GET
 //TODO: Not implemented
 export async function initiateChangePassword(req: Request, res: Response, next: NextFunction) {
+
     const userEmail = req.params.email;
 
     const initiateChangePasswordResult = authService.initiateChangePassword(userEmail);

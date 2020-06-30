@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 
-import * as channelService from "../services/channel.service";
-import logger from "../utils/loging";
+import * as channelService from '../services/channel.service';
+import logger from '../utils/loging';
 
 /**
 * [POST]
@@ -11,34 +11,49 @@ export async function postCreateChannel(req: Request, res: Response, next: NextF
     const userId = req.body.userId;
     const channelName = req.body.logIn;
 
-    logger.info('Create Channel', {userId, channelName});
+    logger.info('Create Channel', { userId, channelName });
     try {
-        const createdChannel = await channelService.createChannel(userId, channelName); 
+        const createdChannel = await channelService.createChannel(userId, channelName);
         res.json(createdChannel);
     }
-     catch(err) {
-         return next(err);
-     }
+    catch (err) {
+        return next(err);
+    }
 
     return next();
 }
 
+/**
+* [GET]
+*Get channel by name
+*/
+export async function getChannelByName(req: Request, res: Response, next: NextFunction) {
+    const channelName = req.params.name;
+
+    try {
+        const channel = await channelService.getChannel({ channelName: channelName });
+        res.json(channel);
+    } catch (err) {
+        return next(err);
+    }
+    return next();
+}
 
 /**
 * [GET]
 *
 */
 export async function getCurrentChannel(req: Request, res: Response, next: NextFunction) {
-   
+
     const userId = req.user?.id;
 
-    logger.info('Get channel by user id', {userId});
+    logger.info('Get channel by user id', { userId });
 
     try {
         const channel = await channelService.getChannelByUserId(userId!);
         res.json(channel);
 
-    } catch(err) {
+    } catch (err) {
         return next(err);
     }
     return next();
@@ -52,9 +67,25 @@ export async function getCurrentChannel(req: Request, res: Response, next: NextF
 export async function initiateStream(req: Request, res: Response, next: NextFunction) {
     const streamTitle = req.body.title;
     try {
-        const res = await channelService.initiateStream(streamTitle, req.user?.id);
-    } catch(err) {
+        await channelService.initiateStream(streamTitle, req.user?.id);
+    } catch (err) {
         return next(err);
     }
+    return next();
+}
+
+/**
+* [GET]
+* Get all online channels
+*/
+export async function getOnlineChannels(req: Request, res: Response, next: NextFunction) {
+    logger.info('Get online channels');
+    try {
+        const channels = await channelService.getOnlineChannels();
+        res.json(channels);
+    } catch (err) {
+        return next(err);
+    }
+
     return next();
 }

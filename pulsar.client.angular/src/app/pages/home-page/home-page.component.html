@@ -1,7 +1,8 @@
-<app-email-verification *ngIf='isEmailConfirmationMessage'>
-
+<app-email-verification *ngIf="isEmailConfirmationMessage">
 </app-email-verification>
 
-
-<video id="videoP" controls #videoP></video>
-<button class="uk-button uk-button-default">Hi</button>
+<div *ngIf="channels" style="margin-top: 15px;" class="uk-text-center" uk-grid>
+    <div *ngFor="let channel of channels" class="uk-width-1-4@m">
+        <app-stream-preview [chanel]="channel"></app-stream-preview>
+    </div>
+</div>

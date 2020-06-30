@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
-import logger from "../utils/loging";
-import { UnAuthorizedError, NotFoundError } from "../utils/errors/server.errors";
-import os from "os";
+import { Request, Response } from 'express';
+import logger from '../utils/loging';
+import { UnAuthorizedError, NotFoundError } from '../utils/errors/server.errors';
+import os from 'os';
 export function errorHandling(err: any, req: Request, res: Response, next: any) {
     logger.error('', err);
     logger.error('Url');

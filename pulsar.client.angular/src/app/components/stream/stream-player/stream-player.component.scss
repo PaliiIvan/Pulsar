@@ -1,0 +1,21 @@
+video {
+    height: 77vh;
+    width: 100%;
+}
+
+@media (max-height: 695px) {
+    video {
+        height: 75vh;
+    }
+}
+
+@media (max-height: 643px) {
+    video {
+        height: 73vh;
+    }
+}
+@media (max-height: 590px) {
+    video {
+        height: 67vh;
+    }
+}
