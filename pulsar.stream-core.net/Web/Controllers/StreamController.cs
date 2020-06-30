@@ -56,7 +56,7 @@ namespace StreamService.Controllers
 
             if (stream.Contains(".m3u8"))
             {
-                using (var indexFile = System.IO.File.OpenWrite($"{directoryToSave}\\index.m3u8"))
+                using (var indexFile = System.IO.File.OpenWrite($"{directoryToSave}index.m3u8"))
                 {
                     Request.Body.CopyTo(indexFile);
                 }

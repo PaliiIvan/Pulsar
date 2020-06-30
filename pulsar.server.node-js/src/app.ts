@@ -1,31 +1,38 @@
-import express from "express";
-import bodyParser from "body-parser";
-import mongoose from "mongoose";
-import * as auhtMiddleware from "./middleware/authentication.middleware";
-import { Request, Response, NextFunction } from "express";
+import express from 'express';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import * as auhtMiddleware from './middleware/authentication.middleware';
 
-import { ChannelRouter } from "./routes/chanal.routes";
-import { errorHandling } from "./middleware/application-error.middleware";
+import { ChannelRouter } from './routes/chanal.routes';
+import { errorHandling } from './middleware/application-error.middleware';
 
 const app = express();
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  if (req.method === 'OPTIONS') {
-      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-      res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH');
-      return res.status(200).json({});
-  };
-  return next();
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    );
+    if (req.method === 'OPTIONS') {
+        res.header(
+            'Access-Control-Allow-Headers',
+            'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+        );
+        res.header(
+            'Access-Control-Allow-Methods',
+            'GET, POST, PUT, DELETE, PATCH'
+        );
+        return res.status(200).json({});
+    }
+    return next();
 });
-  
+
 //#region Application constants
 
-app.set("port", 8081);
+app.set('port', 8081);
 
 //#endregion
-
 
 //#region Middlevare
 
@@ -35,13 +42,11 @@ app.use(auhtMiddleware.useAuthentication);
 
 //#endregion
 
-
 //#region Routes
 
-app.use("/channel", ChannelRouter);
+app.use('/channel', ChannelRouter);
 
 //#endregion
-
 
 //#region Error Handling
 
@@ -49,16 +54,16 @@ app.use(errorHandling);
 
 //#endregion
 
-mongoose.connect("mongodb://127.0.0.1:27017/Pulsar",
-    {
+mongoose
+    .connect('mongodb://127.0.0.1:27017/Pulsar', {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
     })
-    .then(res => {
-        console.log("MongoDb: Connected");
+    .then(() => {
+        console.log('MongoDb: Connected');
     })
-    .catch(err => {
-      console.log("MongoDb: ", err);
+    .catch((err) => {
+        console.log('MongoDb: ', err);
     });
 
 export default app;

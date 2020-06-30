@@ -1,9 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 
-import { AuthResult } from '../../../models/server-entities/auth-result.model';
+import { AuthResult } from '../../../models/api.models/auth-result.model';
 import { User } from '../../../models/user.model';
 import { Channel } from '../../../models/channel.model';
-
 
 //#region Authentication Actions
 export const authenticationStarted = createAction(
@@ -20,13 +19,11 @@ export const authValidationErrors = createAction(
 
 //#region LogIn Actions
 
-export const logInStarted = createAction(
-    '[User Auth] LogIn started'
-);
+export const logInStarted = createAction('[User Auth] LogIn started');
 
 export const sendLogInData = createAction(
     '[User Auth] Send LogIn Data',
-    props<{ email: string, password: string }>()
+    props<{ email: string; password: string }>()
 );
 
 export const logInSucces = createAction(
@@ -42,27 +39,28 @@ export const setAuthTimer = createAction(
 
 //#region SignUp Actions
 
-export const signUpStarted = createAction(
-    '[User Auth] SignUp started'
-);
+export const signUpStarted = createAction('[User Auth] SignUp started');
 
 export const sendSignUpData = createAction(
     '[User Auth] Send SignUp data',
-    props<{ email: string, logIn: string, password: string, repeatPassword: string }>()
+    props<{
+        email: string;
+        logIn: string;
+        password: string;
+        repeatPassword: string;
+    }>()
 );
 
 export const createUserChannel = createAction(
     '[User Auth] Create user channel',
-    props<{ userId: string, login: string }>()
+    props<{ userId: string; login: string }>()
 );
 
 export const signUpSucces = createAction(
-    '[User Auth] User Account & Channel created success',
+    '[User Auth] User Account & Channel created success'
 );
 
-export const signUpFinisehd = createAction(
-    '[User Auth] SignUp finished'
-);
+export const signUpFinisehd = createAction('[User Auth] SignUp finished');
 
 //#endregion
 
@@ -70,7 +68,7 @@ export const signUpFinisehd = createAction(
 
 export const sendEmailConfirmation = createAction(
     '[User Auth] Send email confirmation data',
-    props<{ userId: string, emailToken: string }>()
+    props<{ userId: string; emailToken: string }>()
 );
 export const emailConfirmationSuccessed = createAction(
     '[User Auth] Email confirmed succes'
@@ -83,7 +81,7 @@ export const emailConfirmationFinished = createAction(
 );
 export const storeUserFromLocalStorage = createAction(
     '[User Auth] Get user from local storage and add it to state',
-    props<{user: User}>()
+    props<{ user: User }>()
 );
 export const userInLocalStoreNotFound = createAction(
     '[User Auth] User from local store not found'
@@ -93,7 +91,7 @@ export const userInLocalStoreNotFound = createAction(
 //#region RelogIn Actions
 
 export const loadUserFromStore = createAction(
-    '[User Auth] Load user from local store',
+    '[User Auth] Load user from local store'
 );
 
 export const checkUserToken = createAction(

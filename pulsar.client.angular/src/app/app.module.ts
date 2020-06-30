@@ -25,6 +25,12 @@ import { StreamComponent } from './components/stream/stream.component';
 import { ModalComponent } from './components-UI/modal/modal.component';
 import { AuthInterceptor } from './utils/interceptors/authentication.interceptor';
 import { StreamInitComponent } from './components/stream/stream-init/stream-init.component';
+import { ChannelPageComponent } from './pages/channel-page/channel-page.component';
+import { ChatComponent } from './components/chat/chat.component';
+import { StreamPlayerComponent } from './components/stream/stream-player/stream-player.component';
+import { StreamDescriptionComponent } from './components/stream/stream-description/stream-description.component';
+import { ChatFormsComponent } from './components/chat/chat-forms/chat-forms.component';
+import { StreamPreviewComponent } from './components/stream-preview/stream-preview.component';
 
 
 
@@ -40,7 +46,13 @@ import { StreamInitComponent } from './components/stream/stream-init/stream-init
     VerifyEmailMessageComponent,
     StreamComponent,
     ModalComponent,
-    StreamInitComponent
+    StreamInitComponent,
+    ChannelPageComponent,
+    ChatComponent,
+    StreamPlayerComponent,
+    StreamDescriptionComponent,
+    ChatFormsComponent,
+    StreamPreviewComponent
   ],
   imports: [
     BrowserModule,

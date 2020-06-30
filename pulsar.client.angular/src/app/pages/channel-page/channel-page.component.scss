@@ -1,0 +1,82 @@
+// .container {
+//     margin-left: 10px;
+// }
+
+// .stream__name {
+//     font-size: 30px;
+// }
+
+// .stream__container {
+//     width: 100%;
+// }
+// .video__stream {
+//     width: auto;
+//     background-color: black;
+// }
+// .chat__container {
+//     width: 500px;
+//     background-color: #eee065;
+//     height: 100%;
+// }
+// .stream__contant {
+//     margin-top: 10px;
+//     display: flex;
+//     flex-direction: row;
+// }
+// .stream__contant--small {
+//     flex-direction: column;
+// }
+
+// .stream__description {
+//     display: flex;
+//     flex-direction: row;
+//     margin-top: 10px;
+// }
+
+// .stream__title {
+//     font-size: 20px;
+// }
+// .sream__data {
+//     margin-left: 10px;
+// }
+
+// .channel__name {
+// }
+
+.stream_grid_container {
+    display: grid;
+    grid-template-columns: auto 300px;
+    grid-template-rows: auto 100px;
+    grid-template-areas:
+        "stream_player stream_chat"
+        "stream_description stream_chat_forms";
+}
+
+.stream_grid_container_without_chat {
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "stream_player"
+        "stream_description";
+}
+
+.item-1 {
+    grid-area: stream_player;
+}
+
+.item-2 {
+    grid-area: stream_chat;
+}
+.item-3 {
+    grid-area: stream_description;
+}
+
+.item-4 {
+    grid-area: stream_chat_forms;
+}
+
+// @media (min-width: 1729px) {
+//     .item-1 {
+//         height: 656px;
+//     }
+// }
