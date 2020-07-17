@@ -9,4 +9,6 @@ router.post('/initiate-stream', channelController.initiateStream);
 router.get('/online-channels', channelController.getOnlineChannels);
 router.post('/', channelController.postCreateChannel);
 router.get('/channel/:name', channelController.getChannelByName);
+router.put('/channel/finish-stream', channelController.putFinishStream);
+
 export const ChannelRouter = router;

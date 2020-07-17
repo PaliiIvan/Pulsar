@@ -31,4 +31,8 @@ export class ChannelService {
     getChannelByNameWithStream(channelName: string) {
         return this.http.get(`${this.API}/channel/${channelName}`);
     }
+
+    finishStream() {
+        return this.http.put(`${this.API}/channel/finish-stream`, {});
+    }
 }

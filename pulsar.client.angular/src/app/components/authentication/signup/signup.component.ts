@@ -6,48 +6,71 @@ import { AuthenticationService } from '../../../services/authentication/authenti
 import { AppState } from '../../../store/app.reducer';
 import { ChannelService } from '../../../services/channel/channel.service.service';
 
-import * as fromAurhActions from '../_store/authentication.actions';
+import * as fromAuthActions from '../_store/authentication.actions';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-signup',
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.scss', '../authentication.component.scss']
+    selector: 'app-signup',
+    templateUrl: './signup.component.html',
+    styleUrls: ['./signup.component.scss', '../authentication.component.scss'],
 })
 export class SignupComponent implements OnInit {
+    signUpForm = new FormGroup({
+        email: new FormControl(''),
+        login: new FormControl(''),
+        password: new FormControl(''),
+        repeatPassword: new FormControl(''),
+    });
 
-  signUpForm = new FormGroup({
-    email: new FormControl(''),
-    login: new FormControl(''),
-    password: new FormControl(''),
-    repeatPassword: new FormControl('')
-  });
+    logInForm = new FormGroup({
+        email: new FormControl(''),
+        password: new FormControl(''),
+    });
 
-  showsignUpResultMessage: Observable<boolean>;
+    validationErr$: Observable<string>;
+    isSignUp$: Observable<boolean>;
+    showsignUpResultMessage: Observable<boolean>;
 
-  constructor(private authService: AuthenticationService, private channelService: ChannelService, private store: Store<AppState>) { }
+    constructor(
+        private authService: AuthenticationService,
+        private channelService: ChannelService,
+        private store: Store<AppState>
+    ) {}
 
+    ngOnInit(): void {
+        this.isSignUp$ = this.store.select((state) => state.auth.isSignUp);
+        this.showsignUpResultMessage = this.store.select(
+            (store) => store.auth.showSignUpResultMessage
+        );
+        this.validationErr$ = this.store.select((state) => state.auth.error);
+    }
 
-  ngOnInit(): void {
-    this.showsignUpResultMessage = this.store.select(store => store.auth.showSignUpResultMessage);
-  }
+    signUp(): void {
+        const email = this.signUpForm.get('email').value;
+        const logIn = this.signUpForm.get('login').value;
+        const password = this.signUpForm.get('password').value;
+        const repeatPassword = this.signUpForm.get('repeatPassword').value;
 
-  signUp(): void {
-    const email = this.signUpForm.get('email').value;
-    const logIn = this.signUpForm.get('login').value;
-    const password = this.signUpForm.get('password').value;
-    const repeatPassword = this.signUpForm.get('repeatPassword').value;
+        this.store.dispatch(
+            fromAuthActions.sendSignUpData({
+                email,
+                logIn,
+                password,
+                repeatPassword,
+            })
+        );
+    }
 
-    this.store.dispatch(fromAurhActions.sendSignUpData({ email, logIn, password, repeatPassword }));
+    logIn() {
+        const email = this.logInForm.get('email').value;
+        const password = this.logInForm.get('password').value;
+        this.store.dispatch(fromAuthActions.sendLogInData({ email, password }));
+    }
 
-    // this.authService.signUp(email, login, password, repeatPassword)
-    // .subscribe(signUpResult => {
-    //   console.log(signUpResult);
-    //   this.channelService.createChannel('5e568ce5209ef680a419e815', 'BloodShok').subscribe(x => console.log(x));
-    // });
-  }
-
-  logInStarted() {
-    this.store.dispatch(fromAurhActions.logInStarted());
-  }
+    signUpStarted() {
+        this.store.dispatch(fromAuthActions.signUpStarted());
+    }
+    logInStarted() {
+        this.store.dispatch(fromAuthActions.logInStarted());
+    }
 }

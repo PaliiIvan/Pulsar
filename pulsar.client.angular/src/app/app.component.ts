@@ -6,6 +6,7 @@ import { User } from './models/user.model';
 import { AppState } from './store/app.reducer';
 
 import * as fromAuthActions from './components/authentication/_store/authentication.actions';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -14,11 +15,10 @@ import * as fromAuthActions from './components/authentication/_store/authenticat
 })
 export class AppComponent implements OnInit {
   title = 'Pulsar';
-
   constructor(private authService: AuthenticationService, private store: Store<AppState>) { }
 
   ngOnInit(): void {
-   this.store.dispatch(fromAuthActions.loadUserFromStore());
+    this.store.dispatch(fromAuthActions.loadUserFromStore());
   }
 
 }

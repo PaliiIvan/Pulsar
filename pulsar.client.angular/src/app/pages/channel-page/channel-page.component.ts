@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, AfterContentInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ChannelService } from '../../services/channel/channel.service.service';
 
@@ -11,6 +11,8 @@ export class ChannelPageComponent implements OnInit {
     constructor(private route: ActivatedRoute, private channelService: ChannelService) { }
     isChatReomoved = false;
     channel: any;
+
+
 
     ngOnInit(): void {
         this.onResize();

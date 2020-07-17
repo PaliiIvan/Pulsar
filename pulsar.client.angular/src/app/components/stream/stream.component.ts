@@ -5,6 +5,8 @@ import { AppState } from '../../store/app.reducer';
 
 import * as fromNavBar from '../nav-bar/_store/nav-bar.action';
 import { ChannelService } from '../../services/channel/channel.service.service';
+import { MatDialog } from '@angular/material/dialog';
+import { StreamInitComponent } from './stream-init/stream-init.component';
 
 @Component({
   selector: 'app-stream',
@@ -12,27 +14,13 @@ import { ChannelService } from '../../services/channel/channel.service.service';
   styleUrls: ['./stream.component.scss']
 })
 export class StreamComponent implements OnInit {
-
-  streamForm: FormGroup;
-
-  constructor(private store: Store<AppState>, private channelService: ChannelService) { }
+  constructor(
+    private dialog: MatDialog,
+    private store: Store<AppState>
+  ) { }
 
   ngOnInit(): void {
-    this.store.select(state => state.auth.channel.streamToken)
-    .subscribe(streamKey => {
-      this.streamForm = new FormGroup({
-        streamName: new FormControl(''),
-        streamKey: new FormControl(streamKey)
-      });
-    });
-  }
-
-  closeWindow() {
-    this.store.dispatch(fromNavBar.streamInitFinished());
-  }
-
-  submit() {
-    const streanName = this.streamForm.get('streamName').value;
-    this.channelService.initiateStream(streanName).subscribe(x => console.log(x));
+    const streamInitDialog = this.dialog.open(StreamInitComponent);
+    streamInitDialog.afterClosed().subscribe(() => this.store.dispatch(fromNavBar.streamInitFinished()));
   }
 }

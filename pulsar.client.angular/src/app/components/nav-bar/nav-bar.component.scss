@@ -1,6 +1,6 @@
 .nav__bar__container {
     height: 60px;
-    background-color: rgb(78, 77, 77);
+    background-color: #e91e63;
     color: white;
     display: flex;
     justify-content: space-between;
@@ -19,4 +19,23 @@
 }
 .user__container {
     margin-right: 20px;
+}
+
+.auth__btn__container {
+    margin-right: 5px;
+}
+
+.menu__btn__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mat-menu-item .mat-icon {
+    margin-right: unset !important;
+}
+
+.logo {
+    margin-left: 10px;
+    cursor: pointer;
 }

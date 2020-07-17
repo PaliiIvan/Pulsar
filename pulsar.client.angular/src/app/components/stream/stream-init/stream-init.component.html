@@ -1,3 +1,23 @@
-<app-modal>
-    <p>stream-init works!</p>
-</app-modal>
+<h1 mat-dialog-title class="title__color">
+    Start Sream
+</h1>
+<mat-dialog-content style="width: 280px;">
+    <form [formGroup]="streamForm" autocomplete="off">
+        <mat-form-field appearance="legacy" color="warn">
+            <mat-label>Stream Title</mat-label>
+            <input matInput placeholder="Title" formControlName="streamName" />
+        </mat-form-field>
+        <mat-form-field appearance="legacy" color="warn">
+            <mat-label>Token</mat-label>
+            <input matInput placeholder="You email" formControlName="streamToken" />
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions class="stream__init_btn__container">
+    <button mat-raised-button color="primary" (click)='submit()'>Create Stream</button>
+    <button mat-raised-button color="primary" (click)='copyToken()'>Copy stream link</button>
+</mat-dialog-actions>
+
+<mat-dialog-actions *ngIf="isStreamCreated" class="stream__init_btn__container">
+    <button mat-stroked-button disabled> Stream created, you can start it from OBS</button>
+</mat-dialog-actions>

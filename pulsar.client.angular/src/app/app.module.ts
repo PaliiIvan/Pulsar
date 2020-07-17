@@ -11,7 +11,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
-import { LogInComponent } from './components/authentication/login/login.component';
 import { AuthenticationComponent } from './components/authentication/authentication.component';
 import { SignupComponent } from './components/authentication/signup/signup.component';
 import { ErrorPageComponent } from './pages/error-page/error-page.component';
@@ -31,51 +30,67 @@ import { StreamPlayerComponent } from './components/stream/stream-player/stream-
 import { StreamDescriptionComponent } from './components/stream/stream-description/stream-description.component';
 import { ChatFormsComponent } from './components/chat/chat-forms/chat-forms.component';
 import { StreamPreviewComponent } from './components/stream-preview/stream-preview.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTabsModule } from '@angular/material/tabs';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomePageComponent,
-    LogInComponent,
-    AuthenticationComponent,
-    NavBarComponent,
-    SignupComponent,
-    ErrorPageComponent,
-    VerifyEmailMessageComponent,
-    StreamComponent,
-    ModalComponent,
-    StreamInitComponent,
-    ChannelPageComponent,
-    ChatComponent,
-    StreamPlayerComponent,
-    StreamDescriptionComponent,
-    ChatFormsComponent,
-    StreamPreviewComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    StoreModule.forRoot(fromApp.appReducer),
-    StoreDevtoolsModule.instrument({}),
-   // StoreRouterConnectingModule.forRoot(),
-    EffectsModule.forRoot([ AuthenticationEffects])
-  ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpErrorInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        HomePageComponent,
+        AuthenticationComponent,
+        NavBarComponent,
+        SignupComponent,
+        ErrorPageComponent,
+        VerifyEmailMessageComponent,
+        StreamComponent,
+        ModalComponent,
+        StreamInitComponent,
+        ChannelPageComponent,
+        ChatComponent,
+        StreamPlayerComponent,
+        StreamDescriptionComponent,
+        ChatFormsComponent,
+        StreamPreviewComponent,
+    ],
+    imports: [
+        ClipboardModule,
+        MatTabsModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatIconModule,
+        MatMenuModule,
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        StoreModule.forRoot(fromApp.appReducer),
+        StoreDevtoolsModule.instrument({}),
+        // StoreRouterConnectingModule.forRoot(),
+        EffectsModule.forRoot([AuthenticationEffects]),
+        BrowserAnimationsModule,
+    ],
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: HttpErrorInterceptor,
+            multi: true,
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true,
+        },
+    ],
+    bootstrap: [AppComponent],
 })
 export class AppModule { }
