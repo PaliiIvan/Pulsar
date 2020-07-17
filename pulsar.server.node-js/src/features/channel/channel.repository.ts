@@ -22,7 +22,7 @@ export async function updateChannel(channel: Channel) {
     return await channelSchema.updateOne({ _id: channel.id }, channel);
 }
 
-export async function getChannels(conditions: MongooseFilterQuery<Pick<Channel, '_id' | 'userId' | 'channelName' | 'description' | 'savedStreams' | 'isOnline' | 'sreamToken' | 'currentStream'>>) {
+export async function getChannels(conditions: any) {
     return await channelSchema.find(conditions);
 }
 

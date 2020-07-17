@@ -46,12 +46,29 @@ namespace StreamService.Controllers
             var channelsCollection = _userDb.GetCollection<BsonDocument>("channels");
             var filter = Builders<BsonDocument>.Filter.Eq("userId", ObjectId.Parse(tokenMetaData.UserId));
 
-            var streamObj = channelsCollection.Find(filter).FirstOrDefault();
-            var streamObjId = streamObj.GetElement("_id").Value;
+            var channelObj = channelsCollection.Find(filter).FirstOrDefault();
+            var channelStreamObjId = channelObj["currentStream"]["_id"];
+            var streamIsInPandingStatus = channelObj["pending"].AsBoolean;
 
-            var directoryPath = $"{tokenMetaData.channelName}/{streamObjId}/";
+            if (!streamIsInPandingStatus)
+            {
+                Response.StatusCode = 404;
+                var updateIsOnline = Builders<BsonDocument>
+                .Update
+                .Set("isOnline", false)
+                .Set<BsonDocument, object>("currentStream", null);
+
+                channelsCollection.UpdateOne(filter, updateIsOnline);
+                return;
+            }
+
+            var directoryPath = $"{tokenMetaData.channelName}/{channelStreamObjId}/";
             var directoryToSave = Directory.CreateDirectory($"wwwroot/{directoryPath}").FullName;
-            var update = Builders<BsonDocument>.Update.Set("currentStream.locationPath", $"{directoryPath}/index.m3u8");
+            var update = Builders<BsonDocument>
+            .Update
+            .Set("currentStream.locationPath", $"{directoryPath}index.m3u8")
+            .Set("isOnline", true);
+
             channelsCollection.UpdateOne(filter, update);
 
             if (stream.Contains(".m3u8"))

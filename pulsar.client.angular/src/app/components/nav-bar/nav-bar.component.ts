@@ -11,55 +11,73 @@ import * as fromNavBarActions from './_store/nav-bar.action';
 import * as fromAuthActions from '../authentication/_store/authentication.actions';
 import { ActivatedRoute } from '@angular/router';
 import { EmailConfirmation } from '../../models/email-confirmation.model';
+import { Channel } from '../../models/channel.model';
+import { ChannelService } from '../../services/channel/channel.service.service';
+
 @Component({
-  selector: 'app-nav-bar',
-  templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.scss'],
+    selector: 'app-nav-bar',
+    templateUrl: './nav-bar.component.html',
+    styleUrls: ['./nav-bar.component.scss'],
 })
 export class NavBarComponent implements OnInit {
-  user$: Observable<User>;
-  isAuth$: Observable<boolean>;
-  isSignUp: boolean;
-  isStreamProcess$: Observable<boolean>;
-  isEmailConfirmationProccess$: Observable<EmailConfirmation>;
+    user$: Observable<User>;
+    isAuth$: Observable<boolean>;
+    channel: Channel;
+    isSignUp: boolean;
+    isStreamProcess$: Observable<boolean>;
+    isEmailConfirmationProccess$: Observable<EmailConfirmation>;
 
-  constructor(private store: Store<AppState>, private router: ActivatedRoute) { }
+    constructor(
+        private store: Store<AppState>,
+        private router: ActivatedRoute,
+        private channelService: ChannelService
+    ) { }
 
-  ngOnInit(): void {
-    this.isAuth$ = this.store.select((state) => state.navBar.isAuthProcess);
-    this.user$ = this.store.select((state) => state.auth.user);
-    this.isStreamProcess$ = this.store.select(
-      (state) => state.navBar.isStreaminitProcess
-    );
-    this.isEmailConfirmationProccess$ = this.store.select(
-      (state) => state.auth.emailConfirmationMessage
-    );
-
-    this.router.queryParamMap.subscribe((params) => {
-      const scope = params.get('scope');
-
-      if (scope === 'confirm-email') {
-        const userId = params.get('id');
-        const emailToken = params.get('token');
-        this.store.dispatch(
-          fromAuthActions.sendEmailConfirmation({ userId, emailToken })
+    ngOnInit(): void {
+        this.store.select(state => state.auth.channel).subscribe(channel => this.channel = channel);
+        this.isAuth$ = this.store.select((state) => state.navBar.isAuthProcess);
+        this.user$ = this.store.select((state) => state.auth.user);
+        this.isStreamProcess$ = this.store.select(
+            (state) => state.navBar.isStreaminitProcess
         );
-      }
-    });
-  }
+        this.isEmailConfirmationProccess$ = this.store.select(
+            (state) => state.auth.emailConfirmationMessage
+        );
 
-  authProcessStarted() {
-    this.store.dispatch(fromNavBarActions.authProcessStarted());
-  }
-  authProcessFinished() {
-    this.store.dispatch(fromNavBarActions.authProcessFinished());
-  }
+        this.router.queryParamMap.subscribe((params) => {
+            const scope = params.get('scope');
+            if (scope === 'confirm-email') {
+                console.log(scope);
+                const userId = params.get('id');
+                const emailToken = params.get('token');
+                this.store.dispatch(
+                    fromAuthActions.sendEmailConfirmation({
+                        userId,
+                        emailToken,
+                    })
+                );
+            }
+        });
+    }
 
-  streamInitStarted() {
-    this.store.dispatch(fromNavBarActions.streamInitStarted());
-  }
+    authProcessStarted() {
+        this.store.dispatch(fromNavBarActions.authProcessStarted());
+    }
+    authProcessFinished() {
+        this.store.dispatch(fromNavBarActions.authProcessFinished());
+    }
 
-  logOut() {
-    this.store.dispatch(fromAuthActions.logOut());
-  }
+    streamInitStarted() {
+        this.store.dispatch(fromNavBarActions.streamInitStarted());
+    }
+
+    logOut() {
+        this.store.dispatch(fromAuthActions.logOut());
+    }
+
+    finishStream() {
+        this.channelService.finishStream().subscribe(() => {
+            location.reload();
+        });
+    }
 }

@@ -1,6 +1,6 @@
 <div class="stream_grid_container" [ngClass]="{ stream_grid_container_without_chat: isChatReomoved }">
     <div class="item-1">
-        <app-stream-player></app-stream-player>
+        <app-stream-player [channelSource]="channel.currentStream.locationPath"></app-stream-player>
     </div>
     <div *ngIf="!isChatReomoved" class="item-2">
         <app-chat></app-chat>

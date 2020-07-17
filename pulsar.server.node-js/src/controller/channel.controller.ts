@@ -68,6 +68,7 @@ export async function initiateStream(req: Request, res: Response, next: NextFunc
     const streamTitle = req.body.title;
     try {
         await channelService.initiateStream(streamTitle, req.user?.id);
+        res.json(null);
     } catch (err) {
         return next(err);
     }
@@ -87,5 +88,26 @@ export async function getOnlineChannels(req: Request, res: Response, next: NextF
         return next(err);
     }
 
+    return next();
+}
+
+
+/**
+* [PUT]
+* Finish stream for current channel
+*/
+export async function putFinishStream(req: Request, res: Response, next: NextFunction) {
+    logger.info('Finish stream');
+
+    const userId = req.user?.id;
+    if (!userId) {
+        return next(new Error('User is undefined'));
+    }
+    try {
+        await channelService.finishStream(userId);
+        res.json({});
+    } catch (err) {
+        return next(err);
+    }
     return next();
 }

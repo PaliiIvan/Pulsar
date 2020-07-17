@@ -126,6 +126,9 @@ export const storeUserChannal = createAction(
     props<{ channel: Channel }>()
 );
 
+export const setIsOffline = createAction(
+    '[User Auth] Set is offline'
+);
 //#endregion
 
 //#endregion

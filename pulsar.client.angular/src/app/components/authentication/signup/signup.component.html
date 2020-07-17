@@ -1,46 +1,104 @@
-<div *ngIf='!(showsignUpResultMessage |async)'>
-    <div class="auth__container__forms">
-        <form [formGroup]="signUpForm" (submit)="signUp()">
+<mat-tab-group [dynamicHeight]="true">
+    <mat-tab label="SignUp">
+        <form [formGroup]="signUpForm">
             <div class="forms">
-                <div class="forms__group">
-                    <label class="forms__group__label" for="email">Email</label>
-                    <input class="forms__group__input" type="text" name="email" id="email" formControlName="email" />
-                </div>
+                <mat-form-field appearance="legacy" color="warn">
+                    <mat-label>Email</mat-label>
+                    <input
+                        matInput
+                        placeholder="You email"
+                        formControlName="email"
+                    />
+                </mat-form-field>
 
-                <div class="forms__group">
-                    <label class="forms__group__label" for="login">Login</label>
-                    <input class="forms__group__input" type="text" name="login" id="login" formControlName="login" />
-                </div>
+                <mat-form-field appearance="legacy" color="warn">
+                    <mat-label>Login</mat-label>
+                    <input
+                        matInput
+                        placeholder="You login"
+                        formControlName="login"
+                    />
+                </mat-form-field>
 
-                <div class="forms__group">
-                    <label class="forms__group__label" for="password">Password</label>
-                    <input class="forms__group__input" type="password" name="password" id="password"
-                        formControlName="password" />
-                </div>
+                <mat-form-field appearance="legacy" color="warn">
+                    <mat-label>Password</mat-label>
+                    <input
+                        matInput
+                        type="password"
+                        placeholder="You Password"
+                        formControlName="password"
+                    />
+                </mat-form-field>
 
-                <div class="forms__group">
-                    <label class="forms__group__label" for="repeatpassword">Repeat password</label>
-                    <input class="forms__group__input" type="password" name="repeatpassword" id="repeatpassword"
-                        formControlName="repeatPassword" />
-                </div>
-                <button class="btn  btn__submit  btn__auth" type="submit">Sign In</button>
+                <mat-form-field appearance="legacy" color="warn">
+                    <mat-label>Repeat password</mat-label>
+                    <input
+                        matInput
+                        type="password"
+                        placeholder="You Password"
+                        formControlName="repeatPassword"
+                    />
+                </mat-form-field>
             </div>
         </form>
-    </div>
-    <div class="or">
-        <div class="or__separator"></div>
-        <div class="or__text">or..</div>
-        <div class="or__separator"></div>
-    </div>
-    <div>
-        <button (click)="logInStarted()">Login</button>
-    </div>
+        <mat-dialog-actions>
+            <button
+                cdkFocusInitial
+                mat-raised-button
+                color="primary"
+                (click)="signUp()"
+            >
+                Sign Up
+            </button>
+            <button mat-button mat-dialog-close>Cancel</button>
+        </mat-dialog-actions>
+    </mat-tab>
+    <mat-tab label="LogIn">
+        <form [formGroup]="logInForm">
+            <div class="forms">
+                <mat-form-field appearance="legacy" color="warn">
+                    <mat-label>Email</mat-label>
+                    <input
+                        matInput
+                        placeholder="You email"
+                        formControlName="email"
+                    />
+                </mat-form-field>
 
-</div>
+                <mat-form-field appearance="legacy" color="warn">
+                    <mat-label>Password</mat-label>
+                    <input
+                        matInput
+                        type="password"
+                        placeholder="You Password"
+                        formControlName="password"
+                    />
+                </mat-form-field>
 
-<div *ngIf='(showsignUpResultMessage |async)'>
+                <div *ngIf="(validationErr$ | async) !== ''">
+                    <span>{{ validationErr$ | async }}</span>
+                </div>
+            </div>
+        </form>
+        <mat-dialog-actions [class]="'btn_actions'">
+            <button mat-raised-button color="primary" (click)="logIn()">
+                Log In
+            </button>
+            <button mat-button mat-dialog-close>Cancel</button>
+        </mat-dialog-actions>
+    </mat-tab>
+</mat-tab-group>
+
+<!-- <div *ngIf="showsignUpResultMessage | async">
     <span>
-        Accaunt was created and confirmation link was send to you email.
-        Please confirm you email.
+        Accaunt was created and confirmation link was send to you email. Please
+        confirm you email.
     </span>
-</div>
+</div> -->
+<!-- <div *ngIf="!(isSignUp$ | async)">
+    <h3 style="color: white;" mat-dialog-title>LogIn</h3>
+    <mat-dialog-content>
+      
+    </mat-dialog-content>
+  
+</div> -->

@@ -23,20 +23,24 @@ const channelSchemaDef = new Schema({
         required: true,
         unique: true
     },
-    
+
     currentStream: streamSchemaDef,
 
     savedStreams: {
         type: Schema.Types.ObjectId,
         ref: "stream"
     },
-    
+
     isOnline: {
+        type: Boolean,
+        default: false
+    },
+    pending: {
         type: Boolean,
         default: false
     }
 }, { timestamps: true });
 
-channelSchemaDef.set("toObject", { getters: true});
+channelSchemaDef.set("toObject", { getters: true });
 
 export const channelSchema = model<Channel>("channel", channelSchemaDef);

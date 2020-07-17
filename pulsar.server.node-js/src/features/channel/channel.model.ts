@@ -8,6 +8,7 @@ export interface Channel extends Document {
     description: string;
     savedStreams: string;
     isOnline: boolean;
-    sreamToken: string;
-    currentStream: Stream;
+    pending: boolean;
+    streamToken: string;
+    currentStream: Stream | null;
 }
