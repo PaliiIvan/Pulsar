@@ -1,12 +1,13 @@
-<app-modal (modalOff)='closeAuthWindow()'>
-    <div style="width: 500px; height: 700px; background-color: white;">
-        <div *ngIf='!(emailConfirmationState |async)'>
-            <div *ngIf='(emailConfirmationState |async).isSuccess'>
-                Email confirmed!
-            </div>
-            <div *ngIf='!(emailConfirmationState |async).isSuccess'>
-                Email not confirmed
-            </div>
-        </div>
-    </div>
-</app-modal>
+<h1 mat-dialog-title class="title__color">
+    Email verification Successful!
+    <mat-divider></mat-divider>
+</h1>
+
+<mat-dialog-content style="width: 280px;">
+    You email was successfully verified! <br>
+    Please LogIn with you email.
+</mat-dialog-content>
+
+<mat-dialog-actions style="display: flex; flex-direction: row-reverse;">
+    <button mat-raised-button color="primary" mat-dialog-close>Close</button>
+</mat-dialog-actions>

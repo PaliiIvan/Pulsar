@@ -9,10 +9,12 @@ import { AppState } from '../../store/app.reducer';
 
 import * as fromNavBarActions from './_store/nav-bar.action';
 import * as fromAuthActions from '../authentication/_store/authentication.actions';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EmailConfirmation } from '../../models/email-confirmation.model';
 import { Channel } from '../../models/channel.model';
 import { ChannelService } from '../../services/channel/channel.service.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { VerifyEmailMessageComponent } from '../authentication/email-verification/email-verification.component';
 
 @Component({
     selector: 'app-nav-bar',
@@ -26,11 +28,14 @@ export class NavBarComponent implements OnInit {
     isSignUp: boolean;
     isStreamProcess$: Observable<boolean>;
     isEmailConfirmationProccess$: Observable<EmailConfirmation>;
+    emailVerificationDialog: MatDialogRef<any>;
 
     constructor(
         private store: Store<AppState>,
-        private router: ActivatedRoute,
-        private channelService: ChannelService
+        private activateRouter: ActivatedRoute,
+        private channelService: ChannelService,
+        private dialog: MatDialog,
+        private router: Router
     ) { }
 
     ngOnInit(): void {
@@ -44,18 +49,14 @@ export class NavBarComponent implements OnInit {
             (state) => state.auth.emailConfirmationMessage
         );
 
-        this.router.queryParamMap.subscribe((params) => {
+        this.activateRouter.queryParamMap.subscribe((params) => {
             const scope = params.get('scope');
             if (scope === 'confirm-email') {
                 console.log(scope);
                 const userId = params.get('id');
                 const emailToken = params.get('token');
-                this.store.dispatch(
-                    fromAuthActions.sendEmailConfirmation({
-                        userId,
-                        emailToken,
-                    })
-                );
+                this.emailVerificationDialog = this.dialog.open(VerifyEmailMessageComponent, { data: { userId, emailToken } });
+                this.emailVerificationDialog.beforeClosed().subscribe(() => this.router.navigate(['']));
             }
         });
     }

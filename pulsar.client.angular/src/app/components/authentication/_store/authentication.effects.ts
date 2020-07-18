@@ -18,14 +18,16 @@ import * as fromNavBar from '../../nav-bar/_store/nav-bar.action';
 import { ChannelService } from '../../../services/channel/channel.service.service';
 import { User } from '../../../models/user.model';
 import { of } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 @Injectable()
 export class AuthenticationEffects {
     constructor(
         private actions$: Actions,
         private store: Store<AppState>,
         private authService: AuthenticationService,
-        private channelService: ChannelService
-    ) {}
+        private channelService: ChannelService,
+        private dialog: MatDialog
+    ) { }
     //#region LogIn Effects
 
     sendLogInData$ = createEffect(() =>
@@ -143,7 +145,7 @@ export class AuthenticationEffects {
                 this.channelService
                     .createChannel(action.userId, action.login)
                     .pipe(
-                        map((res) => fromAuthActions.signUpSucces()),
+                        map((res) => { this.dialog.closeAll(); return fromAuthActions.signUpSucces(); }),
                         catchError((err) =>
                             of(
                                 fromAuthActions.authValidationErrors({

@@ -40,7 +40,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ClipboardModule } from '@angular/cdk/clipboard';
-
+import { ConfirmEmailComponent } from './components/confirm-email/confirm-email.component';
+import { MatDividerModule } from '@angular/material/divider';
 @NgModule({
     declarations: [
         AppComponent,
@@ -59,8 +60,10 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
         StreamDescriptionComponent,
         ChatFormsComponent,
         StreamPreviewComponent,
+        ConfirmEmailComponent,
     ],
     imports: [
+        MatDividerModule,
         ClipboardModule,
         MatTabsModule,
         MatInputModule,

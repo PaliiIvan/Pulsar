@@ -75,7 +75,7 @@ export async function finishStream(userId: string) {
 
     channel.pending = false;
     channel.isOnline = false;
-
+    channel.currentStream = null;
     await channelRepo.updateChannel(channel);
 }
 /**

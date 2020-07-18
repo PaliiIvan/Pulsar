@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/app.reducer';
@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EmailConfirmation } from '../../../models/email-confirmation.model';
 
 import * as fromAuthActions from '../_store/authentication.actions';
+import { AuthenticationService } from '../../../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-email-verification',
@@ -14,22 +15,16 @@ import * as fromAuthActions from '../_store/authentication.actions';
 })
 export class VerifyEmailMessageComponent implements OnInit {
 
-  emailConfirmationState: Observable<EmailConfirmation>;
+  @Input() emailData: { userId: string, emailToken: string };
 
   constructor(private store: Store<AppState>, private router: Router) { }
 
   ngOnInit(): void {
-    this.emailConfirmationState = this.store.select(state => state.auth.emailConfirmationMessage);
-
-    this.emailConfirmationState.subscribe(res => {
-      if (res) {
-        setTimeout(() => {
-          console.log('Email finished');
-          this.store.dispatch(fromAuthActions.emailConfirmationFinished());
-          this.router.navigate(['']);
-        }, 3000);
-      }
-    });
+    this.store.dispatch(
+      fromAuthActions.sendEmailConfirmation({
+        userId: this.emailData.userId,
+        emailToken: this.emailData.emailToken
+      }));
   }
 
   closeAuthWindow() {

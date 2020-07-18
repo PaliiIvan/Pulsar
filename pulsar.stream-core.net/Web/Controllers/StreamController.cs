@@ -47,7 +47,20 @@ namespace StreamService.Controllers
             var filter = Builders<BsonDocument>.Filter.Eq("userId", ObjectId.Parse(tokenMetaData.UserId));
 
             var channelObj = channelsCollection.Find(filter).FirstOrDefault();
-            var channelStreamObjId = channelObj["currentStream"]["_id"];
+            var channelStreamObj = channelObj["currentStream"];
+            if (channelStreamObj.IsBsonNull)
+            {
+                Response.StatusCode = 404;
+                var updateIsOnline = Builders<BsonDocument>
+                .Update
+                .Set("isOnline", false)
+                .Set<BsonDocument, object>("currentStream", null);
+
+                channelsCollection.UpdateOne(filter, updateIsOnline);
+                return;
+            }
+
+            var channelStreamObjId = channelStreamObj["_id"];
             var streamIsInPandingStatus = channelObj["pending"].AsBoolean;
 
             if (!streamIsInPandingStatus)
