@@ -19,3 +19,18 @@ video {
         height: 67vh;
     }
 }
+
+video::-webkit-media-controls-timeline {
+    display: none;
+}
+
+video::-webkit-media-controls-timeline-container {
+    display: none;
+}
+video::-webkit-media-controls-time-remaining-display {
+    display: none;
+}
+
+video:focus {
+    outline: none;
+}

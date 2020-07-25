@@ -3,6 +3,7 @@ import { createAction, props } from '@ngrx/store';
 import { AuthResult } from '../../../models/api.models/auth-result.model';
 import { User } from '../../../models/user.model';
 import { Channel } from '../../../models/channel.model';
+import { ValidationError } from '../../../models/errors/validation-error.model';
 
 //#region Authentication Actions
 export const authenticationStarted = createAction(
@@ -14,7 +15,7 @@ export const authenticationCompleted = createAction(
 
 export const authValidationErrors = createAction(
     '[User Auth] Authentication validation error',
-    props<{ error: string }>()
+    props<{ error: ValidationError[] }>()
 );
 
 //#region LogIn Actions

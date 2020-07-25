@@ -1,1 +1,11 @@
-<p>chat-forms works!</p>
+<div class="comment-input">
+    <form [formGroup]='chatMessageForm' class="example-form">
+        <mat-form-field appearance="fill" class="example-full-width">
+            <mat-label>Write you message</mat-label>
+            <textarea formControlName='message' rows="2" matInput></textarea>
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)='sendComment()'>
+            Comment
+        </button>
+    </form>
+</div>

@@ -5,6 +5,8 @@ import { Channel } from '../../../models/channel.model';
 import { EmailConfirmation } from '../../../models/email-confirmation.model';
 
 import * as fromaAuthActions from './authentication.actions';
+import { ValidationError } from '../../../models/errors/validation-error.model';
+
 
 export interface AuthenticationState {
     user: User;
@@ -12,7 +14,7 @@ export interface AuthenticationState {
     isTokenValid: boolean;
     isAuthProccess: boolean;
     isSignUp: boolean;
-    error: string;
+    error: ValidationError[];
     showSignUpResultMessage: boolean;
     emailConfirmationMessage: EmailConfirmation;
 }
@@ -23,7 +25,7 @@ const initialState: AuthenticationState = {
     isTokenValid: false,
     isAuthProccess: false,
     isSignUp: false,
-    error: '',
+    error: [],
     showSignUpResultMessage: false,
     emailConfirmationMessage: null,
 };

@@ -15,18 +15,21 @@ export function errorParser(errors: Result, next: NextFunction) {
 
 export class ValidationExeption extends Error implements ErrorMetadata {
 
+    metadata: any[] = [];
+    description: string;
+    statusCode: number;
+
     constructor(errors: ValidationError[] | { propery: string, message: string }[]) {
         super("Validation Error");
 
-        if('param' in errors)
-            this.metadata = (<ValidationError[]>errors).map(err => err.msg);
-        else
-            this.metadata = errors;
-    }
+        errors.forEach(error => {
+            if ('param' in error)
+                this.metadata.push(error.msg);
+            else
+                this.metadata.push(error);
+        });
 
-    metadata: any;
-    description: string;
-    statusCode: number;
+    }
 }
 
 export class ValidationErrorMessage {

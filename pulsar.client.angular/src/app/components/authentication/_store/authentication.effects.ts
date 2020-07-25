@@ -19,6 +19,7 @@ import { ChannelService } from '../../../services/channel/channel.service.servic
 import { User } from '../../../models/user.model';
 import { of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import { ValidationError } from '../../../models/errors/validation-error.model';
 @Injectable()
 export class AuthenticationEffects {
     constructor(
@@ -38,7 +39,7 @@ export class AuthenticationEffects {
                     map((userData) =>
                         fromAuthActions.logInSucces({ user: userData })
                     ),
-                    catchError((error: string) =>
+                    catchError((error: ValidationError[]) =>
                         of(fromAuthActions.authValidationErrors({ error }))
                     )
                 )

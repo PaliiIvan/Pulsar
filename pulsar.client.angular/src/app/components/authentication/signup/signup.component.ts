@@ -8,6 +8,7 @@ import { ChannelService } from '../../../services/channel/channel.service.servic
 
 import * as fromAuthActions from '../_store/authentication.actions';
 import { Observable } from 'rxjs';
+import { ValidationError } from '../../../models/errors/validation-error.model';
 
 @Component({
     selector: 'app-signup',
@@ -27,7 +28,7 @@ export class SignupComponent implements OnInit {
         password: new FormControl(''),
     });
 
-    validationErr$: Observable<string>;
+    validationErr$: Observable<ValidationError[]>;
     isSignUp$: Observable<boolean>;
     showsignUpResultMessage: Observable<boolean>;
 
@@ -35,7 +36,7 @@ export class SignupComponent implements OnInit {
         private authService: AuthenticationService,
         private channelService: ChannelService,
         private store: Store<AppState>
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         this.isSignUp$ = this.store.select((state) => state.auth.isSignUp);

@@ -12,3 +12,12 @@ form {
     display: flex;
     justify-content: space-between;
 }
+
+.stream__init_btn__container {
+    display: flex;
+    justify-content: space-around;
+    button {
+        border-color: #f44336;
+        color: #f44336;
+    }
+}
