@@ -2,7 +2,7 @@ import { Schema, Types, model, Document } from "mongoose";
 import { Stream } from "./stream.model";
 
 
-interface StreamSchemaModel extends Stream, Document {}
+interface StreamSchemaModel extends Stream, Document { }
 
 export const streamSchemaDef = new Schema({
     title: {
@@ -13,9 +13,11 @@ export const streamSchemaDef = new Schema({
         type: String
     },
     comments: [{
-        data: String,
-        by: Types.ObjectId,
-        videoTime: {
+        comment: String,
+        userId: Types.ObjectId,
+        userName: String,
+
+        streamTime: {
             type: Date,
             require: true
         },
@@ -24,9 +26,9 @@ export const streamSchemaDef = new Schema({
             require: true
         }
     }]
-}, {timestamps: true});
+}, { timestamps: true });
 
-streamSchemaDef.set("toObject", {getters: true});
+streamSchemaDef.set("toObject", { getters: true });
 
 export const streamSchema = model<StreamSchemaModel>("stream", streamSchemaDef);
 

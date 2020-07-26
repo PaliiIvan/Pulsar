@@ -9,7 +9,7 @@ const routes: Routes = [
     { path: 'home', component: HomePageComponent },
     { path: 'error', component: ErrorPageComponent },
     { path: 'channel/:name', component: ChannelPageComponent },
-    // { path: '', redirectTo: '/home', pathMatch: 'full' },
+    { path: '*', redirectTo: '/home', pathMatch: 'full' },
 ];
 
 @NgModule({

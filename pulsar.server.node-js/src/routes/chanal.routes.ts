@@ -1,6 +1,8 @@
 import { Router } from 'express';
 
 import * as channelController from '../controller/channel.controller';
+
+
 const router = Router();
 import { isAuthenticated } from '../authentication/authorization-context';
 
@@ -10,5 +12,7 @@ router.get('/online-channels', channelController.getOnlineChannels);
 router.post('/', channelController.postCreateChannel);
 router.get('/channel/:name', channelController.getChannelByName);
 router.put('/channel/finish-stream', channelController.putFinishStream);
+
+
 
 export const ChannelRouter = router;

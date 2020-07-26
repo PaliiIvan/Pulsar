@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import * as auhtMiddleware from './middleware/authentication.middleware';
 
 import { ChannelRouter } from './routes/chanal.routes';
+import { StreamRouter } from "./routes/stream.routes";
 import { errorHandling } from './middleware/application-error.middleware';
 
 const app = express();
@@ -45,7 +46,7 @@ app.use(auhtMiddleware.useAuthentication);
 //#region Routes
 
 app.use('/channel', ChannelRouter);
-
+app.use('/stream', StreamRouter);
 //#endregion
 
 //#region Error Handling

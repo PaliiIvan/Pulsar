@@ -4,9 +4,11 @@ export interface Stream {
     id?: any;
     title: string;
     locationPath?: string;
-    comments?: {
-        data: string,
-        videoTime: Date,
-        DateTime: Date
-    }
+    comments?: [{
+        userId: string,
+        userName: string,
+        comment: string,
+        streamTime: Date,
+        dateTime: Date
+    }]
 }
