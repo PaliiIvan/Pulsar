@@ -4,11 +4,12 @@ export interface Stream {
     id?: any;
     title: string;
     locationPath?: string;
+    startDate?: Date;
     comments?: [{
         userId: string,
         userName: string,
         comment: string,
-        streamTime: Date,
+        streamDuration: number,
         dateTime: Date
     }]
 }

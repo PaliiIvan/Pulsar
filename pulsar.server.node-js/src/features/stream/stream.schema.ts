@@ -12,13 +12,16 @@ export const streamSchemaDef = new Schema({
     locationPath: {
         type: String
     },
+    startDate: {
+        type: Date
+    },
     comments: [{
         comment: String,
         userId: Types.ObjectId,
         userName: String,
 
-        streamTime: {
-            type: Date,
+        streamDuration: {
+            type: Number,
             require: true
         },
         dateTime: {

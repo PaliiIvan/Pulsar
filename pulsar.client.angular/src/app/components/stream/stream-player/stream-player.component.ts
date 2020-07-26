@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, Input, AfterContentInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, HostListener, Input, AfterContentInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { element } from 'protractor';
 import * as HLS from 'hls.js';
 
@@ -7,7 +7,7 @@ import * as HLS from 'hls.js';
     templateUrl: './stream-player.component.html',
     styleUrls: ['./stream-player.component.scss'],
 })
-export class StreamPlayerComponent implements OnInit, AfterContentInit {
+export class StreamPlayerComponent implements OnInit, AfterContentInit, OnDestroy {
     constructor() { }
     isVideoHeightStatic = false;
     changedWidth = 0;
@@ -41,18 +41,7 @@ export class StreamPlayerComponent implements OnInit, AfterContentInit {
         }
     }
 
-    getCurrentVideoTime() {
-        const nginx_base_timestamp = Math.floor(Date.now() / 4294967296) * 4294967296;
-        const program_data = this.hls.levels[this.hls.currentLevel].details.fragments[0].programDateTime as any;
-        const start_time = this.hls.levels[this.hls.currentLevel].details.fragments[0];
-        const vide_time = this.hls.levels[this.hls.currentLevel].details;
-
-        // console.log(vide_time + program_data - start_time);
-        // console.log(vide_time, 'vide_time');
-        // console.log(program_data, 'program_data');
-        // console.log(start_time, 'start_time');
-        console.log(vide_time, 'vide_time');
-
-
+    ngOnDestroy() {
+        this.hls.destroy();
     }
 }
