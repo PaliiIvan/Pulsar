@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { StreamService } from '../../services/stream/stream.service';
+import { Comment } from '../../models/api.models/comment';
 
 @Component({
   selector: 'app-chat',
@@ -6,10 +8,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit {
+  @Input() channelName: string;
+  comments: Comment[];
 
-  constructor() { }
+  constructor(private streamService: StreamService) { }
 
   ngOnInit(): void {
+    this.streamService.getComments(this.channelName).subscribe(comments => this.comments = comments);
   }
 
 }

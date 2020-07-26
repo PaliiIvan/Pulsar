@@ -1,1 +1,8 @@
-<p>chat works!</p>
+<div class="chat__container">
+    <div *ngFor='let commentData of comments'>
+        <p class="chat__element">
+            <span class="chat__element__user__name">@{{commentData.userName}}</span>
+            {{commentData.comment}}
+        </p>
+    </div>
+</div>

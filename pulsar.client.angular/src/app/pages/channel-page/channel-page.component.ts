@@ -7,6 +7,7 @@ import { ChannelService } from '../../services/channel/channel.service.service';
     templateUrl: './channel-page.component.html',
     styleUrls: ['./channel-page.component.scss'],
 })
+
 export class ChannelPageComponent implements OnInit {
     constructor(private route: ActivatedRoute, private channelService: ChannelService) { }
     isChatReomoved = false;

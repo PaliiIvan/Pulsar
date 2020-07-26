@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
@@ -73,6 +74,16 @@ namespace StreamService.Controllers
 
                 channelsCollection.UpdateOne(filter, updateIsOnline);
                 return;
+            }
+
+            var streamIsInOnlineStatus = channelObj["isOnline"].AsBoolean;
+
+            if (!streamIsInOnlineStatus)
+            {
+                var updateStartDate = Builders<BsonDocument>
+                           .Update
+                           .Set("currentStream.startDate", DateTime.UtcNow);
+                channelsCollection.UpdateOne(filter, updateStartDate);
             }
 
             var directoryPath = $"{tokenMetaData.channelName}/{channelStreamObjId}/";

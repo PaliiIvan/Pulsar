@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-stream-description',
@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./stream-description.component.scss']
 })
 export class StreamDescriptionComponent implements OnInit {
+
+  @Input() channelName: string;
+  @Input() stream: any;
 
   constructor() { }
 
