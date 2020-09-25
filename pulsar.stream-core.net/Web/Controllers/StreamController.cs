@@ -87,25 +87,25 @@ namespace StreamService.Controllers
                 channelsCollection.UpdateOne(filter, updateStartDate);
             }
 
-            var directoryPath = $"{tokenMetaData.channelName}/{channelStreamObjId}/";
-            var directoryToSave = Directory.CreateDirectory($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/pulsar_streams/{directoryPath}").FullName;
+            var userDirectoryPath = $"{tokenMetaData.channelName}/{channelStreamObjId}/";
+            var fullDirectoryPath = Directory.CreateDirectory($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/pulsar_streams/{userDirectoryPath}").FullName;
             var update = Builders<Channel>
             .Update
-            .Set(channel => channel.currentStream.locationPath, $"{directoryPath}index.m3u8")
+            .Set(channel => channel.currentStream.locationPath, $"{userDirectoryPath}index.m3u8")
             .Set(chanel => chanel.isOnline, true);
 
             channelsCollection.UpdateOne(filter, update);
 
             if (stream.Contains(".m3u8"))
             {
-                using (var indexFile = System.IO.File.OpenWrite($"{directoryToSave}index.m3u8"))
+                using (var indexFile = System.IO.File.OpenWrite($"{fullDirectoryPath}index.m3u8"))
                 {
                     Request.Body.CopyTo(indexFile);
                 }
             }
             else
             {
-                using (var tsStream = new System.IO.FileStream($"{directoryToSave}/{stream}", FileMode.OpenOrCreate))
+                using (var tsStream = new System.IO.FileStream($"{fullDirectoryPath}/{stream}", FileMode.OpenOrCreate))
                 {
                     Request.Body.CopyTo(tsStream);
                 }
