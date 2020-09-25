@@ -1,4 +1,13 @@
-import { Component, OnInit, HostListener, Input, AfterContentInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    HostListener,
+    Input,
+    AfterContentInit,
+    Output,
+    EventEmitter,
+    OnDestroy,
+} from '@angular/core';
 import { element } from 'protractor';
 import * as HLS from 'hls.js';
 
@@ -7,8 +16,9 @@ import * as HLS from 'hls.js';
     templateUrl: './stream-player.component.html',
     styleUrls: ['./stream-player.component.scss'],
 })
-export class StreamPlayerComponent implements OnInit, AfterContentInit, OnDestroy {
-    constructor() { }
+export class StreamPlayerComponent
+    implements OnInit, AfterContentInit, OnDestroy {
+    constructor() {}
     isVideoHeightStatic = false;
     changedWidth = 0;
     @Input() channelSource: string;
@@ -24,13 +34,16 @@ export class StreamPlayerComponent implements OnInit, AfterContentInit, OnDestro
         this.hls.loadSource(this.channelSource);
         this.hls.attachMedia(this.videoElement);
 
-        const data = this.hls.levels;
-        while (true) {
-            console.log(this.hls.levels[this.hls.currentLevel].details.fragments[0].programDateTime);
-        }
+        this.videoElement.addEventListener('timeupdate', (event) =>
+            console.log(event)
+        );
+
+        this.videoElement.addEventListener('ended', (event) => {
+            console.log('--------STOP-------');
+        });
     }
 
-    ngOnInit(): void { }
+    ngOnInit(): void {}
 
     @HostListener('window:resize', ['$event'])
     onResize(event) {

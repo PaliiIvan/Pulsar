@@ -8,10 +8,13 @@ import { NotFoundError } from '../utils/errors/server.errors';
 
 export async function createChannel(userId: string, channelName: string) {
     const streamToken = generateStreamToken(userId, channelName);
-    const result = await channelRepo.createChannel(userId, channelName, streamToken);
+    const result = await channelRepo.createChannel(
+        userId,
+        channelName,
+        streamToken
+    );
     return result;
 }
-
 
 export async function getChannelByUserId(userId: string) {
     const channel = await channelRepo.getChannelByUserId(userId);
@@ -22,7 +25,6 @@ export async function getChannelByUserId(userId: string) {
 }
 
 export async function initiateStream(streamTitile: string, userId?: string) {
-
     const stream = await streamRepo.createStream({ title: streamTitile });
     const channel = await channelRepo.getChannelByUserId(userId);
 
@@ -30,21 +32,25 @@ export async function initiateStream(streamTitile: string, userId?: string) {
     channel.pending = true;
 
     const result = await channelRepo.updateChannel(channel);
-
 }
 
 export async function getOnlineChannels() {
-    const onlineChannels = await channelRepo.getChannels({ isOnline: true, currentStream: { $ne: null } });
-    console.log(onlineChannels);
-    const streamsPreview = onlineChannels
-        .map(channel => {
-            if (channel.currentStream) {
-                return new ChannelPreview(channel.id, channel.channelName, channel.currentStream.title, channel.currentStream.id);
-            }
-        });
+    const onlineChannels = await channelRepo.getChannels({
+        isOnline: true,
+        currentStream: { $ne: null },
+    });
+    const streamsPreview = onlineChannels.map((channel) => {
+        if (channel.currentStream) {
+            return new ChannelPreview(
+                channel.id,
+                channel.channelName,
+                channel.currentStream.title,
+                channel.currentStream.id
+            );
+        }
+    });
     return streamsPreview;
 }
-
 
 export async function getChannel(query: any) {
     logger.info(query);
@@ -60,8 +66,8 @@ export async function getChannel(query: any) {
     const channelDto = {
         isOnline: channel?.isOnline,
         channelName: channel?.channelName,
-        currentStream: channel?.currentStream
-    }
+        currentStream: channel?.currentStream,
+    };
 
     return channelDto;
 }

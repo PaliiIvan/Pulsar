@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -29,8 +31,8 @@ namespace StreamService
         {
             services.AddSingleton<ITokenValidationService, TokenValidationService>();
             services.Configure<SecretKeys>(Configuration.GetSection("SecretKeys"));
-            
-            
+
+
             services.Configure<KestrelServerOptions>(options =>
             {
                 options.AllowSynchronousIO = true;
@@ -44,7 +46,7 @@ namespace StreamService
             }));
 
             services.AddControllers();
-            
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -59,8 +61,13 @@ namespace StreamService
             // Add new mappings
             provider.Mappings[".m3u8"] = "application/x-mpegURL";
 
+            var pathForStreamFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var directoryToSave = Directory.CreateDirectory(Path.Combine(pathForStreamFolder, "pulsar_streams")).FullName;
+
+            Console.WriteLine(pathForStreamFolder);
             app.UseStaticFiles(new StaticFileOptions
             {
+                FileProvider = new PhysicalFileProvider(directoryToSave),
                 ContentTypeProvider = provider
             });
 

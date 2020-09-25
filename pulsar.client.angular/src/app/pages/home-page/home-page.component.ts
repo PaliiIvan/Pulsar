@@ -5,11 +5,7 @@ import {
     ElementRef,
     AfterViewInit,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
 
-import { AppState } from '../../store/app.reducer';
-import { Observable } from 'rxjs';
 import * as HLS from 'hls.js';
 import { ChannelService } from '../../services/channel/channel.service.service';
 import { ChannelPreview } from '../../models/api.models/channel-preview';
@@ -25,7 +21,6 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     videoElement: HTMLMediaElement;
     isEmailConfirmationMessage = false;
     hls: HLS;
-
     channels: ChannelPreview[];
 
     ngAfterViewInit(): void {

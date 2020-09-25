@@ -4,27 +4,58 @@
             <div class="forms">
                 <mat-form-field appearance="legacy" color="warn">
                     <mat-label>Email</mat-label>
-                    <input matInput placeholder="You email" formControlName="email" />
+                    <input
+                        matInput
+                        placeholder="You email"
+                        formControlName="email"
+                    />
                 </mat-form-field>
 
                 <mat-form-field appearance="legacy" color="warn">
                     <mat-label>Login</mat-label>
-                    <input matInput placeholder="You login" formControlName="login" />
+                    <input
+                        matInput
+                        placeholder="You login"
+                        formControlName="login"
+                    />
                 </mat-form-field>
 
                 <mat-form-field appearance="legacy" color="warn">
                     <mat-label>Password</mat-label>
-                    <input matInput type="password" placeholder="You Password" formControlName="password" />
+                    <input
+                        matInput
+                        type="password"
+                        placeholder="You Password"
+                        formControlName="password"
+                    />
                 </mat-form-field>
 
                 <mat-form-field appearance="legacy" color="warn">
                     <mat-label>Repeat password</mat-label>
-                    <input matInput type="password" placeholder="You Password" formControlName="repeatPassword" />
+                    <input
+                        matInput
+                        type="password"
+                        placeholder="You Password"
+                        formControlName="repeatPassword"
+                    />
                 </mat-form-field>
             </div>
         </form>
+        <mat-dialog-actions
+            *ngIf="(signupErrors$ | async).length !== 0"
+            class="stream__init_btn__container"
+        >
+            <button mat-stroked-button disabled>
+                {{ (signupErrors$ | async)[0].message }}
+            </button>
+        </mat-dialog-actions>
         <mat-dialog-actions>
-            <button cdkFocusInitial mat-raised-button color="primary" (click)="signUp()">
+            <button
+                cdkFocusInitial
+                mat-raised-button
+                color="primary"
+                (click)="signUp()"
+            >
                 Sign Up
             </button>
             <button mat-button mat-dialog-close>Cancel</button>
@@ -35,17 +66,31 @@
             <div class="forms">
                 <mat-form-field appearance="legacy" color="warn">
                     <mat-label>Email</mat-label>
-                    <input matInput placeholder="You email" formControlName="email" />
+                    <input
+                        matInput
+                        placeholder="You email"
+                        formControlName="email"
+                    />
                 </mat-form-field>
 
                 <mat-form-field appearance="legacy" color="warn">
                     <mat-label>Password</mat-label>
-                    <input matInput type="password" placeholder="You Password" formControlName="password" />
+                    <input
+                        matInput
+                        type="password"
+                        placeholder="You Password"
+                        formControlName="password"
+                    />
                 </mat-form-field>
             </div>
         </form>
-        <mat-dialog-actions *ngIf="(validationErr$ | async).length !== 0" class="stream__init_btn__container">
-            <button mat-stroked-button disabled> {{(validationErr$ | async)[0].message}}</button>
+        <mat-dialog-actions
+            *ngIf="(logInErrors$ | async).length !== 0"
+            class="stream__init_btn__container"
+        >
+            <button mat-stroked-button disabled>
+                {{ (logInErrors$ | async)[0].message }}
+            </button>
         </mat-dialog-actions>
         <mat-dialog-actions [class]="'btn_actions'">
             <button mat-raised-button color="primary" (click)="logIn()">

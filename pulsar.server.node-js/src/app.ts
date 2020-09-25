@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import * as auhtMiddleware from './middleware/authentication.middleware';
 
 import { ChannelRouter } from './routes/chanal.routes';
-import { StreamRouter } from "./routes/stream.routes";
+import { StreamRouter } from './routes/stream.routes';
 import { errorHandling } from './middleware/application-error.middleware';
 
 const app = express();

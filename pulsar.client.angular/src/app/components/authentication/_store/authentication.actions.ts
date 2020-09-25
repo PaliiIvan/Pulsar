@@ -13,8 +13,13 @@ export const authenticationCompleted = createAction(
     '[User Auth] Authentication completed'
 );
 
-export const authValidationErrors = createAction(
+export const logInValidationErrors = createAction(
     '[User Auth] Authentication validation error',
+    props<{ error: ValidationError[] }>()
+);
+
+export const signUpValidationErrors = createAction(
+    '[User Auth] SignUp error',
     props<{ error: ValidationError[] }>()
 );
 
@@ -127,9 +132,7 @@ export const storeUserChannal = createAction(
     props<{ channel: Channel }>()
 );
 
-export const setIsOffline = createAction(
-    '[User Auth] Set is offline'
-);
+export const setIsOffline = createAction('[User Auth] Set is offline');
 //#endregion
 
 //#endregion

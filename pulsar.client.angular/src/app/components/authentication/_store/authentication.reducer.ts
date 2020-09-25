@@ -7,14 +7,14 @@ import { EmailConfirmation } from '../../../models/email-confirmation.model';
 import * as fromaAuthActions from './authentication.actions';
 import { ValidationError } from '../../../models/errors/validation-error.model';
 
-
 export interface AuthenticationState {
     user: User;
     channel: Channel;
     isTokenValid: boolean;
     isAuthProccess: boolean;
     isSignUp: boolean;
-    error: ValidationError[];
+    signUpErrors: ValidationError[];
+    logInErrors: ValidationError[];
     showSignUpResultMessage: boolean;
     emailConfirmationMessage: EmailConfirmation;
 }
@@ -25,14 +25,14 @@ const initialState: AuthenticationState = {
     isTokenValid: false,
     isAuthProccess: false,
     isSignUp: false,
-    error: [],
+    signUpErrors: [],
+    logInErrors: [],
     showSignUpResultMessage: false,
     emailConfirmationMessage: null,
 };
 
 const authenticationReducer = createReducer<AuthenticationState>(
     initialState,
-
     on(fromaAuthActions.authenticationStarted, (state) => ({
         ...state,
         isAuthProccess: true,
@@ -41,12 +41,15 @@ const authenticationReducer = createReducer<AuthenticationState>(
         ...state,
         isAuthProccess: false,
     })),
-    on(fromaAuthActions.authValidationErrors, (state, action) => ({
+    on(fromaAuthActions.logInValidationErrors, (state, action) => ({
         ...state,
-        error: action.error,
+        logInErrors: action.error,
+    })),
+    on(fromaAuthActions.signUpValidationErrors, (state, action) => ({
+        ...state,
+        signUpErrors: action.error,
     })),
     on(fromaAuthActions.logOut, (state) => ({ ...initialState })),
-
     on(fromaAuthActions.logInStarted, (state) => ({
         ...state,
         isSignUp: false,
@@ -58,7 +61,6 @@ const authenticationReducer = createReducer<AuthenticationState>(
         isTokenValid: true,
     })),
     on(fromaAuthActions.setAuthTimer, (state) => ({ ...state })),
-
     on(fromaAuthActions.signUpStarted, (state) => ({
         ...state,
         isSignUp: true,
@@ -74,7 +76,6 @@ const authenticationReducer = createReducer<AuthenticationState>(
         ...state,
         showSignUpResultMessage: false,
     })),
-
     on(fromaAuthActions.loadUserFromStore, (state, action) => ({ ...state })),
     on(fromaAuthActions.checkUserToken, (state, action) => ({ ...state })),
     on(fromaAuthActions.regenerateUserToken, (state, action) => ({ ...state })),
@@ -82,26 +83,22 @@ const authenticationReducer = createReducer<AuthenticationState>(
         ...state,
         user: { ...state.user, token: action.token },
     })),
-
     on(fromaAuthActions.getUserChannal, (state) => ({ ...state })),
     on(fromaAuthActions.storeUserChannal, (state, action) => ({
         ...state,
         channel: action.channel,
     })),
-
     on(fromaAuthActions.storeUserFromLocalStorage, (state, action) => ({
         ...state,
         user: action.user,
     })),
-
     on(fromaAuthActions.setIsOffline, (state) => ({
         ...state,
         channel: {
             ...state.channel,
-            isOnline: false
-        }
+            isOnline: false,
+        },
     })),
-
     on(fromaAuthActions.emailConfirmationSuccessed, (state) => ({
         ...state,
         emailConfirmationMessage: { isSuccess: true, showMessage: true },

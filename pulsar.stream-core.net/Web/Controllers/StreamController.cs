@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json;
+using Models;
 
 namespace StreamService.Controllers
 {
@@ -29,10 +30,10 @@ namespace StreamService.Controllers
         public string CheckAction(string stream)
         {
             var st = stream;
-            var channelsCollection = _userDb.GetCollection<BsonDocument>("channels");
-            var filter = Builders<BsonDocument>.Filter.Eq("userId", ObjectId.Parse("5ee099261f0d11077900d3e2"));
+            var channelsCollection = _userDb.GetCollection<Channel>("channels");
+            var filter = Builders<Channel>.Filter.Eq(channel => channel.userId, ObjectId.Parse("5f11f0e2a84f233764161184"));
 
-            var testres = channelsCollection.Find(filter).FirstOrDefault().GetElement("_id").Value;
+            var testres = channelsCollection.Find(filter).FirstOrDefault().Id;
 
             return testres.ToString();
         }
@@ -44,54 +45,54 @@ namespace StreamService.Controllers
             var tokenMetaData = _tokenValidationService.ValidateToken(token);
 
 
-            var channelsCollection = _userDb.GetCollection<BsonDocument>("channels");
-            var filter = Builders<BsonDocument>.Filter.Eq("userId", ObjectId.Parse(tokenMetaData.UserId));
+            var channelsCollection = _userDb.GetCollection<Channel>("channels");
+            var filter = Builders<Channel>.Filter.Eq(channel => channel.userId, ObjectId.Parse(tokenMetaData.UserId));
 
-            var channelObj = channelsCollection.Find(filter).FirstOrDefault();
-            var channelStreamObj = channelObj["currentStream"];
-            if (channelStreamObj.IsBsonNull)
+            var currentChannel = channelsCollection.Find(filter).FirstOrDefault();
+            var channelStreamObj = currentChannel.currentStream;
+            if (channelStreamObj == null)
             {
                 Response.StatusCode = 404;
-                var updateIsOnline = Builders<BsonDocument>
+                var updateIsOnline = Builders<Channel>
                 .Update
-                .Set("isOnline", false)
-                .Set<BsonDocument, object>("currentStream", null);
+                .Set(channel => channel.isOnline, false)
+                .Set(channel => channel.currentStream, null);
 
                 channelsCollection.UpdateOne(filter, updateIsOnline);
                 return;
             }
 
-            var channelStreamObjId = channelStreamObj["_id"];
-            var streamIsInPandingStatus = channelObj["pending"].AsBoolean;
+            var channelStreamObjId = channelStreamObj.id;
+            var streamIsInPandingStatus = currentChannel.pending;
 
             if (!streamIsInPandingStatus)
             {
                 Response.StatusCode = 404;
-                var updateIsOnline = Builders<BsonDocument>
+                var updateIsOnline = Builders<Channel>
                 .Update
-                .Set("isOnline", false)
-                .Set<BsonDocument, object>("currentStream", null);
+                .Set(chanel => chanel.isOnline, false)
+                .Set(channel => channel.currentStream, null);
 
                 channelsCollection.UpdateOne(filter, updateIsOnline);
                 return;
             }
 
-            var streamIsInOnlineStatus = channelObj["isOnline"].AsBoolean;
+            var streamIsInOnlineStatus = currentChannel.isOnline;
 
             if (!streamIsInOnlineStatus)
             {
-                var updateStartDate = Builders<BsonDocument>
+                var updateStartDate = Builders<Channel>
                            .Update
-                           .Set("currentStream.startDate", DateTime.UtcNow);
+                           .Set(channel => channel.currentStream.startDate, DateTime.UtcNow);
                 channelsCollection.UpdateOne(filter, updateStartDate);
             }
 
             var directoryPath = $"{tokenMetaData.channelName}/{channelStreamObjId}/";
-            var directoryToSave = Directory.CreateDirectory($"wwwroot/{directoryPath}").FullName;
-            var update = Builders<BsonDocument>
+            var directoryToSave = Directory.CreateDirectory($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/pulsar_streams/{directoryPath}").FullName;
+            var update = Builders<Channel>
             .Update
-            .Set("currentStream.locationPath", $"{directoryPath}index.m3u8")
-            .Set("isOnline", true);
+            .Set(channel => channel.currentStream.locationPath, $"{directoryPath}index.m3u8")
+            .Set(chanel => chanel.isOnline, true);
 
             channelsCollection.UpdateOne(filter, update);
 

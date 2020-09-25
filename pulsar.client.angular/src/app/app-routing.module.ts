@@ -5,6 +5,7 @@ import { ErrorPageComponent } from './pages/error-page/error-page.component';
 import { ChannelPageComponent } from './pages/channel-page/channel-page.component';
 
 const routes: Routes = [
+    { path: '', component: HomePageComponent },
     { path: 'home/:msg', component: HomePageComponent },
     { path: 'home', component: HomePageComponent },
     { path: 'error', component: ErrorPageComponent },
@@ -16,4 +17,4 @@ const routes: Routes = [
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

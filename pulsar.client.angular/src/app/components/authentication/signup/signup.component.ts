@@ -28,7 +28,9 @@ export class SignupComponent implements OnInit {
         password: new FormControl(''),
     });
 
-    validationErr$: Observable<ValidationError[]>;
+    signupErrors$: Observable<ValidationError[]>;
+    logInErrors$: Observable<ValidationError[]>;
+
     isSignUp$: Observable<boolean>;
     showsignUpResultMessage: Observable<boolean>;
 
@@ -36,14 +38,19 @@ export class SignupComponent implements OnInit {
         private authService: AuthenticationService,
         private channelService: ChannelService,
         private store: Store<AppState>
-    ) { }
+    ) {}
 
     ngOnInit(): void {
         this.isSignUp$ = this.store.select((state) => state.auth.isSignUp);
         this.showsignUpResultMessage = this.store.select(
             (store) => store.auth.showSignUpResultMessage
         );
-        this.validationErr$ = this.store.select((state) => state.auth.error);
+        this.signupErrors$ = this.store.select(
+            (state) => state.auth.signUpErrors
+        );
+        this.logInErrors$ = this.store.select(
+            (state) => state.auth.logInErrors
+        );
     }
 
     signUp(): void {

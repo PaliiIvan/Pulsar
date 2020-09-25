@@ -28,7 +28,7 @@ export class AuthenticationEffects {
         private authService: AuthenticationService,
         private channelService: ChannelService,
         private dialog: MatDialog
-    ) { }
+    ) {}
     //#region LogIn Effects
 
     sendLogInData$ = createEffect(() =>
@@ -40,7 +40,7 @@ export class AuthenticationEffects {
                         fromAuthActions.logInSucces({ user: userData })
                     ),
                     catchError((error: ValidationError[]) =>
-                        of(fromAuthActions.authValidationErrors({ error }))
+                        of(fromAuthActions.logInValidationErrors({ error }))
                     )
                 )
             )
@@ -129,7 +129,7 @@ export class AuthenticationEffects {
                         ),
                         catchError((err) =>
                             of(
-                                fromAuthActions.authValidationErrors({
+                                fromAuthActions.signUpValidationErrors({
                                     error: err,
                                 })
                             )
@@ -146,10 +146,13 @@ export class AuthenticationEffects {
                 this.channelService
                     .createChannel(action.userId, action.login)
                     .pipe(
-                        map((res) => { this.dialog.closeAll(); return fromAuthActions.signUpSucces(); }),
+                        map((res) => {
+                            this.dialog.closeAll();
+                            return fromAuthActions.signUpSucces();
+                        }),
                         catchError((err) =>
                             of(
-                                fromAuthActions.authValidationErrors({
+                                fromAuthActions.logInValidationErrors({
                                     error: err,
                                 })
                             )
