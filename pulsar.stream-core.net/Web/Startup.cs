@@ -14,8 +14,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using StreamInterfaces;
+using StreamServices;
+using Utils;
 
-namespace StreamService
+namespace StreamServices
 {
     public class Startup
     {
@@ -30,6 +33,7 @@ namespace StreamService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<ITokenValidationService, TokenValidationService>();
+            services.AddScoped<IStreamService, StreamService>();
             services.Configure<SecretKeys>(Configuration.GetSection("SecretKeys"));
 
 

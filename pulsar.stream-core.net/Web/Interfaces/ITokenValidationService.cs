@@ -1,5 +1,6 @@
+using Models;
 
-namespace StreamService
+namespace StreamInterfaces
 {
     public interface ITokenValidationService
     {
