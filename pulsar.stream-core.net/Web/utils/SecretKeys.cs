@@ -1,6 +1,6 @@
 using System;
 
-namespace StreamService
+namespace Utils
 {
     public class SecretKeys
     {

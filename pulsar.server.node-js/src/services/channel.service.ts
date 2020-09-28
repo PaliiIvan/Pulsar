@@ -55,7 +55,7 @@ export async function getOnlineChannels() {
 export async function getChannel(query: any) {
     logger.info(query);
     const channel = await channelRepo.getChannel(query);
-    const streamServer = 'https://localhost:5001/';
+    const streamServer = 'https://localhost:5001/online';
 
     if (channel == null || channel.currentStream == null) {
         throw new NotFoundError('Channel stream not found');

@@ -8,6 +8,8 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using Models;
+using StreamServices;
+using StreamInterfaces;
 
 namespace StreamService.Controllers
 {
@@ -18,12 +20,14 @@ namespace StreamService.Controllers
         private readonly ITokenValidationService _tokenValidationService;
         private readonly MongoClient _mongoClient;
         private readonly IMongoDatabase _userDb;
-        public StreamController(ITokenValidationService tokenValidationService, ILogger<TokenValidationService> logger)
+        private readonly IStreamService _streamService;
+
+        public StreamController(ITokenValidationService tokenValidationService, ILogger<TokenValidationService> logger, IStreamService streamService)
         {
             _tokenValidationService = tokenValidationService;
             _mongoClient = new MongoClient("mongodb://127.0.0.1:27017/Pulsar");
             _userDb = _mongoClient.GetDatabase("Pulsar");
-
+            _streamService = streamService;
         }
 
         [HttpGet("{stream}")]
@@ -41,75 +45,21 @@ namespace StreamService.Controllers
         [HttpPut("{stream}")]
         public void StartStream(string stream)
         {
-            string token = Regex.Replace(stream, @"__+[0-9,\.]+(ts|m3u8)$", string.Empty);
-            var tokenMetaData = _tokenValidationService.ValidateToken(token);
+            _streamService.StartStream(stream, Response, Request);
+        }
 
+        [HttpPost]
+        public JsonResult SaveStream(string channel, string streamId)
+        {
+            Responce responce = _streamService.RecordStreamData(channel, streamId);
+            return new JsonResult(new { res = $"SaveStream {channel} {streamId}" });
+        }
 
-            var channelsCollection = _userDb.GetCollection<Channel>("channels");
-            var filter = Builders<Channel>.Filter.Eq(channel => channel.userId, ObjectId.Parse(tokenMetaData.UserId));
-
-            var currentChannel = channelsCollection.Find(filter).FirstOrDefault();
-            var channelStreamObj = currentChannel.currentStream;
-            if (channelStreamObj == null)
-            {
-                Response.StatusCode = 404;
-                var updateIsOnline = Builders<Channel>
-                .Update
-                .Set(channel => channel.isOnline, false)
-                .Set(channel => channel.currentStream, null);
-
-                channelsCollection.UpdateOne(filter, updateIsOnline);
-                return;
-            }
-
-            var channelStreamObjId = channelStreamObj.id;
-            var streamIsInPandingStatus = currentChannel.pending;
-
-            if (!streamIsInPandingStatus)
-            {
-                Response.StatusCode = 404;
-                var updateIsOnline = Builders<Channel>
-                .Update
-                .Set(chanel => chanel.isOnline, false)
-                .Set(channel => channel.currentStream, null);
-
-                channelsCollection.UpdateOne(filter, updateIsOnline);
-                return;
-            }
-
-            var streamIsInOnlineStatus = currentChannel.isOnline;
-
-            if (!streamIsInOnlineStatus)
-            {
-                var updateStartDate = Builders<Channel>
-                           .Update
-                           .Set(channel => channel.currentStream.startDate, DateTime.UtcNow);
-                channelsCollection.UpdateOne(filter, updateStartDate);
-            }
-
-            var userDirectoryPath = $"{tokenMetaData.channelName}/{channelStreamObjId}/";
-            var fullDirectoryPath = Directory.CreateDirectory($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/pulsar_streams/{userDirectoryPath}").FullName;
-            var update = Builders<Channel>
-            .Update
-            .Set(channel => channel.currentStream.locationPath, $"{userDirectoryPath}index.m3u8")
-            .Set(chanel => chanel.isOnline, true);
-
-            channelsCollection.UpdateOne(filter, update);
-
-            if (stream.Contains(".m3u8"))
-            {
-                using (var indexFile = System.IO.File.OpenWrite($"{fullDirectoryPath}index.m3u8"))
-                {
-                    Request.Body.CopyTo(indexFile);
-                }
-            }
-            else
-            {
-                using (var tsStream = new System.IO.FileStream($"{fullDirectoryPath}/{stream}", FileMode.OpenOrCreate))
-                {
-                    Request.Body.CopyTo(tsStream);
-                }
-            }
+        [HttpDelete]
+        public JsonResult DeleteStream(string channel, string streamId)
+        {
+            Responce responce = _streamService.RemoveStream(channel, streamId);
+            return new JsonResult(new { res = $"DeleteStream {channel} {streamId}" });
         }
     }
 }

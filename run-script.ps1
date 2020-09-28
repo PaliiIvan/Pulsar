@@ -9,6 +9,6 @@ Write-Host "Starting..."
 Start-Process PowerShell -ArgumentList "Write-Host 'Start Node Js Server'; npm run-script watch --prefix '$nodeJs'; Read-Host"
 Start-Process PowerShell -ArgumentList "Write-Host 'Start Node Js Identity Server'; npm run-script watch --prefix '$identityNodeJs'; Read-Host"
 Start-Process PowerShell -ArgumentList "Write-Host 'Start Angular'; npm start --prefix '$angular'; Read-Host"
-Start-Process PowerShell -ArgumentList "Write-Host 'Start Stream DotNet'; dotnet run --project '$streamServerMet'; Read-Host"
+Start-Process PowerShell -ArgumentList "Write-Host 'Start Stream DotNet'; dotnet watch run --project '$streamServerMet'; Read-Host"
 
 Write-Host "All services was started"

@@ -4,11 +4,14 @@ using JWT.Algorithms;
 using JWT.Serializers;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Models;
 using Newtonsoft.Json;
+using StreamInterfaces;
+using Utils;
 
-namespace StreamService
+namespace StreamServices
 {
-    public class TokenValidationService: ITokenValidationService
+    public class TokenValidationService : ITokenValidationService
     {
         private readonly IJwtAlgorithm _algorithm;
         private readonly IJsonSerializer _serializer;

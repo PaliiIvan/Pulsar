@@ -1,6 +1,6 @@
 using System;
 
-namespace StreamService
+namespace Models
 {
     public class TokenModel
     {
