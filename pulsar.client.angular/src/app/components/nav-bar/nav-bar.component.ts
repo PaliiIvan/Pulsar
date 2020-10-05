@@ -15,6 +15,8 @@ import { Channel } from '../../models/channel.model';
 import { ChannelService } from '../../services/channel/channel.service.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VerifyEmailMessageComponent } from '../authentication/email-verification/email-verification.component';
+import { StreamService } from '../../services/stream/stream.service';
+import { FinishStreamModalComponent } from '../stream/finish-stream-modal/finish-stream-modal.component';
 
 @Component({
     selector: 'app-nav-bar',
@@ -29,17 +31,19 @@ export class NavBarComponent implements OnInit {
     isStreamProcess$: Observable<boolean>;
     isEmailConfirmationProccess$: Observable<EmailConfirmation>;
     emailVerificationDialog: MatDialogRef<any>;
-
+    streamMenuDialog: MatDialogRef<any>;
     constructor(
         private store: Store<AppState>,
         private activateRouter: ActivatedRoute,
-        private channelService: ChannelService,
+        private streamService: StreamService,
         private dialog: MatDialog,
         private router: Router
-    ) { }
+    ) {}
 
     ngOnInit(): void {
-        this.store.select(state => state.auth.channel).subscribe(channel => this.channel = channel);
+        this.store
+            .select((state) => state.auth.channel)
+            .subscribe((channel) => (this.channel = channel));
         this.isAuth$ = this.store.select((state) => state.navBar.isAuthProcess);
         this.user$ = this.store.select((state) => state.auth.user);
         this.isStreamProcess$ = this.store.select(
@@ -55,8 +59,13 @@ export class NavBarComponent implements OnInit {
                 console.log(scope);
                 const userId = params.get('id');
                 const emailToken = params.get('token');
-                this.emailVerificationDialog = this.dialog.open(VerifyEmailMessageComponent, { data: { userId, emailToken } });
-                this.emailVerificationDialog.beforeClosed().subscribe(() => this.router.navigate(['']));
+                this.emailVerificationDialog = this.dialog.open(
+                    VerifyEmailMessageComponent,
+                    { data: { userId, emailToken } }
+                );
+                this.emailVerificationDialog
+                    .beforeClosed()
+                    .subscribe(() => this.router.navigate(['']));
             }
         });
     }
@@ -77,8 +86,12 @@ export class NavBarComponent implements OnInit {
     }
 
     finishStream() {
-        this.channelService.finishStream().subscribe(() => {
-            location.reload();
+        // this.streamService.finishStream().subscribe(() => {
+        //     this.router.navigate(['/home']);
+        // });
+
+        this.streamMenuDialog = this.dialog.open(FinishStreamModalComponent, {
+            data: { close: () => this.streamMenuDialog.close() },
         });
     }
 }

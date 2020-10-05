@@ -1,5 +1,5 @@
-import { Document } from "mongoose";
-import { Stream } from "../stream/stream.model";
+import { Document, Types } from 'mongoose';
+import { Stream } from '../stream/stream.model';
 
 export interface Channel extends Document {
     id: any;

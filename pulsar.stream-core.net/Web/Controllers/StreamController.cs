@@ -52,14 +52,14 @@ namespace StreamService.Controllers
         public JsonResult SaveStream(string channel, string streamId)
         {
             Responce responce = _streamService.RecordStreamData(channel, streamId);
-            return new JsonResult(new { res = $"SaveStream {channel} {streamId}" });
+            return new JsonResult(responce);
         }
 
         [HttpDelete]
         public JsonResult DeleteStream(string channel, string streamId)
         {
             Responce responce = _streamService.RemoveStream(channel, streamId);
-            return new JsonResult(new { res = $"DeleteStream {channel} {streamId}" });
+            return new JsonResult(responce);
         }
     }
 }

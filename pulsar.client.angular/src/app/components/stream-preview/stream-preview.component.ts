@@ -9,9 +9,9 @@ import { Router } from '@angular/router';
 })
 export class StreamPreviewComponent implements OnInit {
     @Input() chanel: ChannelPreview;
-    constructor(private router: Router) { }
+    constructor(private router: Router) {}
 
-    ngOnInit(): void { }
+    ngOnInit(): void {}
 
     goToChannel() {
         this.router.navigate(['/channel', this.chanel.channelName]);

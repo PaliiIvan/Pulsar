@@ -9,6 +9,8 @@ import {
 import * as HLS from 'hls.js';
 import { ChannelService } from '../../services/channel/channel.service.service';
 import { ChannelPreview } from '../../models/api.models/channel-preview';
+import { StreamService } from '../../services/stream/stream.service';
+import { SavedStream } from '../../models/api.models/saved-streams';
 
 @Component({
     selector: 'app-home-page',
@@ -16,12 +18,16 @@ import { ChannelPreview } from '../../models/api.models/channel-preview';
     styleUrls: ['./home-page.component.scss'],
 })
 export class HomePageComponent implements OnInit, AfterViewInit {
-    constructor(private channelService: ChannelService) {}
+    constructor(
+        private channelService: ChannelService,
+        private streamService: StreamService
+    ) {}
 
     videoElement: HTMLMediaElement;
     isEmailConfirmationMessage = false;
     hls: HLS;
     channels: ChannelPreview[];
+    savedStreams: SavedStream[];
 
     ngAfterViewInit(): void {
         // this.videoElement = document.getElementById(
@@ -38,5 +44,9 @@ export class HomePageComponent implements OnInit, AfterViewInit {
         this.channelService
             .getOnlineChannels()
             .subscribe((channels) => (this.channels = channels));
+
+        this.streamService
+            .getSavedStreams()
+            .subscribe((data) => (this.savedStreams = data));
     }
 }

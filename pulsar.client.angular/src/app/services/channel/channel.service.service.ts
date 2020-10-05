@@ -10,7 +10,7 @@ import { ChannelPreview } from '../../models/api.models/channel-preview';
 export class ChannelService {
     readonly API = `${environment.apiUrl}/channel`;
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {}
 
     createChannel(userId: string, logIn: string) {
         return this.http.post(`${this.API}`, { userId, logIn });
@@ -20,19 +20,11 @@ export class ChannelService {
         return this.http.get<Channel>(`${this.API}/current`);
     }
 
-    initiateStream(title: string) {
-        return this.http.post(`${this.API}/initiate-stream`, { title });
-    }
-
     getOnlineChannels() {
         return this.http.get<ChannelPreview[]>(`${this.API}/online-channels`);
     }
 
     getChannelByNameWithStream(channelName: string) {
         return this.http.get(`${this.API}/channel/${channelName}`);
-    }
-
-    finishStream() {
-        return this.http.put(`${this.API}/channel/finish-stream`, {});
     }
 }

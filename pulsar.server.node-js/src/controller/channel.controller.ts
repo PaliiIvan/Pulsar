@@ -4,9 +4,9 @@ import * as channelService from '../services/channel.service';
 import logger from '../utils/loging';
 
 /**
-* [POST]
-*
-*/
+ * [POST]
+ *
+ */
 export async function postCreateChannel(req: Request, res: Response, next: NextFunction) {
     const userId = req.body.userId;
     const channelName = req.body.logIn;
@@ -15,8 +15,7 @@ export async function postCreateChannel(req: Request, res: Response, next: NextF
     try {
         const createdChannel = await channelService.createChannel(userId, channelName);
         res.json(createdChannel);
-    }
-    catch (err) {
+    } catch (err) {
         return next(err);
     }
 
@@ -24,12 +23,13 @@ export async function postCreateChannel(req: Request, res: Response, next: NextF
 }
 
 /**
-* [GET]
-*Get channel by name
-*/
+ * [GET]
+ *Get channel by name
+ */
 export async function getChannelByName(req: Request, res: Response, next: NextFunction) {
     const channelName = req.params.name;
 
+    logger.info('Get channel by name: ', { channelName });
     try {
         const channel = await channelService.getChannel({ channelName: channelName });
         res.json(channel);
@@ -40,11 +40,10 @@ export async function getChannelByName(req: Request, res: Response, next: NextFu
 }
 
 /**
-* [GET]
-*
-*/
+ * [GET]
+ *
+ */
 export async function getCurrentChannel(req: Request, res: Response, next: NextFunction) {
-
     const userId = req.user?.id;
 
     logger.info('Get channel by user id', { userId });
@@ -52,23 +51,6 @@ export async function getCurrentChannel(req: Request, res: Response, next: NextF
     try {
         const channel = await channelService.getChannelByUserId(userId!);
         res.json(channel);
-
-    } catch (err) {
-        return next(err);
-    }
-    return next();
-
-}
-
-/**
-* [POST]
-* Initiate new stream
-*/
-export async function initiateStream(req: Request, res: Response, next: NextFunction) {
-    const streamTitle = req.body.title;
-    try {
-        await channelService.initiateStream(streamTitle, req.user?.id);
-        res.json(null);
     } catch (err) {
         return next(err);
     }
@@ -76,9 +58,9 @@ export async function initiateStream(req: Request, res: Response, next: NextFunc
 }
 
 /**
-* [GET]
-* Get all online channels
-*/
+ * [GET]
+ * Get all online channels
+ */
 export async function getOnlineChannels(req: Request, res: Response, next: NextFunction) {
     logger.info('Get online channels');
     try {
@@ -88,26 +70,5 @@ export async function getOnlineChannels(req: Request, res: Response, next: NextF
         return next(err);
     }
 
-    return next();
-}
-
-
-/**
-* [PUT]
-* Finish stream for current channel
-*/
-export async function putFinishStream(req: Request, res: Response, next: NextFunction) {
-    logger.info('Finish stream');
-
-    const userId = req.user?.id;
-    if (!userId) {
-        return next(new Error('User is undefined'));
-    }
-    try {
-        await channelService.finishStream(userId);
-        res.json({});
-    } catch (err) {
-        return next(err);
-    }
     return next();
 }
