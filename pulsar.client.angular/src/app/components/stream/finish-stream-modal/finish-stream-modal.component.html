@@ -1,0 +1,49 @@
+<h1 mat-dialog-title class="title__color">
+    Stream stop options
+    <span (click)="modalData.close()" class="pointer">
+        <mat-icon aria-hidden="false" aria-label="Close">
+            clear
+        </mat-icon>
+    </span>
+</h1>
+<mat-dialog-content style="width: 438px;">
+    Important! Here you can stop your stream. Also, after the stream is stopped,
+    the broadcast in OBS should automatically end.
+</mat-dialog-content>
+<mat-dialog-actions class="stream__init_btn__container">
+    <button
+        mat-raised-button
+        color="primary"
+        (click)="stopStream(true)"
+        (mouseover)="selectedItem = btnDescriptions.stop_and_save"
+        (mouseleave)="selectedItem = null"
+    >
+        Stop and save
+    </button>
+    <button
+        mat-raised-button
+        color="primary"
+        (click)="stopStream(false)"
+        (mouseover)="selectedItem = btnDescriptions.stop_and_dont_save"
+        (mouseleave)="selectedItem = null"
+    >
+        Stop and don't save
+    </button>
+</mat-dialog-actions>
+
+<mat-dialog-actions class="stream__option__description__container">
+    <button
+        *ngIf="selectedItem == btnDescriptions.stop_and_save"
+        mat-stroked-button
+        disabled
+    >
+        The stream will be saved and anyone can play it in the recording.
+    </button>
+    <button
+        *ngIf="selectedItem == btnDescriptions.stop_and_dont_save"
+        mat-stroked-button
+        disabled
+    >
+        The stream will be permanently removed from the channel.
+    </button>
+</mat-dialog-actions>

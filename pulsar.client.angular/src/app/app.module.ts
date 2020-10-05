@@ -42,6 +42,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ConfirmEmailComponent } from './components/confirm-email/confirm-email.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { FinishStreamModalComponent } from './components/stream/finish-stream-modal/finish-stream-modal.component';
+import { SavedStreamPageComponent } from './pages/saved-stream-page/saved-stream-page.component';
 @NgModule({
     declarations: [
         AppComponent,
@@ -61,6 +63,8 @@ import { MatDividerModule } from '@angular/material/divider';
         ChatFormsComponent,
         StreamPreviewComponent,
         ConfirmEmailComponent,
+        FinishStreamModalComponent,
+        SavedStreamPageComponent,
     ],
     imports: [
         MatDividerModule,

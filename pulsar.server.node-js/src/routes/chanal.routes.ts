@@ -1,18 +1,13 @@
 import { Router } from 'express';
 
+import { isAuthenticated } from '../authentication/authorization-context';
 import * as channelController from '../controller/channel.controller';
 
-
 const router = Router();
-import { isAuthenticated } from '../authentication/authorization-context';
 
+router.post('/', isAuthenticated, channelController.postCreateChannel);
 router.get('/current', isAuthenticated, channelController.getCurrentChannel);
-router.post('/initiate-stream', channelController.initiateStream);
 router.get('/online-channels', channelController.getOnlineChannels);
-router.post('/', channelController.postCreateChannel);
 router.get('/channel/:name', channelController.getChannelByName);
-router.put('/channel/finish-stream', channelController.putFinishStream);
-
-
 
 export const ChannelRouter = router;

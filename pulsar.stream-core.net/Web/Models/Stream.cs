@@ -8,6 +8,7 @@ namespace Models
     {
         [BsonId]
         public ObjectId id { get; set; }
+        public ObjectId channel { get; set; }
         public string title { get; set; }
         public string locationPath { get; set; }
         public dynamic comments { get; set; }

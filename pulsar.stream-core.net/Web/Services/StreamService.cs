@@ -9,6 +9,7 @@ using Models;
 using StreamInterfaces;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
+using System.Text;
 
 namespace StreamServices
 {
@@ -51,6 +52,7 @@ namespace StreamServices
             var streamIsInPandingStatus = currentChannel.pending;
 
             var userDirectoryPath = $"{tokenMetaData.channelName}/{channelStreamObjId}/";
+            string fullDirectoryPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/pulsar_streams/online/{userDirectoryPath}";
             if (streamIsInPandingStatus)
             {
                 var update = Builders<Channel>
@@ -62,7 +64,9 @@ namespace StreamServices
 
                 channelsCollection.UpdateOne(filter, update);
                 currentChannel.isOnline = true;
+                Directory.CreateDirectory($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/pulsar_streams/online/{userDirectoryPath}");
             }
+
 
             if (!currentChannel.isOnline)
             {
@@ -73,7 +77,7 @@ namespace StreamServices
                 channelsCollection.UpdateOne(filter, updateIsOnline);
                 return;
             }
-            var fullDirectoryPath = Directory.CreateDirectory($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/pulsar_streams/online/{userDirectoryPath}").FullName;
+
 
             if (stream.Contains(".m3u8"))
             {
@@ -95,6 +99,12 @@ namespace StreamServices
 
         public Responce RecordStreamData(string channelName, string streamId)
         {
+
+            if (channelName == null || streamId == null)
+            {
+                return new Responce { Status = false, Message = "ChannelName or StreamId is null" };
+            }
+
             try
             {
                 var streamFolder = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/pulsar_streams/online/{channelName}/{streamId}";
@@ -115,11 +125,18 @@ namespace StreamServices
 
         public Responce RemoveStream(string channelName, string streamId)
         {
+
+            if (channelName == null || streamId == null)
+            {
+                return new Responce { Status = false, Message = "ChannelName or StreamId is null" };
+            }
+            System.Console.WriteLine($"channelName - {channelName} streamId - {streamId}");
             try
             {
                 var streamFolder = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/pulsar_streams/online/{channelName}/{streamId}";
 
                 DirectoryInfo directoryWithStream = new DirectoryInfo(streamFolder);
+                System.Console.WriteLine("Remoed: " + directoryWithStream.Name);
                 directoryWithStream.Delete(true);
 
                 return new Responce { Status = true, Message = "Success" };
@@ -153,8 +170,10 @@ namespace StreamServices
             FileInfo indexFile = allStreamData.FirstOrDefault(file => file.Name == "index.m3u8");
             allStreamData.RemoveAll(file => file.Name == "index.m3u8");
 
-            var res = indexFile.OpenText();
-            string fileData = res.ReadToEnd();
+            var indexStreamReader = indexFile.OpenText();
+            string fileData = indexStreamReader.ReadToEnd();
+            indexStreamReader.Close();
+
             string indexMetadata =
                 "#EXTM3U\n" +
                 "#EXT-X-VERSION:3\n" +
@@ -177,8 +196,11 @@ namespace StreamServices
             $"{allStreamData[allStreamData.Count - 1].Name}\n" +
             "#EXT-X-ENDLIST\n";
 
-            File.WriteAllText("test.m3u8", indexMetadata);
-            System.Console.WriteLine(indexMetadata);
+
+            var indexStreamWriter = indexFile.OpenWrite();
+            var indexByteMetadata = Encoding.ASCII.GetBytes(indexMetadata);
+            indexStreamWriter.Write(indexByteMetadata, 0, indexByteMetadata.Length);
+            indexStreamWriter.Close();
         }
 
     }

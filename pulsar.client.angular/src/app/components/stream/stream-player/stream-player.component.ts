@@ -26,6 +26,7 @@ export class StreamPlayerComponent
     videoElement: HTMLMediaElement;
     isEmailConfirmationMessage = false;
     hls: HLS;
+    HlsEvents = HLS.Events;
     ngAfterContentInit() {
         this.videoElement = document.getElementById(
             'videoP'
@@ -41,6 +42,10 @@ export class StreamPlayerComponent
         this.videoElement.addEventListener('ended', (event) => {
             console.log('--------STOP-------');
         });
+
+        this.hls.on(this.HlsEvents.MANIFEST_PARSED, () =>
+            this.videoElement.click()
+        );
     }
 
     ngOnInit(): void {}
