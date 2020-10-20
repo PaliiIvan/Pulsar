@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { StreamService } from '../../../services/stream/stream.service';
 import { Comment } from '../../../models/api.models/comment';
@@ -15,6 +15,12 @@ import * as io from 'socket.io-client';
 export class ChatFormsComponent implements OnInit {
     @Input()
     channelName: string;
+
+    @Input()
+    ChannelGoOfflineEvent: EventEmitter<boolean>;
+
+    @Input()
+    isOnline: boolean;
     socket: SocketIOClient.Socket = io(`localhost:8081`);
     constructor(
         private streamService: StreamService,
@@ -28,6 +34,11 @@ export class ChatFormsComponent implements OnInit {
     ngOnInit(): void {
         this.socket.on(this.channelName, (msg) => {
             console.log(msg);
+        });
+
+        this.ChannelGoOfflineEvent.subscribe((event) => {
+            this.isOnline = event;
+            this.chatMessageForm.disable();
         });
     }
 

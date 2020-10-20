@@ -1,16 +1,35 @@
 <app-email-verification *ngIf="isEmailConfirmationMessage">
 </app-email-verification>
 
-<div *ngIf="channels" style="margin-top: 15px;" class="uk-text-center" uk-grid>
-    <div *ngFor="let channel of channels" class="uk-width-1-4@m">
+<div class="stream__separator__title">
+    Online streams
+</div>
+
+<div
+    *ngIf="channels"
+    style="margin-top: 15px;"
+    class="uk-text-center channe__conainer_margin"
+    uk-grid
+>
+    <div *ngFor="let channel of channels" class="uk-width-1-4@s">
         <app-stream-preview [chanel]="channel"></app-stream-preview>
     </div>
+</div>
 
-    <!-- <div *ngFor="let savedStream of savedStreams" class="uk-width-1-4@m">
-        --sss--
-        <app-saved-stream-page
-            [savedStreams]="savedStream"
-        ></app-saved-stream-page>
+<div class="stream__separator__title stream__separator__title__offline">
+    Recently been online
+</div>
+
+<div
+    *ngIf="savedStreams"
+    style="margin-top: 15px;"
+    class="uk-text-center channe__conainer_margin"
+    uk-grid
+>
+    <div *ngFor="let savedStream of savedStreams" class="uk-width-1-4@s">
+        <app-stream-preview
+            [chanel]="savedStream"
+            [isOffline]="true"
+        ></app-stream-preview>
     </div>
-    <hr /> -->
 </div>

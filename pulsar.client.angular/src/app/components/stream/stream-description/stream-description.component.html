@@ -1,11 +1,17 @@
 <div class="stream__description">
     <div class="uk-width-auto">
-        <img class="uk-border-rounded" src="../../../../assets/astronaut.png" width="50" height="50" alt="" />
+        <img
+            class="uk-border-rounded"
+            src="../../../../assets/astronaut.png"
+            width="50"
+            height="50"
+            alt=""
+        />
     </div>
     <div class="sream__data">
         <div class="stream__title">
-            {{stream.title}}
+            {{ stream && stream.title }}
         </div>
-        <div class="channel__name">@{{channelName}}</div>
+        <div class="channel__name">@{{ channelName }}</div>
     </div>
 </div>

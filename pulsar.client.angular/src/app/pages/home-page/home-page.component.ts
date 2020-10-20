@@ -17,7 +17,7 @@ import { SavedStream } from '../../models/api.models/saved-streams';
     templateUrl: './home-page.component.html',
     styleUrls: ['./home-page.component.scss'],
 })
-export class HomePageComponent implements OnInit, AfterViewInit {
+export class HomePageComponent implements OnInit {
     constructor(
         private channelService: ChannelService,
         private streamService: StreamService
@@ -25,21 +25,9 @@ export class HomePageComponent implements OnInit, AfterViewInit {
 
     videoElement: HTMLMediaElement;
     isEmailConfirmationMessage = false;
-    hls: HLS;
     channels: ChannelPreview[];
-    savedStreams: SavedStream[];
+    savedStreams: ChannelPreview[];
 
-    ngAfterViewInit(): void {
-        // this.videoElement = document.getElementById(
-        //     'videoP'
-        // ) as HTMLMediaElement;
-        // this.hls = new HLS();
-        // this.hls.loadSource(
-        //     'https://localhost:5001/vaniyha96/5ee09985b1dfcd235d6fcf1a/index.m3u8'
-        // );
-        // this.hls.attachMedia(this.videoElement);
-        // this.hls.on(HLS.Events.MANIFEST_PARSED, () => this.videoElement.play());
-    }
     ngOnInit() {
         this.channelService
             .getOnlineChannels()

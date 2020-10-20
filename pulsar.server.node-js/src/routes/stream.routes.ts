@@ -9,5 +9,5 @@ router.post('/comment', isAuthenticated, streamController.postComment);
 router.get('/comment/:channelName', streamController.getComment);
 router.post('/initiate-stream', isAuthenticated, streamController.initiateStream);
 router.post('/finish-stream', isAuthenticated, streamController.postFinishStream);
-router.get('/', streamController.getAllStreams);
+router.get('/', streamController.getOfflineStreams);
 export const StreamRouter = router;

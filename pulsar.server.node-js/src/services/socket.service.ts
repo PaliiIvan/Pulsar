@@ -17,3 +17,7 @@ export function createChatRoom(channelName: string) {
         });
     });
 }
+
+export function sendChannelIsOffline(channelName: string) {
+    io.emit(`${channelName}_offline_mode`, { isOffline: true });
+}

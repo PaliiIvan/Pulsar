@@ -1,15 +1,33 @@
-<div class="stream_grid_container" [ngClass]="{ stream_grid_container_without_chat: isChatReomoved }" *ngIf='channel'>
+<div
+    class="stream_grid_container"
+    [ngClass]="{ stream_grid_container_without_chat: isChatReomoved }"
+    *ngIf="channel"
+>
     <div class="item-1">
-        <app-stream-player [channelSource]="channel.currentStream.locationPath"></app-stream-player>
+        <app-stream-player
+            [ChannelGoOfflineEvent]="ChannelGoOfflineEvent"
+            [channelSource]="channel.currentStream?.locationPath"
+            [isOnline]="channel.isOnline"
+        ></app-stream-player>
     </div>
     <div *ngIf="!isChatReomoved" class="item-2">
-        <app-chat [channelName]='channel.channelName'></app-chat>
+        <app-chat
+            [ChannelGoOfflineEvent]="ChannelGoOfflineEvent"
+            [channelName]="channel.channelName"
+        ></app-chat>
     </div>
     <div class="item-3">
-        <app-stream-description [stream]='channel.currentStream' [channelName]='channel.channelName'>
+        <app-stream-description
+            [stream]="channel.currentStream"
+            [channelName]="channel.channelName"
+        >
         </app-stream-description>
     </div>
     <div *ngIf="!isChatReomoved" class="item-4">
-        <app-chat-forms [channelName]='channel.channelName'></app-chat-forms>
+        <app-chat-forms
+            [ChannelGoOfflineEvent]="ChannelGoOfflineEvent"
+            [channelName]="channel.channelName"
+            [isOnline]="channel.isOnline"
+        ></app-chat-forms>
     </div>
 </div>

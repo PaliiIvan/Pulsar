@@ -24,7 +24,9 @@ export class ChannelService {
         return this.http.get<ChannelPreview[]>(`${this.API}/online-channels`);
     }
 
-    getChannelByNameWithStream(channelName: string) {
-        return this.http.get(`${this.API}/channel/${channelName}`);
+    getChannelByNameWithStream(channelName: string, streamId: string) {
+        streamId = streamId == null ? '' : `/${streamId}`;
+
+        return this.http.get(`${this.API}/channel/${channelName}${streamId}`);
     }
 }

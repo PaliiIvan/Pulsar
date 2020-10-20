@@ -110,6 +110,10 @@ const authenticationReducer = createReducer<AuthenticationState>(
     on(fromaAuthActions.emailConfirmationFinished, (state) => ({
         ...state,
         emailConfirmationMessage: null,
+    })),
+    on(fromaAuthActions.setIsOffline, (state) => ({
+        ...state,
+        channel: { ...state.channel, isOnline: false },
     }))
 );
 

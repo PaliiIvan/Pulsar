@@ -1,15 +1,16 @@
 import { channelSchema } from '../features/channel/channel.schema';
 import { Comment } from '../api.models/comment';
-import { SocketService, ChannelService } from '../services';
+import { SocketService, ChannelService, StreamService } from '../services';
 import axios, { AxiosResponse } from 'axios';
 import { STREM_SERVER_URL } from '../configs/secrets';
-import { StreamServiceResponce } from '../api.models';
+import { ChannelPreview, StreamServiceResponce } from '../api.models';
 import * as streamRepo from '../features/stream/stream.repository';
 import * as channelRepo from '../features/channel/channel.repository';
 import { NotFoundError } from '../utils/errors/server.errors';
 import { Types } from 'mongoose';
 import { Channel } from '../features/channel/channel.model';
 import { StreamSchema } from '../features/stream/stream.schema';
+import { Stream } from '../features/stream/stream.model';
 
 export async function initiateStream(streamTitile: string, userId?: string) {
     if (!userId) throw Error('UserId null');
@@ -57,7 +58,7 @@ export async function finishStream(userId: string, save: boolean) {
     if (channel == null) {
         throw new NotFoundError('Channel not found');
     }
-
+    const channelName = channel?.channelName;
     channel.pending = false;
     channel.isOnline = false;
 
@@ -71,6 +72,7 @@ export async function finishStream(userId: string, save: boolean) {
 
     channel.currentStream = null;
     await channelRepo.updateChannel(channel);
+    SocketService.sendChannelIsOffline(channelName);
 }
 
 export async function getSavedStreams() {
@@ -92,7 +94,7 @@ async function saveStream(channel: Channel) {
     );
 
     if (result.data.status && channel.currentStream) {
-        const stream = await streamRepo.createStream({ ...channel.currentStream.toObject() });
+        const stream = await streamRepo.createStream({ ...channel.currentStream.toObject(), channel: channel.id });
     }
 
     return result.data;
@@ -109,7 +111,45 @@ async function deleteStream(channel: Channel) {
         });
     } catch (err) {
         console.log(err);
+        throw err;
     }
 
     return result!.data;
+}
+
+export async function getStream(id: string) {
+    let channelWithOfflineStream: any;
+    const streamServer = 'https://localhost:5001/saved/';
+    try {
+        const stream = await streamRepo.getStream(id);
+        if (stream == null) throw new NotFoundError(`Stream with id: ${id} not found`);
+        let channel = <Channel>stream.channel;
+
+        channelWithOfflineStream = {
+            isOnline: false,
+            channelName: channel.channelName,
+            currentStream: stream,
+        };
+
+        channelWithOfflineStream.currentStream.locationPath = `${streamServer}${channelWithOfflineStream?.currentStream?.locationPath}`;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+
+    return channelWithOfflineStream;
+}
+
+export async function getOfflineStreams() {
+    const savedStreams = await StreamService.getSavedStreams();
+
+    const streamsPreview = savedStreams.map((savedStream) => {
+        return new ChannelPreview(
+            (<Channel>savedStream.channel).id,
+            (<Channel>savedStream.channel).channelName,
+            savedStream.title,
+            savedStream.id
+        );
+    });
+    return streamsPreview;
 }
