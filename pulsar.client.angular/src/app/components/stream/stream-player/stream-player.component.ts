@@ -21,7 +21,11 @@ export class StreamPlayerComponent
     constructor() {}
     isVideoHeightStatic = false;
     changedWidth = 0;
+    isStopped = false;
+
     @Input() channelSource: string;
+    @Input() ChannelGoOfflineEvent: EventEmitter<boolean>;
+    @Input() isOnline: boolean;
 
     videoElement: HTMLMediaElement;
     isEmailConfirmationMessage = false;
@@ -35,20 +39,29 @@ export class StreamPlayerComponent
         this.hls.loadSource(this.channelSource);
         this.hls.attachMedia(this.videoElement);
 
-        this.videoElement.addEventListener('timeupdate', (event) =>
-            console.log(event)
-        );
+        // this.videoElement.addEventListener('timeupdate', (event) =>
+        //     console.log(event)
+        // );
 
-        this.videoElement.addEventListener('ended', (event) => {
-            console.log('--------STOP-------');
-        });
+        // this.videoElement.addEventListener('ended', (event) => {
+        //     console.log('--------STOP-------');
+        // });
 
         this.hls.on(this.HlsEvents.MANIFEST_PARSED, () =>
             this.videoElement.click()
         );
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.ChannelGoOfflineEvent.subscribe((event) => {
+            this.hls.destroy();
+            this.videoElement.pause();
+            this.videoElement.removeAttribute('src');
+            this.videoElement.load();
+            this.isOnline = false;
+            this.isStopped = true;
+        });
+    }
 
     @HostListener('window:resize', ['$event'])
     onResize(event) {

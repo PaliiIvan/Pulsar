@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { StreamService } from '../services';
 
 import * as channelService from '../services/channel.service';
 import logger from '../utils/loging';
@@ -28,10 +29,17 @@ export async function postCreateChannel(req: Request, res: Response, next: NextF
  */
 export async function getChannelByName(req: Request, res: Response, next: NextFunction) {
     const channelName = req.params.name;
+    const streamId = req.params.stream;
+    let channel;
 
     logger.info('Get channel by name: ', { channelName });
     try {
-        const channel = await channelService.getChannel({ channelName: channelName });
+        if (streamId) {
+            channel = await StreamService.getStream(streamId);
+        } else {
+            channel = await channelService.getChannel({ channelName: channelName });
+        }
+
         res.json(channel);
     } catch (err) {
         return next(err);

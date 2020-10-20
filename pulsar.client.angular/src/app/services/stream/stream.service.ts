@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Comment } from '../../models/api.models/comment';
 import { SavedStream } from '../../models/api.models/saved-streams';
+import { ChannelPreview } from '../../models/api.models/channel-preview';
 @Injectable({
     providedIn: 'root',
 })
@@ -27,6 +28,6 @@ export class StreamService {
     }
 
     getSavedStreams() {
-        return this.http.get<SavedStream[]>(`${this.API}`);
+        return this.http.get<ChannelPreview[]>(`${this.API}`);
     }
 }

@@ -75,11 +75,11 @@ export async function postFinishStream(req: Request, res: Response, next: NextFu
  * [GET]
  * Get all saved streams
  */
-export async function getAllStreams(req: Request, res: Response, next: NextFunction) {
+export async function getOfflineStreams(req: Request, res: Response, next: NextFunction) {
     logger.info('Get all streams action started');
 
     try {
-        const streams = await StreamService.getSavedStreams();
+        const streams = await StreamService.getOfflineStreams();
         res.json(streams);
     } catch (err) {
         return next(err);

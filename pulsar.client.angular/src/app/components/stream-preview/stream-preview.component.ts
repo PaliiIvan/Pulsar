@@ -9,11 +9,21 @@ import { Router } from '@angular/router';
 })
 export class StreamPreviewComponent implements OnInit {
     @Input() chanel: ChannelPreview;
+    @Input() isOffline: boolean;
+
     constructor(private router: Router) {}
 
     ngOnInit(): void {}
 
     goToChannel() {
-        this.router.navigate(['/channel', this.chanel.channelName]);
+        if (this.isOffline) {
+            this.router.navigate([
+                '/channel',
+                this.chanel.channelName,
+                this.chanel.streamId,
+            ]);
+        } else {
+            this.router.navigate(['/channel', this.chanel.channelName]);
+        }
     }
 }

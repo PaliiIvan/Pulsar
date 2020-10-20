@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter } from '@angular/core';
 import { StreamService } from '../../services/stream/stream.service';
 import { Comment } from '../../models/api.models/comment';
 import * as io from 'socket.io-client';
@@ -9,8 +9,10 @@ import * as io from 'socket.io-client';
     styleUrls: ['./chat.component.scss'],
 })
 export class ChatComponent implements OnInit {
-    @Input()
-    channelName: string;
+    @Input() channelName: string;
+
+    @Input() ChannelGoOfflineEvent: EventEmitter<boolean>;
+
     comments: Comment[];
     socket: SocketIOClient.Socket = io(`localhost:8081`);
 

@@ -91,7 +91,12 @@ export class NavBarComponent implements OnInit {
         // });
 
         this.streamMenuDialog = this.dialog.open(FinishStreamModalComponent, {
-            data: { close: () => this.streamMenuDialog.close() },
+            data: {
+                close: () => {
+                    this.streamMenuDialog.close();
+                    this.store.dispatch(fromAuthActions.setIsOffline());
+                },
+            },
         });
     }
 }

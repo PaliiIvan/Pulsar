@@ -3,6 +3,14 @@ video {
     width: 100%;
 }
 
+.stream__player--stopped {
+    background: transparent url("../../../../assets/VideoBacground.png") no-repeat 0 0;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
 @media (max-height: 695px) {
     video {
         height: 75vh;
@@ -19,17 +27,18 @@ video {
         height: 67vh;
     }
 }
-
-video::-webkit-media-controls-timeline {
-    display: none;
+.timeline--dissabled {
+    video::-webkit-media-controls-timeline {
+        display: none;
+    }
+    video::-webkit-media-controls-time-remaining-display {
+        display: none;
+    }
 }
 
-video::-webkit-media-controls-timeline-container {
-    display: none;
-}
-video::-webkit-media-controls-time-remaining-display {
-    display: none;
-}
+// video::-webkit-media-controls-timeline-container {
+//     display: none;
+// }
 
 video:focus {
     outline: none;

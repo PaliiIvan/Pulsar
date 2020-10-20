@@ -3,7 +3,7 @@ import { Stream } from './stream.model';
 import { Channel } from '../channel/channel.model';
 
 export async function getStream(id: string) {
-    return await StreamSchema.findById(id);
+    return await StreamSchema.findById(id).populate('channel');
 }
 
 export async function updateStream(stream: Stream) {
@@ -21,14 +21,5 @@ export async function findOne(query: any) {
 export async function getStreams() {
     const streams = await StreamSchema.find().populate('channel');
 
-    return streams.map((stream) => ({
-        id: stream.id,
-        title: stream.title,
-        locationPath: stream.locationPath,
-        comments: stream.comments,
-        channel: {
-            id: (<Channel>stream.channel).id,
-            channelName: (<Channel>stream.channel).channelName,
-        },
-    }));
+    return streams;
 }
