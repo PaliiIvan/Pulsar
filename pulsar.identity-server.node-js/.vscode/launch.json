@@ -9,7 +9,7 @@
             "request": "attach",
             "name": "Attach by Process ID",
             "processId": "${command:PickProcess}",
-            "protocol": "inspector"
+            "protocol": "inspector",
         }
     ]
 }
