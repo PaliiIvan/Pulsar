@@ -10,7 +10,6 @@ using StreamInterfaces;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Text;
-
 namespace StreamServices
 {
     public class StreamService : IStreamService
