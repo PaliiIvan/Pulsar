@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using StreamPreviewServiceWorker;
 
 namespace StreamServices
 {
@@ -21,6 +23,9 @@ namespace StreamServices
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                }).ConfigureServices((HostBuilderContext, services) =>
+                {
+                    services.AddHostedService<Worker>();
                 });
     }
 }
