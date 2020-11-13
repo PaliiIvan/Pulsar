@@ -5,6 +5,7 @@ export interface Stream extends Document {
     id?: any;
     title: string;
     locationPath?: string;
+    previewImage: string;
     channel: Types.ObjectId | Channel;
     startDate?: Date;
     comments?: [

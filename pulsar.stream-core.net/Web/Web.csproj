@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Streams\" />
+    <Folder Include="ffmpeg\" />
   </ItemGroup>
 
   <ItemGroup>

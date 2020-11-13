@@ -9,15 +9,21 @@
         </mat-form-field>
         <mat-form-field appearance="legacy" color="warn">
             <mat-label>Token</mat-label>
-            <input matInput placeholder="You email" formControlName="streamToken" />
+            <input matInput placeholder="Token" formControlName="streamToken" />
         </mat-form-field>
     </form>
 </mat-dialog-content>
 <mat-dialog-actions class="stream__init_btn__container">
-    <button mat-raised-button color="primary" (click)='submit()'>Create Stream</button>
-    <button mat-raised-button color="primary" (click)='copyToken()'>Copy stream link</button>
+    <button mat-raised-button color="primary" (click)="submit()">
+        Create Stream
+    </button>
+    <button mat-raised-button color="primary" (click)="copyToken()">
+        Copy stream link
+    </button>
 </mat-dialog-actions>
 
 <mat-dialog-actions *ngIf="isStreamCreated" class="stream__init_btn__container">
-    <button mat-stroked-button disabled> Stream created, you can start it from OBS</button>
+    <button mat-stroked-button disabled>
+        Stream created, you can start it from OBS
+    </button>
 </mat-dialog-actions>

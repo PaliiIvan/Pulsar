@@ -142,13 +142,14 @@ export async function getStream(id: string) {
 
 export async function getOfflineStreams() {
     const savedStreams = await StreamService.getSavedStreams();
-
+    const streamServer = 'https://localhost:5001/saved/';
     const streamsPreview = savedStreams.map((savedStream) => {
         return new ChannelPreview(
             (<Channel>savedStream.channel).id,
             (<Channel>savedStream.channel).channelName,
             savedStream.title,
-            savedStream.id
+            savedStream.id,
+            `${streamServer}${savedStream.previewImage}`
         );
     });
     return streamsPreview;
