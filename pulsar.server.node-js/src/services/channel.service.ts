@@ -5,9 +5,10 @@ import { STREAM_SECRET_KEY } from '../configs/secrets';
 import logger from '../utils/loging';
 import { ChannelPreview } from '../api.models/channel-preview';
 import { NotFoundError } from '../utils/errors/server.errors';
+import uuid from 'uuid';
 
 export async function createChannel(userId: string, channelName: string) {
-    const streamToken = generateStreamToken(userId, channelName);
+    const streamToken = uuid.v1() + '__';
     const result = await channelRepo.createChannel(userId, channelName, streamToken);
     return result;
 }
@@ -22,13 +23,15 @@ export async function getOnlineChannels() {
         isOnline: true,
         currentStream: { $ne: null },
     });
+    const streamServer = 'https://localhost:5001/online/';
     const streamsPreview = onlineChannels.map((channel) => {
         if (channel.currentStream) {
             return new ChannelPreview(
                 channel.id,
                 channel.channelName,
                 channel.currentStream.title,
-                channel.currentStream.id
+                channel.currentStream.id,
+                `${streamServer}${channel.currentStream.previewImage}`
             );
         }
     });
@@ -54,15 +57,4 @@ export async function getChannel(query: any) {
     };
 
     return channelDto;
-}
-
-/**
- * This method generate new Stream token that include User Id and Channel Name
- * @param userId User Id
- * @param channelName User login is channel Name
- * @returns Generated token
- */
-function generateStreamToken(userId: string, channelName: string) {
-    const streamToken = jwt.sign({ userId, channelName }, STREAM_SECRET_KEY!);
-    return streamToken + '__';
 }

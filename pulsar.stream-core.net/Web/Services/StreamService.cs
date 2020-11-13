@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using Models;
 using StreamInterfaces;
@@ -27,12 +26,11 @@ namespace StreamServices
         }
         public void StartStream(string stream, HttpResponse Response, HttpRequest Request)
         {
-            string token = Regex.Replace(stream, @"__+[0-9,\.]+(ts|m3u8)$", string.Empty);
-            var tokenMetaData = _tokenValidationService.ValidateToken(token);
+            string token = Regex.Replace(stream, @"[0-9,\.]+(ts|m3u8)$", string.Empty);
 
 
             var channelsCollection = _userDb.GetCollection<Channel>("channels");
-            var filter = Builders<Channel>.Filter.Eq(channel => channel.userId, ObjectId.Parse(tokenMetaData.UserId));
+            var filter = Builders<Channel>.Filter.Eq(channel => channel.streamToken, token);
 
             var currentChannel = channelsCollection.Find(filter).FirstOrDefault();
             var channelStreamObj = currentChannel.currentStream;
@@ -51,13 +49,14 @@ namespace StreamServices
             var channelStreamObjId = channelStreamObj.id;
             var streamIsInPandingStatus = currentChannel.pending;
 
-            var userDirectoryPath = $"{tokenMetaData.channelName}/{channelStreamObjId}/";
+            var userDirectoryPath = $"{currentChannel.channelName}/{channelStreamObjId}/";
             string fullDirectoryPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/pulsar_streams/online/{userDirectoryPath}";
             if (streamIsInPandingStatus)
             {
                 var update = Builders<Channel>
                     .Update
                     .Set(channel => channel.currentStream.locationPath, $"{userDirectoryPath}index.m3u8")
+                    .Set(channel => channel.currentStream.previewImage, $"{userDirectoryPath}preview.jpg")
                     .Set(channel => channel.currentStream.startDate, DateTime.UtcNow)
                     .Set(channel => channel.isOnline, true)
                     .Set(channel => channel.pending, false);
@@ -78,13 +77,54 @@ namespace StreamServices
                 return;
             }
 
-
             if (stream.Contains(".m3u8"))
             {
-                using (var indexFile = System.IO.File.OpenWrite($"{fullDirectoryPath}index.m3u8"))
+                if (File.Exists($"{fullDirectoryPath}index.m3u8"))
                 {
-                    Request.Body.CopyTo(indexFile);
+                    using (var indexFile = File.AppendText($"{fullDirectoryPath}index.m3u8"))
+                    {
+
+                        using (StreamReader strReader = new StreamReader(Request.Body))
+                        {
+
+                            var m3U8Lines = strReader.ReadToEnd().Split('\n');
+
+                            var tsRegex = @"(.)+(\d.ts)$";
+                            var lastTsMetadata = m3U8Lines.Select((line, index) =>
+                                 {
+                                     if (Regex.IsMatch(line, tsRegex))
+                                     {
+                                         return new M3U8 { tsVideolength = m3U8Lines[index - 1], tsFileName = line };
+                                     }
+                                     else if (line == "#EXT-X-ENDLIST")
+                                     {
+                                         return new M3U8 { tsVideolength = "", tsFileName = line };
+                                     }
+                                     return null;
+                                 })
+                                 .Where(line => line != null)
+                                 .Select(line => $"{line.tsVideolength}\n{line.tsFileName}")
+                                 .LastOrDefault();
+
+
+                            indexFile.WriteLine(lastTsMetadata);
+                            indexFile.Close();
+
+                        }
+                    }
                 }
+                else
+                {
+                    using (var indexFile = File.AppendText($"{fullDirectoryPath}index.m3u8"))
+                    {
+                        Request.Body.CopyTo(indexFile.BaseStream);
+                        indexFile.Close();
+                    }
+                }
+
+
+
+                // string[] m3U8Lines = File.ReadAllLines(e.FullPath);
             }
             else
             {
@@ -166,10 +206,9 @@ namespace StreamServices
         {
             DirectoryInfo directoryWithStream = new DirectoryInfo(streamFolder);
 
-            List<FileInfo> allStreamData = directoryWithStream.GetFiles().OrderBy(file => file.Name).ToList();
+            List<FileInfo> allStreamData = directoryWithStream.GetFiles().OrderBy(file => file.Name.Length).ThenBy(file => file.Name).ToList();
             FileInfo indexFile = allStreamData.FirstOrDefault(file => file.Name == "index.m3u8");
-            allStreamData.RemoveAll(file => file.Name == "index.m3u8");
-
+            allStreamData.RemoveAll(file => file.Name == "index.m3u8" || file.Name == "preview.jpg");
             var indexStreamReader = indexFile.OpenText();
             string fileData = indexStreamReader.ReadToEnd();
             indexStreamReader.Close();
@@ -203,5 +242,12 @@ namespace StreamServices
             indexStreamWriter.Close();
         }
 
+
+    }
+
+    class M3U8
+    {
+        public string tsVideolength;
+        public string tsFileName;
     }
 }

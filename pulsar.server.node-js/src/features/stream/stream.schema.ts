@@ -16,6 +16,9 @@ export const streamSchemaDef = new Schema(
         locationPath: {
             type: String,
         },
+        previewImage: {
+            type: String,
+        },
         startDate: {
             type: Date,
         },

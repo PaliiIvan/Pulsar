@@ -51,7 +51,10 @@ export class AuthenticationEffects {
         this.actions$.pipe(
             ofType(fromAuthActions.logInSucces),
             withLatestFrom(this.store.select((state) => state.auth.user)),
-            map(([action, userState]) => this.logInUser(userState))
+            map(([action, userState]) => {
+                this.logInUser(userState);
+                return fromAuthActions.setAuthTimer();
+            })
         )
     );
 
@@ -244,7 +247,7 @@ export class AuthenticationEffects {
         setTimeout(() => {
             console.log('Time to regenerate token');
             this.store.dispatch(fromAuthActions.regenerateUserToken({ token }));
-        }, msToRegenerateToken);
+        }, 1000 /*msToRegenerateToken*/);
     }
 
     //#endregion Private Methods

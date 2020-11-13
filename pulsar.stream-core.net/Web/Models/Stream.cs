@@ -11,6 +11,7 @@ namespace Models
         public ObjectId channel { get; set; }
         public string title { get; set; }
         public string locationPath { get; set; }
+        public string previewImage { get; set; }
         public dynamic comments { get; set; }
         public DateTime createdAt { get; set; }
         public DateTime updatedAt { get; set; }
