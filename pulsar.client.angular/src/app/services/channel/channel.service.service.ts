@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { Channel } from '../../models/channel.model';
-import { ChannelPreview } from '../../models/api.models/channel-preview';
+import { ChannelPreview, Channel } from '../../models';
 
 @Injectable({
     providedIn: 'root',
@@ -10,7 +9,7 @@ import { ChannelPreview } from '../../models/api.models/channel-preview';
 export class ChannelService {
     readonly API = `${environment.apiUrl}/channel`;
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     createChannel(userId: string, logIn: string) {
         return this.http.post(`${this.API}`, { userId, logIn });

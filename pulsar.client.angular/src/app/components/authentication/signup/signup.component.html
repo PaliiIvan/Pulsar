@@ -42,11 +42,13 @@
             </div>
         </form>
         <mat-dialog-actions
-            *ngIf="(signupErrors$ | async).length !== 0"
+            *ngIf="(!signUpResultMessage.showMessage)"
             class="stream__init_btn__container"
         >
-            <button mat-stroked-button disabled>
-                {{ (signupErrors$ | async)[0].message }}
+            <button  mat-stroked-button disabled>
+                {{ signUpResultMessage.isSuccess 
+                    ? "Accaunt was created and confirmation link was send to you email. Please confirm you email."
+                    : "An error occured on SignUp"}}
             </button>
         </mat-dialog-actions>
         <mat-dialog-actions>
@@ -85,11 +87,11 @@
             </div>
         </form>
         <mat-dialog-actions
-            *ngIf="(logInErrors$ | async).length !== 0"
+            *ngIf="(loginResultMessage.showMessage)"
             class="stream__init_btn__container"
         >
             <button mat-stroked-button disabled>
-                {{ (logInErrors$ | async)[0].message }}
+                {{ "Login failed" }}
             </button>
         </mat-dialog-actions>
         <mat-dialog-actions [class]="'btn_actions'">

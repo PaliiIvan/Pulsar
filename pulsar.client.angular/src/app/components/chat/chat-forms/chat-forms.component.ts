@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { StreamService } from '../../../services/stream/stream.service';
-import { Comment } from '../../../models/api.models/comment';
+import { Comment } from '../../../models';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/app.reducer';
+import { AppState } from '../../../global-store/app.reducer';
 
 import * as io from 'socket.io-client';
 
@@ -25,7 +25,7 @@ export class ChatFormsComponent implements OnInit {
     constructor(
         private streamService: StreamService,
         private store: Store<AppState>
-    ) {}
+    ) { }
 
     chatMessageForm = new FormGroup({
         message: new FormControl(''),

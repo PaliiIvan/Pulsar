@@ -12,7 +12,7 @@
             </button>
 
             <mat-menu #menu="matMenu">
-                <button (click)="streamInitStarted()" mat-menu-item>
+                <button (click)="showStreamInitModal()" mat-menu-item>
                     Stream
                 </button>
                 <button *ngIf="channel && channel.isOnline" mat-menu-item (click)="finishStream()">
@@ -27,13 +27,9 @@
             </mat-menu>
         </div>
         <div *ngIf="!(user$ | async)" class="auth__btn__container">
-            <button (click)="authProcessStarted()" mat-raised-button>
+            <button (click)="showAuthModal()" mat-raised-button>
                 Log In
             </button>
         </div>
     </div>
 </div>
-
-<app-authentication *ngIf="isAuth$ | async"></app-authentication>
-<app-email-verification *ngIf="(isEmailConfirmationProccess$ | async) != null"></app-email-verification>
-<app-stream *ngIf="isStreamProcess$ | async"></app-stream>

@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/app.reducer';
+import { AppState } from '../../global-store/app.reducer';
 
-import * as fromNavBar from '../nav-bar/_store/nav-bar.action';
-import { ChannelService } from '../../services/channel/channel.service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { StreamInitComponent } from './stream-init/stream-init.component';
 
@@ -21,6 +19,6 @@ export class StreamComponent implements OnInit {
 
   ngOnInit(): void {
     const streamInitDialog = this.dialog.open(StreamInitComponent);
-    streamInitDialog.afterClosed().subscribe(() => this.store.dispatch(fromNavBar.streamInitFinished()));
+    streamInitDialog.afterClosed().subscribe(() => console.log('Stream finished'));
   }
 }

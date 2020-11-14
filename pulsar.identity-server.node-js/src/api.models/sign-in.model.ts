@@ -1,9 +1,7 @@
-export class SignUpUser {
-    userId: string;
+export class SignUpResult {
     login: string;
 
-    constructor(userId: string, login: string) {
+    constructor(login: string) {
         this.login = login;
-        this.userId = userId;
     }
 }

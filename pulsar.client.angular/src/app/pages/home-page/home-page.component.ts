@@ -8,9 +8,8 @@ import {
 
 import * as HLS from 'hls.js';
 import { ChannelService } from '../../services/channel/channel.service.service';
-import { ChannelPreview } from '../../models/api.models/channel-preview';
+import { ChannelPreview, SavedStream } from '../../models';
 import { StreamService } from '../../services/stream/stream.service';
-import { SavedStream } from '../../models/api.models/saved-streams';
 
 @Component({
     selector: 'app-home-page',
@@ -21,7 +20,7 @@ export class HomePageComponent implements OnInit {
     constructor(
         private channelService: ChannelService,
         private streamService: StreamService
-    ) {}
+    ) { }
 
     videoElement: HTMLMediaElement;
     isEmailConfirmationMessage = false;

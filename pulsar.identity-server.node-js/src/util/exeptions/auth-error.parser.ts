@@ -1,7 +1,7 @@
 import { NextFunction } from "express";
 import { Result, ValidationError } from "express-validator";
 
-import { ErrorMetadata } from "./server-errors";
+import { ErrorMetadata } from "../../api.models/server.errors";
 
 /**
  * 

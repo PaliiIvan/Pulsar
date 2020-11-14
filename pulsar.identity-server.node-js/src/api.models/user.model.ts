@@ -1,11 +1,15 @@
 export class User {
     id: string;
-    logIn: string;
+    login: string;
     email: string;
+    token: string;
+    tokenExpDate: number;
 
-    constructor(id: string, logIn: string, email: string) {
+    constructor(id: string, login: string, email: string, token: string, tokenExparation: number) {
         this.id = id;
-        this.logIn = logIn;
+        this.login = login;
         this.email = email;
+        this.token = token;
+        this.tokenExpDate = tokenExparation;
     }
 }
