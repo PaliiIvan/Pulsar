@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/app.reducer';
+import { AppState } from '../../../global-store/app.reducer';
 import { ChannelService } from '../../../services/channel/channel.service.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -24,7 +24,7 @@ export class StreamInitComponent implements OnInit {
         private store: Store<AppState>,
         private streamService: StreamService,
         private clipboard: Clipboard
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         this.store

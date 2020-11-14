@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { Comment } from '../../models/api.models/comment';
-import { SavedStream } from '../../models/api.models/saved-streams';
-import { ChannelPreview } from '../../models/api.models/channel-preview';
+import { ChannelPreview, SavedStream, Comment } from '../../models';
+
 @Injectable({
     providedIn: 'root',
 })
 export class StreamService {
     private readonly API = `${environment.apiUrl}/stream`;
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     initiateStream(title: string) {
         return this.http.post(`${this.API}/initiate-stream`, { title });

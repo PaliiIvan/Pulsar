@@ -1,4 +1,4 @@
-import { Comment } from './comment';
+import { Comment } from './comment.model';
 
 export class SavedStream {
     id: string;

@@ -10,7 +10,7 @@ export class ServerError extends Error implements ErrorMetadata {
     description: "Server Error\n";
     statusCode: 500;
 
-    constructor(message: string, metadata?: any){
+    constructor(message: string, metadata?: any) {
         super(message);
         this.metadata = metadata;
     }
@@ -21,7 +21,7 @@ export class NotFoundError extends Error implements ErrorMetadata {
     description: "Resource not found\n";
     statusCode: 404;
 
-    constructor(message: string, metadata?: any){
+    constructor(message: string, metadata?: any) {
         super(message);
         this.metadata = metadata;
     }
@@ -32,7 +32,7 @@ export class NotAuthorizeError extends Error implements ErrorMetadata {
     description: "Access denied\n";
     statusCode: 401;
 
-    constructor(message: string, metadata?: any){
+    constructor(message: string, metadata?: any) {
         super(message);
         this.metadata = metadata;
     }

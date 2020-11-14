@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter } from '@angular/core';
 import { StreamService } from '../../services/stream/stream.service';
-import { Comment } from '../../models/api.models/comment';
+import { Comment } from '../../models';
 import * as io from 'socket.io-client';
 
 @Component({
@@ -16,7 +16,7 @@ export class ChatComponent implements OnInit {
     comments: Comment[];
     socket: SocketIOClient.Socket = io(`localhost:8081`);
 
-    constructor(private streamService: StreamService) {}
+    constructor(private streamService: StreamService) { }
 
     ngOnInit(): void {
         this.streamService

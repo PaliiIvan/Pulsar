@@ -1,11 +1,11 @@
 export class RequestResult<T> {
     message: string;
     data: T;
-    status: boolean;
+    isSuccess: boolean;
 
-    constructor(message: string, data?: T, status = true) {
+    constructor(message: string, isSuccess: boolean, data?: T) {
         this.message = message;
-        this.status = status;
+        this.isSuccess = isSuccess;
         this.data = data;
     }
 }

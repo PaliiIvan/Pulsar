@@ -5,13 +5,13 @@ import {
     HttpHandler,
 } from '@angular/common/http';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/app.reducer';
+import { AppState } from '../../global-store/app.reducer';
 import { take, exhaustMap } from 'rxjs/operators';
-import { User } from '../../models/user.model';
+import { User } from '../../models';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-    constructor(private store: Store<AppState>) {}
+    constructor(private store: Store<AppState>) { }
     intercept(req: HttpRequest<any>, next: HttpHandler) {
         const user: User = JSON.parse(localStorage.getItem('user'));
 

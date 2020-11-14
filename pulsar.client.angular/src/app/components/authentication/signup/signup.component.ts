@@ -3,17 +3,16 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
-import { AppState } from '../../../store/app.reducer';
+import { AppState } from '../../../global-store/app.reducer';
 import { ChannelService } from '../../../services/channel/channel.service.service';
 
 import * as fromAuthActions from '../_store/authentication.actions';
-import { Observable } from 'rxjs';
-import { ValidationError } from '../../../models/errors/validation-error.model';
+import { User } from '../../../models';
 
 @Component({
     selector: 'app-signup',
     templateUrl: './signup.component.html',
-    styleUrls: ['./signup.component.scss', '../authentication.component.scss'],
+    styleUrls: ['./signup.component.scss'],
 })
 export class SignupComponent implements OnInit {
     signUpForm = new FormGroup({
@@ -28,29 +27,26 @@ export class SignupComponent implements OnInit {
         password: new FormControl(''),
     });
 
-    signupErrors$: Observable<ValidationError[]>;
-    logInErrors$: Observable<ValidationError[]>;
+    isSignup = true;
 
-    isSignUp$: Observable<boolean>;
-    showsignUpResultMessage: Observable<boolean>;
+    signUpResultMessage = {
+        isSuccess: false,
+        showMessage: false
+    };
+
+    loginResultMessage = {
+        isSuccess: false,
+        showMessage: false
+    };
 
     constructor(
         private authService: AuthenticationService,
         private channelService: ChannelService,
         private store: Store<AppState>
-    ) {}
+    ) { }
 
     ngOnInit(): void {
-        this.isSignUp$ = this.store.select((state) => state.auth.isSignUp);
-        this.showsignUpResultMessage = this.store.select(
-            (store) => store.auth.showSignUpResultMessage
-        );
-        this.signupErrors$ = this.store.select(
-            (state) => state.auth.signUpErrors
-        );
-        this.logInErrors$ = this.store.select(
-            (state) => state.auth.logInErrors
-        );
+
     }
 
     signUp(): void {
@@ -58,27 +54,40 @@ export class SignupComponent implements OnInit {
         const logIn = this.signUpForm.get('login').value;
         const password = this.signUpForm.get('password').value;
         const repeatPassword = this.signUpForm.get('repeatPassword').value;
-
-        this.store.dispatch(
-            fromAuthActions.sendSignUpData({
-                email,
-                logIn,
-                password,
-                repeatPassword,
-            })
-        );
+        this.authService.signUp(email, logIn, password, repeatPassword).subscribe(response => {
+            if (response.isSuccess) {
+                this.signUpResultMessage = {
+                    isSuccess: true,
+                    showMessage: true
+                };
+            } else {
+                this.signUpResultMessage = {
+                    isSuccess: false,
+                    showMessage: true
+                };
+            }
+        });
     }
 
     logIn() {
         const email = this.logInForm.get('email').value;
         const password = this.logInForm.get('password').value;
-        this.store.dispatch(fromAuthActions.sendLogInData({ email, password }));
+
+        this.authService.logIn(email, password).subscribe(respose => {
+            if (respose.isSuccess) {
+                this.store.dispatch(fromAuthActions.storeUser({ user: respose.data }));
+            } else {
+
+                this.loginResultMessage = {
+                    isSuccess: true,
+                    showMessage: true
+                };
+            }
+
+        });
     }
 
-    signUpStarted() {
-        this.store.dispatch(fromAuthActions.signUpStarted());
-    }
-    logInStarted() {
-        this.store.dispatch(fromAuthActions.logInStarted());
+    changeAuthFlow() {
+        this.isSignup = !this.isSignup;
     }
 }

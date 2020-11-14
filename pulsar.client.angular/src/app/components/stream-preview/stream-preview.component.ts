@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ChannelPreview } from '../../models/api.models/channel-preview';
+import { ChannelPreview } from '../../models';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,9 +11,9 @@ export class StreamPreviewComponent implements OnInit {
     @Input() chanel: ChannelPreview;
     @Input() isOffline: boolean;
 
-    constructor(private router: Router) {}
+    constructor(private router: Router) { }
 
-    ngOnInit(): void {}
+    ngOnInit(): void { }
 
     goToChannel() {
         if (this.isOffline) {

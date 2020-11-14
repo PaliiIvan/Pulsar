@@ -11,13 +11,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
-import { AuthenticationComponent } from './components/authentication/authentication.component';
 import { SignupComponent } from './components/authentication/signup/signup.component';
 import { ErrorPageComponent } from './pages/error-page/error-page.component';
-import { AuthenticationEffects } from './components/authentication/_store/authentication.effects';
-import { HttpErrorInterceptor } from './utils/interceptors/http-error.interceptor';
 
-import * as fromApp from './store/app.reducer';
+import * as fromApp from './global-store/app.reducer';
 
 import { VerifyEmailMessageComponent } from './components/authentication/email-verification/email-verification.component';
 import { StreamComponent } from './components/stream/stream.component';
@@ -48,7 +45,6 @@ import { SavedStreamPageComponent } from './pages/saved-stream-page/saved-stream
     declarations: [
         AppComponent,
         HomePageComponent,
-        AuthenticationComponent,
         NavBarComponent,
         SignupComponent,
         ErrorPageComponent,
@@ -83,15 +79,9 @@ import { SavedStreamPageComponent } from './pages/saved-stream-page/saved-stream
         StoreModule.forRoot(fromApp.appReducer),
         StoreDevtoolsModule.instrument({}),
         // StoreRouterConnectingModule.forRoot(),
-        EffectsModule.forRoot([AuthenticationEffects]),
         BrowserAnimationsModule,
     ],
     providers: [
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: HttpErrorInterceptor,
-            multi: true,
-        },
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,

@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { AuthenticationService } from './services/authentication/authentication.service';
-import { User } from './models/user.model';
-import { AppState } from './store/app.reducer';
+
+import { AppState } from './global-store/app.reducer';
+import { User } from './models';
 
 import * as fromAuthActions from './components/authentication/_store/authentication.actions';
-import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,41 @@ export class AppComponent implements OnInit {
   constructor(private authService: AuthenticationService, private store: Store<AppState>) { }
 
   ngOnInit(): void {
-    this.store.dispatch(fromAuthActions.loadUserFromStore());
+
+    const user = this.getUserFromLocalStore();
+
+    if (user !== null) {
+      this.store.dispatch(fromAuthActions.storeUser({ user }));
+    }
+
+    this.store.select(state => state.auth.user).subscribe(user => {
+      if (user !== null) {
+        this.startTimer(user.token, user.tokenExpDate);
+        this.saveUserToLocalStore(user);
+      }
+    });
   }
 
+
+  private getUserFromLocalStore() {
+    const user: User = JSON.parse(localStorage.getItem('user'));
+    return user;
+  }
+
+  private saveUserToLocalStore(user: User) {
+    localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  private startTimer(token: string, timeForExp: number) {
+    const msToRegenerateToken = timeForExp - new Date().getTime();
+    console.log('Timer started, sec:', msToRegenerateToken);
+    setTimeout(() => {
+      console.log('Time to regenerate token');
+      this.authService.regenerateToken(token).subscribe(response => {
+        if (response.isSuccess) {
+          this.store.dispatch(fromAuthActions.storeUser({ user: response.data }));
+        }
+      });
+    }, msToRegenerateToken);
+  }
 }

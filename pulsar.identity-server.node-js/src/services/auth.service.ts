@@ -9,14 +9,14 @@ import path from "path";
 import logger from "../util/logger";
 
 import { formatString } from "../extensions/string.extensions";
-import { NotFoundError, NotAuthorizeError, ServerError } from "../util/exeptions/server-errors";
+import { NotFoundError, NotAuthorizeError, ServerError } from "../api.models/server.errors";
 import { constants, files } from "../configs/global.variables";
-import { User } from "../api.models/user";
+import { User } from "../api.models/user.model";
 import { SEND_GRID, BASE_URL, AUTH_SECRET_KEY } from "../configs/secrets";
 import { ValidationExeption } from "../util/exeptions/auth-error.parser";
 
 import * as userRepo from "../features/user/user.repository";
-import { SignUpUser } from "../api.models/sign-in.model";
+import { SignUpResult } from "../api.models/sign-in.model";
 
 sendGrid.setApiKey(SEND_GRID);
 
@@ -35,12 +35,11 @@ export async function signUp(email: string, login: string, password: string) {
         const result = await sendGrid.send(mailMessage);
 
         if (result[0].statusCode == 202) {
-            logger.info("SignUp successful");
-            return new SignUpUser(createdUser.id, createdUser.login);
+            logger.info("Email sended");
+            return new SignUpResult(createdUser.login);
         } else {
-
-            logger.error("Email sending Error", { user: createdUser, emailMess: result });
-            throw new ServerError("Email Sending Error");
+            logger.error("Email sending Error",);
+            throw new ServerError("Email Sending Error", { email: email });
         }
     } catch (err) {
         const removeResult = await userRepo.removeUser(createdUser.id);

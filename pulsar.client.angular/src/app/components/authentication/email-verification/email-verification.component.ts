@@ -1,12 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/app.reducer';
+import { AppState } from '../../../global-store/app.reducer';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EmailConfirmation } from '../../../models/email-confirmation.model';
+import { EmailConfirmation } from '../../../models';
 
 import * as fromAuthActions from '../_store/authentication.actions';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
+import { timeStamp } from 'console';
 
 @Component({
     selector: 'app-email-verification',
@@ -16,18 +17,21 @@ import { AuthenticationService } from '../../../services/authentication/authenti
 export class VerifyEmailMessageComponent implements OnInit {
     @Input() emailData: { userId: string; emailToken: string };
 
-    constructor(private store: Store<AppState>, private router: Router) {}
+    constructor(private store: Store<AppState>, private router: Router, private authenticationService: AuthenticationService) { }
 
     ngOnInit(): void {
-        this.store.dispatch(
-            fromAuthActions.sendEmailConfirmation({
-                userId: this.emailData.userId,
-                emailToken: this.emailData.emailToken,
-            })
-        );
+
+
+        this.authenticationService.confirmEmail(this.emailData.userId, this.emailData.emailToken).subscribe(response => {
+            if (response.isSuccess) {
+                setTimeout(() => {
+                    console.log('Close Email window');
+                }, 1000);
+            } else {
+                console.log('An error occured on email confirmation please contact support');
+            }
+        });
     }
 
-    closeAuthWindow() {
-        this.store.dispatch(fromAuthActions.emailConfirmationFinished());
-    }
+
 }

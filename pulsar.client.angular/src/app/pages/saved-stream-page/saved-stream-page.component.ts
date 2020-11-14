@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, HostListener } from '@angular/core';
-import { SavedStream } from '../../models/api.models/saved-streams';
+import { SavedStream } from '../../models';
 
 @Component({
     selector: 'app-saved-stream-page',
@@ -7,14 +7,14 @@ import { SavedStream } from '../../models/api.models/saved-streams';
     styleUrls: ['./saved-stream-page.component.scss'],
 })
 export class SavedStreamPageComponent implements OnInit {
-    constructor() {}
+    constructor() { }
 
     @Input()
     savedStreams: SavedStream;
 
     isChatReomoved = false;
 
-    ngOnInit(): void {}
+    ngOnInit(): void { }
 
     @HostListener('window:resize', ['$event'])
     onResize() {
