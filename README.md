@@ -6,4 +6,4 @@
 - [ ] change all 'magic' strings to env variables
 - [ ] add logo and customize web site
 - [ ] deploy all in cloud
-- [ ] refactor all code flow
+- [ ] refactor all code flow (check models)
