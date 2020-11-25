@@ -13,7 +13,7 @@ import { NotFoundError, NotAuthorizeError, ServerError } from "../api.models/ser
 import { constants, files } from "../configs/global.variables";
 import { User } from "../api.models/user.model";
 import { SEND_GRID, BASE_URL, AUTH_SECRET_KEY } from "../configs/secrets";
-import { ValidationExeption } from "../util/exeptions/auth-error.parser";
+import { ValidationException } from "../util/exeptions/auth-error.parser";
 
 import * as userRepo from "../features/user/user.repository";
 import { SignUpResult } from "../api.models/sign-in.model";
@@ -36,7 +36,7 @@ export async function signUp(email: string, login: string, password: string) {
 
         if (result[0].statusCode == 202) {
             logger.info("Email sended");
-            return new SignUpResult(createdUser.login);
+            return new SignUpResult("Account was created and confirmation link was &#10; send to you email. Please confirm you email");
         } else {
             logger.error("Email sending Error",);
             throw new ServerError("Email Sending Error", { email: email });
@@ -83,23 +83,23 @@ export async function checkEmail(userId: string, emailToken: string) {
 export async function logIn(email: string, password: string) {
 
     logger.info("LogIn in process");
-    const tokenExparationDateInMs = new Date().getTime() + constants.TOKEN_EXPARATION * 1000;
+    const tokenExpirationDateInMs = new Date().getTime() + constants.TOKEN_EXPIRATION * 1000;
     const user = await userRepo.findOne({ email: email, IsConfirmed: true });
 
     if (user == null)
-        throw new ValidationExeption([{ propery: '', message: 'Email or password is incorect' }]);
+        throw new ValidationException([{ property: '', message: 'Email or password is incorrect' }]);
 
-    const isPasswordCorect = compareSync(password, user.password);
+    const isPasswordCorrect = compareSync(password, user.password);
 
-    if (!isPasswordCorect)
-        throw new ValidationExeption([{ propery: '', message: 'Email or password is incorect' }]);
+    if (!isPasswordCorrect)
+        throw new ValidationException([{ property: '', message: 'Email or password is incorrect' }]);
 
     const jsonWebToken = jwt.sign({
         email: user.email,
         id: user.id
-    }, AUTH_SECRET_KEY, { expiresIn: constants.TOKEN_EXPARATION });
+    }, AUTH_SECRET_KEY, { expiresIn: constants.TOKEN_EXPIRATION });
 
-    return new User(user.id, user.login, user.email, jsonWebToken, tokenExparationDateInMs);
+    return new User(user.id, user.login, user.email, jsonWebToken, tokenExpirationDateInMs);
 }
 
 export async function checkUserToken(token: string) {
@@ -137,7 +137,7 @@ export async function regenerateToken(token: string) {
 
     const decodedToken = jwt.decode(token);
     const userId = decodedToken["id"];
-    const tokenExparationDateInMs = new Date().getTime() + constants.TOKEN_EXPARATION * 1000;
+    const tokenExparationDateInMs = new Date().getTime() + constants.TOKEN_EXPIRATION * 1000;
     const user = await userRepo.findOne({ _id: userId, IsConfirmed: true });
 
     if (user == null)
@@ -146,7 +146,7 @@ export async function regenerateToken(token: string) {
     const jsonWebToken = jwt.sign({
         email: user.email,
         id: user.id,
-    }, AUTH_SECRET_KEY, { expiresIn: constants.TOKEN_EXPARATION });
+    }, AUTH_SECRET_KEY, { expiresIn: constants.TOKEN_EXPIRATION });
 
     logger.info("Regeneration Token finished ");
     return new User(user.id, user.login, user.email, jsonWebToken, tokenExparationDateInMs);

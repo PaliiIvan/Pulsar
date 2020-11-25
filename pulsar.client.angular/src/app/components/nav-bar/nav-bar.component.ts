@@ -48,6 +48,8 @@ export class NavBarComponent implements OnInit {
             if (scope === 'confirm-email') {
                 const userId = params.get('id');
                 const emailToken = params.get('token');
+                console.log(userId, emailToken);
+
                 this.emailVerificationDialog = this.dialog.open(
                     VerifyEmailMessageComponent,
                     { data: { userId, emailToken } }
@@ -85,7 +87,7 @@ export class NavBarComponent implements OnInit {
         this.authMenuDialog = this.dialog.open(SignupComponent);
 
         this.authMenuDialog.beforeClosed().subscribe(() => {
-            console.log('Authentification finished');
+            console.log('Authentication finished');
         });
 
         this.store

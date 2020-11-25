@@ -1,12 +1,22 @@
 <h1 mat-dialog-title class="title__color">
-    Email verification Successful!
+    {{!errorMessage ? 'The email was successfully verified!' : 'Email verification error!' }}
     <mat-divider></mat-divider>
 </h1>
 
-<mat-dialog-content style="width: 280px;">
-    You email was successfully verified! <br>
-    Please LogIn with you email.
+<mat-dialog-content *ngIf='!errorMessage' style="width: 280px;">
+    Congratulations your email was verified! <br>
+    Now you can LogIn in our service.
 </mat-dialog-content>
+
+
+<mat-dialog-actions
+*ngIf='errorMessage'
+            class="stream__init_btn__container"
+        >
+            <button class="text__wrap"  mat-stroked-button disabled>
+                {{ errorMessage}}
+            </button>
+        </mat-dialog-actions>
 
 <mat-dialog-actions style="display: flex; flex-direction: row-reverse;">
     <button mat-raised-button color="primary" mat-dialog-close>Close</button>

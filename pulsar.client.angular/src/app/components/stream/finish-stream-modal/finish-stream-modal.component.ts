@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { StreamService } from '../../../services/stream/stream.service';
 import { Router } from '@angular/router';
 
-export interface ModalData {
+interface ModalData {
     close: () => void;
 }
 
@@ -24,9 +24,9 @@ export class FinishStreamModalComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public modalData: ModalData,
         private streamService: StreamService,
         private router: Router
-    ) {}
+    ) { }
 
-    ngOnInit(): void {}
+    ngOnInit(): void { }
 
     stopStream(save: boolean) {
         this.streamService.finishStream(save).subscribe((result) => {

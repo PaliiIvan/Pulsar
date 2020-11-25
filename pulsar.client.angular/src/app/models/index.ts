@@ -8,7 +8,7 @@ import { RequestResult } from './request-result.server.model';
 import { SavedStream } from './saved-streams';
 import { SignUpResult } from './signup-user.model';
 import { User } from './user.model';
-
+import { AuthErrorMessage } from './auth.error.model';
 export {
     AuthResult,
     ChannelPreview,
@@ -19,5 +19,6 @@ export {
     RequestResult,
     SavedStream,
     SignUpResult,
-    User
+    User,
+    AuthErrorMessage
 };

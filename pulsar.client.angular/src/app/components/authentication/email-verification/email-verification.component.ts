@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../global-store/app.reducer';
@@ -8,6 +8,14 @@ import { EmailConfirmation } from '../../../models';
 import * as fromAuthActions from '../_store/authentication.actions';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { timeStamp } from 'console';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+
+
+interface ModalData {
+    userId: string;
+    emailToken: string;
+}
 
 @Component({
     selector: 'app-email-verification',
@@ -15,22 +23,29 @@ import { timeStamp } from 'console';
     styleUrls: ['./email-verification.component.scss'],
 })
 export class VerifyEmailMessageComponent implements OnInit {
-    @Input() emailData: { userId: string; emailToken: string };
 
-    constructor(private store: Store<AppState>, private router: Router, private authenticationService: AuthenticationService) { }
+    constructor(
+        @Inject(MAT_DIALOG_DATA) public emailData: ModalData,
+        private router: Router,
+        private authenticationService: AuthenticationService) { }
 
+
+    errorMessage: string;
     ngOnInit(): void {
 
+        console.log(this.emailData);
 
-        this.authenticationService.confirmEmail(this.emailData.userId, this.emailData.emailToken).subscribe(response => {
-            if (response.isSuccess) {
-                setTimeout(() => {
-                    console.log('Close Email window');
-                }, 1000);
-            } else {
-                console.log('An error occured on email confirmation please contact support');
-            }
-        });
+        this.authenticationService.confirmEmail(this.emailData.userId, this.emailData.emailToken)
+            .subscribe(response => {
+                if (response.isSuccess) {
+                    setTimeout(() => {
+                        this.router.navigate(['']);
+                    }, 1000);
+                } else {
+
+                    this.errorMessage = 'An error occurred on email confirmation, please contact support';
+                }
+            });
     }
 
 

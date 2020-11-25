@@ -5,6 +5,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import { environment } from '../../../environments/environment';
 import { SignUpResult, AuthResult, User, ErrorResponce, RequestResult } from '../../models';
+import { handleError } from '../../utils/http.error.handler';
 
 @Injectable({
     providedIn: 'root',
@@ -20,11 +21,13 @@ export class AuthenticationService {
             login,
             password,
             repeatPassword,
-        });
+        })
+            .pipe(catchError(handleError));
     }
 
     logIn(email: string, password: string) {
-        return this.http.post<RequestResult<User>>(`${this.API}/login`, { email, password });
+        return this.http.post<RequestResult<User>>(`${this.API}/login`, { email, password })
+            .pipe(catchError(handleError));
     }
 
     checkToken(token: string) {

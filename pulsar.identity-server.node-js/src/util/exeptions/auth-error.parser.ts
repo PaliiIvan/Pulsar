@@ -9,26 +9,25 @@ import { ErrorMetadata } from "../../api.models/server.errors";
  * @param next Next function
  */
 export function errorParser(errors: Result, next: NextFunction) {
-    const error = new ValidationExeption(errors.array());
+    const error = new ValidationException(errors.array());
     return next(error);
 }
 
-export class ValidationExeption extends Error implements ErrorMetadata {
+export class ValidationException extends Error implements ErrorMetadata {
 
-    metadata: any[] = [];
+    metadata: any;
     description: string;
     statusCode: number;
 
-    constructor(errors: ValidationError[] | { propery: string, message: string }[]) {
+    constructor(errors: ValidationError[] | { property: string, message: string }[]) {
         super("Validation Error");
 
-        errors.forEach(error => {
-            if ('param' in error)
-                this.metadata.push(error.msg);
-            else
-                this.metadata.push(error);
-        });
 
+        if ('param' in errors[0]) {
+            this.metadata = errors[0].msg;
+        } else {
+            this.metadata = errors[0];
+        }
     }
 }
 

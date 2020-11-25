@@ -7,7 +7,7 @@ import { AppState } from '../../../global-store/app.reducer';
 import { ChannelService } from '../../../services/channel/channel.service.service';
 
 import * as fromAuthActions from '../_store/authentication.actions';
-import { User } from '../../../models';
+import { AuthErrorMessage, User } from '../../../models';
 
 @Component({
     selector: 'app-signup',
@@ -29,15 +29,9 @@ export class SignupComponent implements OnInit {
 
     isSignup = true;
 
-    signUpResultMessage = {
-        isSuccess: false,
-        showMessage: false
-    };
+    signUpResultMessage = new AuthErrorMessage(false, '');
 
-    loginResultMessage = {
-        isSuccess: false,
-        showMessage: false
-    };
+    loginResultMessage = new AuthErrorMessage(false, '');
 
     constructor(
         private authService: AuthenticationService,
@@ -55,15 +49,18 @@ export class SignupComponent implements OnInit {
         const password = this.signUpForm.get('password').value;
         const repeatPassword = this.signUpForm.get('repeatPassword').value;
         this.authService.signUp(email, logIn, password, repeatPassword).subscribe(response => {
+            console.log(response);
             if (response.isSuccess) {
+                console.log(response);
+
                 this.signUpResultMessage = {
-                    isSuccess: true,
-                    showMessage: true
+                    showMessage: true,
+                    message: response.data.message
                 };
             } else {
                 this.signUpResultMessage = {
-                    isSuccess: false,
-                    showMessage: true
+                    showMessage: true,
+                    message: response.data.message
                 };
             }
         });
@@ -73,14 +70,14 @@ export class SignupComponent implements OnInit {
         const email = this.logInForm.get('email').value;
         const password = this.logInForm.get('password').value;
 
-        this.authService.logIn(email, password).subscribe(respose => {
-            if (respose.isSuccess) {
-                this.store.dispatch(fromAuthActions.storeUser({ user: respose.data }));
+        this.authService.logIn(email, password).subscribe(response => {
+            if (response.isSuccess) {
+                console.log(response);
+                this.store.dispatch(fromAuthActions.storeUser({ user: response.data }));
             } else {
-
                 this.loginResultMessage = {
-                    isSuccess: true,
-                    showMessage: true
+                    showMessage: true,
+                    message: response.data.message
                 };
             }
 
