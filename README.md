@@ -1,9 +1,9 @@
 # Pulsar
 
-- [ ] change error message notification
-- [ ] add error page
-- [ ] add stream comments displaing by strem time
+- [x] change error message notification
+- [ ] add stream comments displaying by stream time
 - [ ] change all 'magic' strings to env variables
 - [ ] add logo and customize web site
-- [ ] deploy all in cloud
 - [ ] refactor all code flow
+- [ ] deploy all in cloud
+- [ ] add error page

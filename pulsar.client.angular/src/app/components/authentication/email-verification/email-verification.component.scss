@@ -5,3 +5,18 @@
 .title__color {
     color: white;
 }
+
+.stream__init_btn__container {
+    display: flex;
+    justify-content: space-around;
+    max-width: 375px;
+    margin-bottom: 1px;
+    button {
+        border-color: #f44336;
+        color: #f44336;
+    }
+}
+
+.text__wrap {
+    white-space: initial !important;
+}

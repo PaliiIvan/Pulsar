@@ -1,7 +1,7 @@
 export class SignUpResult {
-    login: string;
+    message: string;
 
-    constructor(login: string) {
-        this.login = login;
+    constructor(message: string) {
+        this.message = message;
     }
 }

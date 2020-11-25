@@ -1,6 +1,9 @@
 .forms {
     display: flex;
     flex-direction: column;
+    &__signup {
+        min-width: 375px;
+    }
 }
 
 form {
@@ -16,8 +19,13 @@ form {
 .stream__init_btn__container {
     display: flex;
     justify-content: space-around;
+    max-width: 375px;
     button {
         border-color: #f44336;
         color: #f44336;
     }
+}
+
+.text__wrap {
+    white-space: initial !important;
 }

@@ -26,4 +26,9 @@ export class StreamPreviewComponent implements OnInit {
             this.router.navigate(['/channel', this.chanel.channelName]);
         }
     }
+
+    changeDefaultStreamPreview(event: any) {
+        event.target.src = '../../../assets/stream-default-preview.jpg';
+
+    }
 }

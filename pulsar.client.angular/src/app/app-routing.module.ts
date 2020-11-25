@@ -8,14 +8,14 @@ const routes: Routes = [
     { path: '', component: HomePageComponent },
     { path: 'home/:msg', component: HomePageComponent },
     { path: 'home', component: HomePageComponent },
-    { path: 'error', component: ErrorPageComponent },
     { path: 'channel/:name/:streamId', component: ChannelPageComponent },
     { path: 'channel/:name', component: ChannelPageComponent },
     { path: '*', redirectTo: '/home', pathMatch: 'full' },
+    { path: 'error', component: ErrorPageComponent },
 ];
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

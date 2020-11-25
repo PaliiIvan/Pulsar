@@ -1,6 +1,6 @@
 <div class="uk-card uk-card-default">
     <div class="stream__preview_border">
-        <img [src]="chanel.previewImage" />
+        <img [src]="chanel.previewImage" (error)="changeDefaultStreamPreview($event)" />
     </div>
     <div class="uk-card-footer">
         {{ chanel.channelName }}

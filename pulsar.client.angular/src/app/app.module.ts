@@ -41,6 +41,7 @@ import { ConfirmEmailComponent } from './components/confirm-email/confirm-email.
 import { MatDividerModule } from '@angular/material/divider';
 import { FinishStreamModalComponent } from './components/stream/finish-stream-modal/finish-stream-modal.component';
 import { SavedStreamPageComponent } from './pages/saved-stream-page/saved-stream-page.component';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -86,7 +87,7 @@ import { SavedStreamPageComponent } from './pages/saved-stream-page/saved-stream
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,
             multi: true,
-        },
+        }
     ],
     bootstrap: [AppComponent],
 })
