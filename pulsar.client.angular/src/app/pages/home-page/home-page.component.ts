@@ -30,10 +30,18 @@ export class HomePageComponent implements OnInit {
     ngOnInit() {
         this.channelService
             .getOnlineChannels()
-            .subscribe((channels) => (this.channels = channels));
+            .subscribe((channelsResponse) => {
+                if (channelsResponse.isSuccess) {
+                    this.channels = channelsResponse.data;
+                }
+            });
 
         this.streamService
             .getSavedStreams()
-            .subscribe((data) => (this.savedStreams = data));
+            .subscribe((savedStreamsResponse) => {
+                if (savedStreamsResponse.isSuccess) {
+                    this.savedStreams = savedStreamsResponse.data;
+                }
+            });
     }
 }

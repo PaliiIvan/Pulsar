@@ -15,6 +15,7 @@ import { VerifyEmailMessageComponent } from '../authentication/email-verificatio
 import { StreamService } from '../../services/stream/stream.service';
 import { FinishStreamModalComponent } from '../stream/finish-stream-modal/finish-stream-modal.component';
 import { SignupComponent } from '../authentication/signup/signup.component';
+import { StreamInitComponent } from '../stream/stream-init/stream-init.component';
 
 @Component({
     selector: 'app-nav-bar',
@@ -80,7 +81,7 @@ export class NavBarComponent implements OnInit {
     }
 
     showStreamInitModal() {
-
+        this.streamMenuDialog = this.dialog.open(StreamInitComponent);
     }
 
     showAuthModal() {

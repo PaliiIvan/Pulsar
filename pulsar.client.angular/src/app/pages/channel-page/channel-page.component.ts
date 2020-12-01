@@ -17,8 +17,8 @@ export class ChannelPageComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private channelService: ChannelService
-    ) {}
-    isChatReomoved = false;
+    ) { }
+    isChatRemoved = false;
     channel: any;
     socket: SocketIOClient.Socket = io(`localhost:8081`);
     ChannelGoOfflineEvent = new EventEmitter<boolean>();
@@ -30,7 +30,11 @@ export class ChannelPageComponent implements OnInit {
             const streamId = param.get('streamId');
             this.channelService
                 .getChannelByNameWithStream(channelName, streamId)
-                .subscribe((channel) => (this.channel = channel));
+                .subscribe((channelResponse) => {
+                    if (channelResponse.isSuccess) {
+                        this.channel = channelResponse.data;
+                    }
+                });
 
             this.socket.on(`${channelName}_offline_mode`, (msg) => {
                 this.ChannelGoOfflineEvent.emit(true);
@@ -42,9 +46,9 @@ export class ChannelPageComponent implements OnInit {
     @HostListener('window:resize', ['$event'])
     onResize() {
         if (window.innerWidth < 900) {
-            this.isChatReomoved = true;
+            this.isChatRemoved = true;
         } else {
-            this.isChatReomoved = false;
+            this.isChatRemoved = false;
         }
     }
 }

@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { ResponseResult } from '../api.models/response.model';
 import { StreamService } from '../services';
 
 import * as channelService from '../services/channel.service';
@@ -15,7 +16,7 @@ export async function postCreateChannel(req: Request, res: Response, next: NextF
     logger.info('Create Channel', { userId, channelName });
     try {
         const createdChannel = await channelService.createChannel(userId, channelName);
-        res.json(createdChannel);
+        res.json(new ResponseResult(createdChannel));
     } catch (err) {
         return next(err);
     }
@@ -40,7 +41,7 @@ export async function getChannelByName(req: Request, res: Response, next: NextFu
             channel = await channelService.getChannel({ channelName: channelName });
         }
 
-        res.json(channel);
+        res.json(new ResponseResult(channel));
     } catch (err) {
         return next(err);
     }
@@ -52,13 +53,12 @@ export async function getChannelByName(req: Request, res: Response, next: NextFu
  *
  */
 export async function getCurrentChannel(req: Request, res: Response, next: NextFunction) {
-    const userId = req.user?.id;
-
-    logger.info('Get channel by user id', { userId });
+    logger.info('Get channel by user id', { user: req.user?.id });
 
     try {
-        const channel = await channelService.getChannelByUserId(userId!);
-        res.json(channel);
+
+        const channel = await channelService.getChannelByUserId(req.user?.id!);
+        res.json(new ResponseResult(channel));
     } catch (err) {
         return next(err);
     }
@@ -73,7 +73,7 @@ export async function getOnlineChannels(req: Request, res: Response, next: NextF
     logger.info('Get online channels');
     try {
         const channels = await channelService.getOnlineChannels();
-        res.json(channels);
+        res.json(new ResponseResult(channels));
     } catch (err) {
         return next(err);
     }

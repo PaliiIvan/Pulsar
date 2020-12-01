@@ -2,14 +2,14 @@ export class Comment {
     userId: string;
     userName: string;
     comment: string;
-    streamTime: Date;
+    streamDuration: number;
     dateTime: Date;
 
-    constructor(commentData: { userId: string, comment: string, streamTime: Date, userName: string }) {
+    constructor(commentData: { userId: string, comment: string, streamDuration: number, userName: string }) {
         this.userId = commentData.userId;
         this.userName = commentData.userName;
         this.comment = commentData.comment;
-        this.streamTime = commentData.streamTime;
+        this.streamDuration = commentData.streamDuration;
         this.dateTime = new Date();
     }
 }

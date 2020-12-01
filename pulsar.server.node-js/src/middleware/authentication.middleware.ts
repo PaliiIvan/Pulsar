@@ -17,7 +17,7 @@ export async function useAuthentication(req: Request, res: Response, next: NextF
             const authResult = await axios.post(`http://localhost:3001/authenticate-server-user`, { token: authToken })
 
             if (authResult.status === 200 && authResult.data != null) {
-                req.user = authResult.data;
+                req.user = authResult.data.data;
                 authContext.setUser(authResult.data);
                 logger.info('User checked', authResult.data);
             } else {

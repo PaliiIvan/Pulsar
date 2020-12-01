@@ -10,6 +10,8 @@ import {
 } from '@angular/core';
 import { element } from 'protractor';
 import * as HLS from 'hls.js';
+import { StreamService } from '../../../services/stream/stream.service';
+import { StreamPlayerService } from '../../../services/stream/stream-player.service';
 
 @Component({
     selector: 'app-stream-player',
@@ -18,7 +20,7 @@ import * as HLS from 'hls.js';
 })
 export class StreamPlayerComponent
     implements OnInit, AfterContentInit, OnDestroy {
-    constructor() {}
+    constructor(private streamService: StreamService, private streamPlayerService: StreamPlayerService) { }
     isVideoHeightStatic = false;
     changedWidth = 0;
     isStopped = false;
@@ -28,36 +30,42 @@ export class StreamPlayerComponent
     @Input() isOnline: boolean;
 
     videoElement: HTMLMediaElement;
-    isEmailConfirmationMessage = false;
-    hls: HLS;
-    HlsEvents = HLS.Events;
+    // hls: HLS;
+    // HlsEvents = HLS.Events;
+
     ngAfterContentInit() {
+        // console.log(this.channelSource);
+
         this.videoElement = document.getElementById(
             'videoP'
         ) as HTMLMediaElement;
-        this.hls = new HLS();
-        this.hls.loadSource(this.channelSource);
-        this.hls.attachMedia(this.videoElement);
+        // this.hls = new HLS();
+        // this.hls.loadSource(this.channelSource);
+        // this.hls.attachMedia(this.videoElement);
 
-        // this.videoElement.addEventListener('timeupdate', (event) =>
-        //     console.log(event)
+        // this.videoElement.addEventListener('timeupdate', (eventData: any) =>
+        //     this.streamService.streamTimeUpdateEvent.emit(eventData.target.currentTime)
         // );
 
         // this.videoElement.addEventListener('ended', (event) => {
         //     console.log('--------STOP-------');
         // });
 
-        this.hls.on(this.HlsEvents.MANIFEST_PARSED, () =>
-            this.videoElement.click()
-        );
+        // this.hls.on(this.HlsEvents.MANIFEST_PARSED, () =>
+        //     this.videoElement.click()
+        // );
+        this.streamPlayerService.init(this.channelSource, this.videoElement);
+        this.streamPlayerService.startVideo();
+
     }
 
     ngOnInit(): void {
         this.ChannelGoOfflineEvent.subscribe((event) => {
-            this.hls.destroy();
-            this.videoElement.pause();
-            this.videoElement.removeAttribute('src');
-            this.videoElement.load();
+            // this.hls.destroy();
+            // this.videoElement.pause();
+            // this.videoElement.removeAttribute('src');
+            // this.videoElement.load();
+            this.streamPlayerService.stopVideo();
             this.isOnline = false;
             this.isStopped = true;
         });
@@ -73,6 +81,6 @@ export class StreamPlayerComponent
     }
 
     ngOnDestroy() {
-        this.hls.destroy();
+        this.streamPlayerService.stopVideo();
     }
 }

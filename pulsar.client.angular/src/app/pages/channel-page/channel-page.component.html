@@ -1,6 +1,6 @@
 <div
     class="stream_grid_container"
-    [ngClass]="{ stream_grid_container_without_chat: isChatReomoved }"
+    [ngClass]="{ stream_grid_container_without_chat: isChatRemoved }"
     *ngIf="channel"
 >
     <div class="item-1">
@@ -10,10 +10,12 @@
             [isOnline]="channel.isOnline"
         ></app-stream-player>
     </div>
-    <div *ngIf="!isChatReomoved" class="item-2">
+    <div *ngIf="!isChatRemoved" class="item-2">
         <app-chat
             [ChannelGoOfflineEvent]="ChannelGoOfflineEvent"
             [channelName]="channel.channelName"
+            [isOnline]="channel.isOnline"
+            [offlineComments]='channel.currentStream.comments'
         ></app-chat>
     </div>
     <div class="item-3">
@@ -23,7 +25,7 @@
         >
         </app-stream-description>
     </div>
-    <div *ngIf="!isChatReomoved" class="item-4">
+    <div *ngIf="!isChatRemoved" class="item-4">
         <app-chat-forms
             [ChannelGoOfflineEvent]="ChannelGoOfflineEvent"
             [channelName]="channel.channelName"

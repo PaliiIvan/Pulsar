@@ -2,6 +2,7 @@ import { StreamService, ChannelService } from '../services';
 import { NextFunction, Request, Response } from 'express';
 import { Comment } from '../api.models/comment';
 import logger from '../utils/loging';
+import { ResponseResult } from '../api.models/response.model';
 /**
  * [POST]
  * Add comment to stream
@@ -12,7 +13,7 @@ export async function postComment(req: Request, res: Response, next: NextFunctio
         const commentData = req.body.comment;
         const comment = new Comment({ ...commentData });
         await StreamService.addCommentToStream(channelName, comment);
-        res.json(null).status(200);
+        res.json(new ResponseResult(null)).status(200);
         return next();
     } catch (err) {
         console.log(err);
@@ -29,7 +30,7 @@ export async function getComment(req: Request, res: Response, next: NextFunction
     try {
         const comments = await StreamService.getComments(channelName);
 
-        res.json(comments);
+        res.json(new ResponseResult(comments));
         return next();
     } catch (err) {
         return next(err);
@@ -44,7 +45,7 @@ export async function initiateStream(req: Request, res: Response, next: NextFunc
     const streamTitle = req.body.title;
     try {
         await StreamService.initiateStream(streamTitle, req.user?.id);
-        res.json(null);
+        res.json(new ResponseResult(null));
     } catch (err) {
         return next(err);
     }
@@ -64,7 +65,7 @@ export async function postFinishStream(req: Request, res: Response, next: NextFu
     }
     try {
         await StreamService.finishStream(userId, save);
-        res.json({});
+        res.json(new ResponseResult(null));
     } catch (err) {
         return next(err);
     }
@@ -80,7 +81,7 @@ export async function getOfflineStreams(req: Request, res: Response, next: NextF
 
     try {
         const streams = await StreamService.getOfflineStreams();
-        res.json(streams);
+        res.json(new ResponseResult(streams));
     } catch (err) {
         return next(err);
     }
