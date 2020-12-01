@@ -38,7 +38,7 @@ export async function addCommentToStream(channelName: string, commentData: Comme
     }
     streamDuration = Date.now() - channel.currentStream.startDate.getTime();
 
-    commentData.streamDuration = channel.currentStream.startDate.getTime() + streamDuration;
+    commentData.streamDuration = streamDuration;
     channel.currentStream.comments?.push(commentData);
     SocketService.sendComments(channelName, commentData);
     channel.save();

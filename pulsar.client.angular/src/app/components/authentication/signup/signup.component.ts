@@ -7,7 +7,7 @@ import { AppState } from '../../../global-store/app.reducer';
 import { ChannelService } from '../../../services/channel/channel.service.service';
 
 import * as fromAuthActions from '../_store/authentication.actions';
-import { AuthErrorMessage, User } from '../../../models';
+import { AuthErrorMessage, Channel, User } from '../../../models';
 
 @Component({
     selector: 'app-signup',
@@ -72,8 +72,17 @@ export class SignupComponent implements OnInit {
 
         this.authService.logIn(email, password).subscribe(response => {
             if (response.isSuccess) {
-                console.log(response);
                 this.store.dispatch(fromAuthActions.storeUser({ user: response.data }));
+                this.channelService.getCurrentChannel().subscribe(channelResponse => {
+                    if (channelResponse.isSuccess) {
+                        this.store.dispatch(fromAuthActions.storeUserChannel({ channel: channelResponse.data }));
+                    } else {
+                        this.loginResultMessage = {
+                            showMessage: true,
+                            message: response.data.message
+                        };
+                    }
+                });
             } else {
                 this.loginResultMessage = {
                     showMessage: true,

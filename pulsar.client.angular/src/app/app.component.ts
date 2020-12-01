@@ -7,6 +7,7 @@ import { AppState } from './global-store/app.reducer';
 import { User } from './models';
 
 import * as fromAuthActions from './components/authentication/_store/authentication.actions';
+import { ChannelService } from './services/channel/channel.service.service';
 
 
 @Component({
@@ -16,7 +17,7 @@ import * as fromAuthActions from './components/authentication/_store/authenticat
 })
 export class AppComponent implements OnInit {
   title = 'Pulsar';
-  constructor(private authService: AuthenticationService, private store: Store<AppState>) { }
+  constructor(private authService: AuthenticationService, private store: Store<AppState>, private channelService: ChannelService) { }
 
   ngOnInit(): void {
 
@@ -30,6 +31,11 @@ export class AppComponent implements OnInit {
       if (user !== null) {
         this.startTimer(user.token, user.tokenExpDate);
         this.saveUserToLocalStore(user);
+        this.channelService.getCurrentChannel().subscribe(channelResponse => {
+          if (channelResponse.isSuccess) {
+            this.store.dispatch(fromAuthActions.storeUserChannel({ channel: channelResponse.data }));
+          }
+        });
       }
     });
   }

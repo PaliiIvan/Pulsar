@@ -17,7 +17,7 @@ export const clearAuthStore = createAction('[Auth] Clear Auth Sotre');
 
 //#region Channel Auth Actions
 
-export const storeUserChannal = createAction(
+export const storeUserChannel = createAction(
     '[User Auth] Load user channel',
     props<{ channel: Channel }>()
 );

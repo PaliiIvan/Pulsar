@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../global-store/app.reducer';
 
 import * as io from 'socket.io-client';
+import { StreamPlayerService } from '../../../services/stream/stream-player.service';
 
 @Component({
     selector: 'app-chat-forms',
@@ -24,7 +25,8 @@ export class ChatFormsComponent implements OnInit {
     socket: SocketIOClient.Socket = io(`localhost:8081`);
     constructor(
         private streamService: StreamService,
-        private store: Store<AppState>
+        private store: Store<AppState>,
+        private streamPlayerService: StreamPlayerService
     ) { }
 
     chatMessageForm = new FormGroup({
@@ -40,6 +42,12 @@ export class ChatFormsComponent implements OnInit {
             this.isOnline = event;
             this.chatMessageForm.disable();
         });
+
+        if (!this.isOnline) {
+            this.chatMessageForm.controls.message.disable();
+        }
+
+
     }
 
     sendComment() {
@@ -51,14 +59,15 @@ export class ChatFormsComponent implements OnInit {
                     userId: user.id,
                     userName: user.login,
                     comment,
-                    streamTime: new Date(),
+                    streamDuration: null,
                 });
-                this.socket.emit(this.channelName, commentObj);
+
                 this.streamService
                     .addComment(this.channelName, commentObj)
                     .subscribe(() => {
                         this.chatMessageForm.reset();
                     });
+                this.socket.emit(this.channelName, commentObj);
             });
     }
 }
