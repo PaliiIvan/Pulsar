@@ -51,9 +51,12 @@ export class NavBarComponent implements OnInit {
                 const emailToken = params.get('token');
                 console.log(userId, emailToken);
 
+                this.authService.confirmEmail(userId, emailToken).subscribe(resp => {
+
+                })
                 this.emailVerificationDialog = this.dialog.open(
                     VerifyEmailMessageComponent,
-                    { data: { userId, emailToken } }
+                    { data: { userId, emailToken, close: () => this.emailVerificationDialog.close() } }
                 );
                 this.emailVerificationDialog
                     .beforeClosed()

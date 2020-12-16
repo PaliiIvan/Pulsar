@@ -3,8 +3,8 @@ import logger from '../utils/loging';
 import { UnAuthorizedError, NotFoundError } from '../utils/errors/server.errors';
 import os from 'os';
 export function errorHandling(err: any, req: Request, res: Response, next: any) {
+
     logger.error('', err);
-    logger.error('Url');
 
     if (err instanceof UnAuthorizedError) {
         res.status(403).json(err);

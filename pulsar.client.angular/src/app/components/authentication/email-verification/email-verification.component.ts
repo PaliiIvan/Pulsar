@@ -15,6 +15,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 interface ModalData {
     userId: string;
     emailToken: string;
+    close: () => void
 }
 
 @Component({
@@ -39,6 +40,7 @@ export class VerifyEmailMessageComponent implements OnInit {
             .subscribe(response => {
                 if (response.isSuccess) {
                     setTimeout(() => {
+                        this.emailData.close();
                         this.router.navigate(['']);
                     }, 1000);
                 } else {

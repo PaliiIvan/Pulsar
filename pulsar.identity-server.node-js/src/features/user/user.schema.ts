@@ -2,7 +2,7 @@ import { Schema, model, Document } from "mongoose";
 import UserAccount from "./user.model";
 
 interface UserAccountsSchemaModel extends UserAccount, Document {
-   
+
 }
 
 const userAccountSchemaDef = new Schema({

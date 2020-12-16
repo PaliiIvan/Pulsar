@@ -1,11 +1,8 @@
 import * as channelRepo from '../features/channel/channel.repository';
-import * as streamRepo from '../features/stream/stream.repository';
-import jwt from 'jsonwebtoken';
-import { STREAM_SECRET_KEY } from '../configs/secrets';
-import logger from '../utils/loging';
 import { ChannelPreview } from '../api.models/channel-preview';
 import { NotFoundError } from '../utils/errors/server.errors';
-import uuid from 'uuid';
+import * as uuid from 'uuid';
+import * as secrets from "../configs/secrets";
 
 export async function createChannel(userId: string, channelName: string) {
     const streamToken = uuid.v1() + '__';
@@ -15,7 +12,12 @@ export async function createChannel(userId: string, channelName: string) {
 
 export async function getChannelByUserId(userId: string) {
     const channel = await channelRepo.getChannelByUserId(userId);
-    return channel;
+    const streamServer = secrets.STREAM_SERVER_URL;
+    const streamFormat = '.m3u8';
+    const channelDto = channel.toObject();
+
+    channelDto.streamToken = `${streamServer}/${channel.streamToken}${streamFormat}`
+    return channelDto;
 }
 
 export async function getOnlineChannels() {
@@ -23,7 +25,7 @@ export async function getOnlineChannels() {
         isOnline: true,
         currentStream: { $ne: null },
     });
-    const streamServer = 'https://localhost:5001/online/';
+    const streamServer = `${secrets.STREAM_SERVER_URL}/online/`;
     const streamsPreview = onlineChannels.map((channel) => {
         if (channel.currentStream) {
             return new ChannelPreview(
@@ -40,7 +42,7 @@ export async function getOnlineChannels() {
 
 export async function getChannel(query: any) {
     const channel = await channelRepo.getChannel(query);
-    const streamServer = 'https://localhost:5001/online/';
+    const streamServer = `${secrets.STREAM_SERVER_URL}/online/`;
 
     if (channel == null) {
         throw new NotFoundError('Channel not found');

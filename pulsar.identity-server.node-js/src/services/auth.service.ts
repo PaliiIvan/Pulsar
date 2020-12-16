@@ -36,11 +36,13 @@ export async function signUp(email: string, login: string, password: string) {
 
         if (result[0].statusCode == 202) {
             logger.info("Email sended");
-            return new SignUpResult("Account was created and confirmation link was &#10; send to you email. Please confirm you email");
+            return new SignUpResult("Account was created and confirmation link was send to you email. Please confirm you email", createdUser.id, createdUser.login);
         } else {
             logger.error("Email sending Error",);
             throw new ServerError("Email Sending Error", { email: email });
         }
+
+
     } catch (err) {
         const removeResult = await userRepo.removeUser(createdUser.id);
         throw err;
@@ -107,7 +109,7 @@ export async function checkUserToken(token: string) {
     logger.info("Checking User Token in process");
 
     try {
-        const verifuResult = jwt.verify(token, AUTH_SECRET_KEY);
+        const verifyResult = jwt.verify(token, AUTH_SECRET_KEY);
         const decodedToken = jwt.decode(token);
         const userId = decodedToken["userId"];
 
@@ -137,7 +139,7 @@ export async function regenerateToken(token: string) {
 
     const decodedToken = jwt.decode(token);
     const userId = decodedToken["id"];
-    const tokenExparationDateInMs = new Date().getTime() + constants.TOKEN_EXPIRATION * 1000;
+    const tokenExpirationDateInMs = new Date().getTime() + constants.TOKEN_EXPIRATION * 1000;
     const user = await userRepo.findOne({ _id: userId, IsConfirmed: true });
 
     if (user == null)
@@ -149,7 +151,7 @@ export async function regenerateToken(token: string) {
     }, AUTH_SECRET_KEY, { expiresIn: constants.TOKEN_EXPIRATION });
 
     logger.info("Regeneration Token finished ");
-    return new User(user.id, user.login, user.email, jsonWebToken, tokenExparationDateInMs);
+    return new User(user.id, user.login, user.email, jsonWebToken, tokenExpirationDateInMs);
 
 }
 
