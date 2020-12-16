@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import axios from "axios";
 
-import { IDENTITY_URL } from "../configs/secrets";
+import * as secrets from "../configs/secrets";
 import { User } from "../authentication/identity-user";
 import { UnAuthorizedError } from "../utils/errors/server.errors";
 
@@ -14,7 +14,7 @@ export async function useAuthentication(req: Request, res: Response, next: NextF
 
     if (authToken != null) {
         try {
-            const authResult = await axios.post(`http://localhost:3001/authenticate-server-user`, { token: authToken })
+            const authResult = await axios.post(`${secrets.IDENTITY_URL}/authenticate-server-user`, { token: authToken })
 
             if (authResult.status === 200 && authResult.data != null) {
                 req.user = authResult.data.data;

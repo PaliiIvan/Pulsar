@@ -9,18 +9,21 @@ using StreamInterfaces;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Options;
+using Utils;
+
 namespace StreamServices
 {
     public class StreamService : IStreamService
     {
-
-        private readonly ITokenValidationService _tokenValidationService;
         private readonly MongoClient _mongoClient;
         private readonly IMongoDatabase _userDb;
-        public StreamService(ITokenValidationService tokenValidationService, ILogger<TokenValidationService> logger)
+        private readonly IOptions<SecretKeys> _secretKeys;
+
+        public StreamService(ILogger<TokenValidationService> logger, IOptions<SecretKeys> secretKeys)
         {
-            _tokenValidationService = tokenValidationService;
-            _mongoClient = new MongoClient("mongodb://127.0.0.1:27017/Pulsar");
+            _secretKeys = secretKeys;
+            _mongoClient = new MongoClient(secretKeys.Value.MongoDbConnectionUrl);
             _userDb = _mongoClient.GetDatabase("Pulsar");
         }
         public void StartStream(string stream, HttpResponse Response, HttpRequest Request)
@@ -29,6 +32,8 @@ namespace StreamServices
 
 
             var channelsCollection = _userDb.GetCollection<Channel>("channels");
+
+
             var filter = Builders<Channel>.Filter.Eq(channel => channel.streamToken, token);
 
             var currentChannel = channelsCollection.Find(filter).FirstOrDefault();

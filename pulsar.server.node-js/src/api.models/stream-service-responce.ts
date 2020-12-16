@@ -1,4 +1,4 @@
-export class StreamServiceResponce {
+export class StreamServiceResponse {
     status: boolean;
     message: string;
 

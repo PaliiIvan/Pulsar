@@ -49,9 +49,8 @@ export class SignupComponent implements OnInit {
         const password = this.signUpForm.get('password').value;
         const repeatPassword = this.signUpForm.get('repeatPassword').value;
         this.authService.signUp(email, logIn, password, repeatPassword).subscribe(response => {
-            console.log(response);
             if (response.isSuccess) {
-                console.log(response);
+                this.channelService.createChannel(response.data.id, response.data.login).subscribe(console.log);
 
                 this.signUpResultMessage = {
                     showMessage: true,

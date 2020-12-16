@@ -1,8 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import * as auhtMiddleware from './middleware/authentication.middleware';
-
+import * as authMiddleware from './middleware/authentication.middleware';
+import * as secrets from './configs/secrets';
 import { ChannelRouter } from './routes/chanal.routes';
 import { StreamRouter } from './routes/stream.routes';
 import { errorHandling } from './middleware/application-error.middleware';
@@ -35,11 +35,11 @@ app.set('port', 8081);
 
 //#endregion
 
-//#region Middlevare
+//#region Middleware
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(auhtMiddleware.useAuthentication);
+app.use(authMiddleware.useAuthentication);
 
 //#endregion
 
@@ -56,9 +56,10 @@ app.use(errorHandling);
 //#endregion
 
 mongoose
-    .connect('mongodb://127.0.0.1:27017/Pulsar', {
+    .connect(secrets.MONGODB_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        dbName: 'Pulsar'
     })
     .then(() => {
         console.log('MongoDb: Connected');

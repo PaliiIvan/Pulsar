@@ -5,7 +5,7 @@ import * as channelController from '../controller/channel.controller';
 
 const router = Router();
 
-router.post('/', isAuthenticated, channelController.postCreateChannel);
+router.post('/', channelController.postCreateChannel);
 router.get('/current', isAuthenticated, channelController.getCurrentChannel);
 router.get('/online-channels', channelController.getOnlineChannels);
 router.get('/channel/:name/:stream?', channelController.getChannelByName);

@@ -35,7 +35,7 @@ namespace StreamServices
             services.AddSingleton<ITokenValidationService, TokenValidationService>();
             services.AddScoped<IStreamService, StreamService>();
             services.Configure<SecretKeys>(Configuration.GetSection("SecretKeys"));
-
+            services.Configure<Constants>(Configuration.GetSection("Constants"));
 
             services.Configure<KestrelServerOptions>(options =>
             {

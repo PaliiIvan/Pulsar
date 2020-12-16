@@ -1,7 +1,7 @@
 import { Schema, Types, model, Document } from 'mongoose';
 import { Stream } from './stream.model';
 
-interface StreamSchemaModel extends Stream, Document {}
+interface StreamSchemaModel extends Stream, Document { }
 
 export const streamSchemaDef = new Schema(
     {

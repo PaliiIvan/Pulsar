@@ -17,8 +17,6 @@ export class StreamInitComponent implements OnInit {
     isCopied = false;
     isStreamCreated = false;
 
-    streamServer = 'https://localhost:5001/';
-    streamFormat = '.m3u8';
 
     constructor(
         private store: Store<AppState>,
@@ -33,11 +31,11 @@ export class StreamInitComponent implements OnInit {
                 this.streamForm = new FormGroup({
                     streamName: new FormControl(''),
                     streamToken: new FormControl({
-                        value: `${this.streamServer}${streamToken}${this.streamFormat}`,
+                        value: streamToken,
                         disabled: true,
                     }),
                 });
-                this.token = `${this.streamServer}${streamToken}${this.streamFormat}`;
+                this.token = streamToken;
             });
     }
 

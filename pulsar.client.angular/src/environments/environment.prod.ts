@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  identityServerUrl: 'https://pulsar-idetity-server.azurewebsites.net',
+  apiUrl: 'https://pulsar-main-server.azurewebsites.net'
 };

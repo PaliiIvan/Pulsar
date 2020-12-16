@@ -2,8 +2,8 @@ import { channelSchema } from '../features/channel/channel.schema';
 import { Comment } from '../api.models/comment';
 import { SocketService, ChannelService, StreamService } from '../services';
 import axios, { AxiosResponse } from 'axios';
-import { STREM_SERVER_URL } from '../configs/secrets';
-import { ChannelPreview, StreamServiceResponce } from '../api.models';
+import * as secrets from '../configs/secrets';
+import { ChannelPreview, StreamServiceResponse } from '../api.models';
 import * as streamRepo from '../features/stream/stream.repository';
 import * as channelRepo from '../features/channel/channel.repository';
 import { NotFoundError } from '../utils/errors/server.errors';
@@ -12,13 +12,13 @@ import { Channel } from '../features/channel/channel.model';
 import { StreamSchema } from '../features/stream/stream.schema';
 import { Stream } from '../features/stream/stream.model';
 
-export async function initiateStream(streamTitile: string, userId?: string) {
+export async function initiateStream(streamTitle: string, userId?: string) {
     if (!userId) throw Error('UserId null');
 
     const channel = await ChannelService.getChannelByUserId(userId);
 
     const stream = new StreamSchema({
-        title: streamTitile,
+        title: streamTitle,
         id: Types.ObjectId(),
         channelId: channel.id,
     });
@@ -82,8 +82,8 @@ export async function getSavedStreams() {
 }
 
 async function saveStream(channel: Channel) {
-    const result = await axios.post<StreamServiceResponce>(
-        STREM_SERVER_URL,
+    const result = await axios.post<StreamServiceResponse>(
+        secrets.STREAM_SERVER_URL,
         {},
         {
             params: {
@@ -101,9 +101,9 @@ async function saveStream(channel: Channel) {
 }
 
 async function deleteStream(channel: Channel) {
-    let result: AxiosResponse<StreamServiceResponce>;
+    let result: AxiosResponse<StreamServiceResponse>;
     try {
-        result = await axios.delete<StreamServiceResponce>(STREM_SERVER_URL, {
+        result = await axios.delete<StreamServiceResponse>(secrets.STREAM_SERVER_URL, {
             params: {
                 channel: channel.channelName,
                 streamId: channel.currentStream?.id,
@@ -119,7 +119,7 @@ async function deleteStream(channel: Channel) {
 
 export async function getStream(id: string) {
     let channelWithOfflineStream: any;
-    const streamServer = 'https://localhost:5001/saved/';
+    const streamServer = `${secrets.STREAM_SERVER_URL}/saved/`;
     try {
         const stream = await streamRepo.getStream(id);
         if (stream == null) throw new NotFoundError(`Stream with id: ${id} not found`);
@@ -142,7 +142,7 @@ export async function getStream(id: string) {
 
 export async function getOfflineStreams() {
     const savedStreams = await StreamService.getSavedStreams();
-    const streamServer = 'https://localhost:5001/saved/';
+    const streamServer = `${secrets.STREAM_SERVER_URL}/saved/`;
     const streamsPreview = savedStreams.map((savedStream) => {
         return new ChannelPreview(
             (<Channel>savedStream.channel).id,
