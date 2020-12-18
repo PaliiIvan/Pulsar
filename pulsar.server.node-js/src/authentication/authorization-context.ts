@@ -1,6 +1,6 @@
-import { User } from "./identity-user";
-import { NextFunction, Request, Response } from "express";
-import { UnAuthorizedError } from "../utils/errors/server.errors";
+import { User } from './identity-user';
+import { NextFunction, Request, Response } from 'express';
+import { UnAuthorizedError } from '../utils/errors/server.errors';
 
 let currentUser: User;
 

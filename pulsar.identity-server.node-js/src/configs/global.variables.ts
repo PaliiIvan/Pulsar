@@ -2,7 +2,6 @@
 
 export const constants = {
     CONFIRMATION_EMAIL_LINK: "http://{0}/home/?scope=confirm-email&id={1}&token={2}",
-    CLIENT_URL: "localhost:4200",
     TOKEN_EXPIRATION: 3600
 };
 

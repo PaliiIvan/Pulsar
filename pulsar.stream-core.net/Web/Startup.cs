@@ -65,15 +65,16 @@ namespace StreamServices
             // Add new mappings
             provider.Mappings[".m3u8"] = "application/x-mpegURL";
 
-            var pathForStreamFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var directoryToSave = Directory.CreateDirectory(Path.Combine(pathForStreamFolder, "pulsar_streams")).FullName;
+            Directory.CreateDirectory("wwwroot/pulsar_streams/online");
+            var directory = Directory.CreateDirectory("wwwroot/pulsar_streams");
+            var directoryToSave = Path.Combine("", "");
 
-            Console.WriteLine(pathForStreamFolder);
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(directoryToSave),
+                FileProvider = new PhysicalFileProvider(directory.FullName),
                 ContentTypeProvider = provider
             });
+            //app.UseStaticFiles();
 
             app.UseRouting();
 

@@ -19,11 +19,11 @@ export class ValidationException extends Error implements ErrorMetadata {
     description: string;
     statusCode: number;
 
-    constructor(errors: ValidationError[] | { property: string, message: string }[]) {
+    constructor(errors: ValidationError[] | { property: string; message: string }[]) {
         super("Validation Error");
 
 
-        if ('param' in errors[0]) {
+        if ("param" in errors[0]) {
             this.metadata = errors[0].msg;
         } else {
             this.metadata = errors[0];

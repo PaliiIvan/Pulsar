@@ -1,12 +1,12 @@
-import { NextFunction, Request, Response } from "express";
-import axios from "axios";
+import { NextFunction, Request, Response } from 'express';
+import axios from 'axios';
 
-import * as secrets from "../configs/secrets";
-import { User } from "../authentication/identity-user";
-import { UnAuthorizedError } from "../utils/errors/server.errors";
+import * as secrets from '../configs/secrets';
+import { User } from '../authentication/identity-user';
+import { UnAuthorizedError } from '../utils/errors/server.errors';
 
-import logger from "../utils/loging";
-import * as authContext from "../authentication/authorization-context";
+import logger from '../utils/loging';
+import * as authContext from '../authentication/authorization-context';
 
 export async function useAuthentication(req: Request, res: Response, next: NextFunction) {
 
@@ -14,7 +14,7 @@ export async function useAuthentication(req: Request, res: Response, next: NextF
 
     if (authToken != null) {
         try {
-            const authResult = await axios.post(`${secrets.IDENTITY_URL}/authenticate-server-user`, { token: authToken })
+            const authResult = await axios.post(`${secrets.IDENTITY_URL}/authenticate-server-user`, { token: authToken });
 
             if (authResult.status === 200 && authResult.data != null) {
                 req.user = authResult.data.data;
@@ -30,7 +30,7 @@ export async function useAuthentication(req: Request, res: Response, next: NextF
         } catch (err) {
             req.user = null;
             logger.error('Request to Identity server failed  ', err);
-            return next(new UnAuthorizedError())
+            return next(new UnAuthorizedError());
         }
     } else {
         req.user = null;

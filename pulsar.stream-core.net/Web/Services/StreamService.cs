@@ -54,7 +54,7 @@ namespace StreamServices
             var streamIsInPandingStatus = currentChannel.pending;
 
             var userDirectoryPath = $"{currentChannel.channelName}/{channelStreamObjId}/";
-            string fullDirectoryPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/pulsar_streams/online/{userDirectoryPath}";
+            string fullDirectoryPath = $"wwwroot/pulsar_streams/online/{userDirectoryPath}";
             if (streamIsInPandingStatus)
             {
                 var update = Builders<Channel>
@@ -67,7 +67,7 @@ namespace StreamServices
 
                 channelsCollection.UpdateOne(filter, update);
                 currentChannel.isOnline = true;
-                Directory.CreateDirectory($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/pulsar_streams/online/{userDirectoryPath}");
+                Directory.CreateDirectory($"wwwroot/pulsar_streams/online/{userDirectoryPath}");
             }
 
 
@@ -151,8 +151,8 @@ namespace StreamServices
 
             try
             {
-                var streamFolder = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/pulsar_streams/online/{channelName}/{streamId}";
-                var savedStreamsFolder = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/pulsar_streams/saved/{channelName}/{streamId}";
+                var streamFolder = $"wwwroot/pulsar_streams/online/{channelName}/{streamId}";
+                var savedStreamsFolder = $"wwwroot/pulsar_streams/saved/{channelName}/{streamId}";
 
                 CopyFiles(streamFolder, savedStreamsFolder);
                 GenerateFullIndexList(savedStreamsFolder);

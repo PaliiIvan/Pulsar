@@ -7,7 +7,7 @@ import { AppState } from '../../../global-store/app.reducer';
 
 import * as io from 'socket.io-client';
 import { StreamPlayerService } from '../../../services/stream/stream-player.service';
-
+import { environment } from '../../../../environments/environment';
 @Component({
     selector: 'app-chat-forms',
     templateUrl: './chat-forms.component.html',
@@ -22,7 +22,7 @@ export class ChatFormsComponent implements OnInit {
 
     @Input()
     isOnline: boolean;
-    socket: SocketIOClient.Socket = io(`localhost:8081`);
+    socket: SocketIOClient.Socket = io(environment.apiUrl);
     constructor(
         private streamService: StreamService,
         private store: Store<AppState>,

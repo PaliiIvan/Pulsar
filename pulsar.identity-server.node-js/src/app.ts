@@ -5,17 +5,17 @@ import mongoose from "mongoose";
 import logger from "./util/logger";
 import { errorHandling } from "./middleware/application-error.middleware";
 import { AuthRouters } from "./routes/auth.routes";
-import * as secrets from './configs/secrets';
+import * as secrets from "./configs/secrets";
 
 const app = express();
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader(
-        'Access-Control-Allow-Methods',
-        'OPTIONS, GET, POST, PUT, PATCH, DELETE'
+        "Access-Control-Allow-Methods",
+        "OPTIONS, GET, POST, PUT, PATCH, DELETE"
     );
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
     next();
 });
 
@@ -30,12 +30,12 @@ app.use(AuthRouters);
 app.use(errorHandling);
 
 
-
+console.log(secrets.MONGODB_URI)
 mongoose.connect(secrets.MONGODB_URI,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        dbName: 'Pulsar'
+        dbName: "Pulsar"
     })
     .then(res => {
         console.log("MongoDb status: Succes");

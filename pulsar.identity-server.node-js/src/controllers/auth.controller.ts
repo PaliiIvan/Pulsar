@@ -78,7 +78,7 @@ export async function regenerateToken(req: Request, res: Response, next: NextFun
     const token = req.body.token;
 
     try {
-        const tokenRegenerationResult = await authService.regenerateToken(token)
+        const tokenRegenerationResult = await authService.regenerateToken(token);
         res.json(new ResponseResult(tokenRegenerationResult));
     } catch (err) {
         return next(err);

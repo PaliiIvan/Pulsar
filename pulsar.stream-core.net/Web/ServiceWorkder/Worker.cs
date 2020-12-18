@@ -13,7 +13,7 @@ namespace StreamPreviewServiceWorker
 {
     public class Worker : BackgroundService
     {
-        private readonly string streamFolder = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/pulsar_streams/online";
+        private readonly string streamFolder = $"wwwroot/pulsar_streams/online";
         private readonly ILogger<Worker> _logger;
 
         public Worker(ILogger<Worker> logger)

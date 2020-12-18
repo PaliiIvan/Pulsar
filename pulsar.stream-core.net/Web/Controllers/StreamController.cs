@@ -17,15 +17,14 @@ namespace StreamService.Controllers
     [Route("/")]
     public class StreamController : ControllerBase
     {
-        private readonly ITokenValidationService _tokenValidationService;
         private readonly MongoClient _mongoClient;
         private readonly IMongoDatabase _userDb;
         private readonly IStreamService _streamService;
 
-        public StreamController(ITokenValidationService tokenValidationService, ILogger<TokenValidationService> logger, IStreamService streamService)
+        private readonly ILogger<TokenValidationService> _logger;
+        public StreamController(IStreamService streamService)
         {
-            _tokenValidationService = tokenValidationService;
-            _mongoClient = new MongoClient("mongodb://127.0.0.1:27017/Pulsar");
+            _mongoClient = new MongoClient("mongodb://ivan-palii:7INYnjqcWzCZ5uIn89nXuB6O0abJD3M0lmwcAUiCbunFYehX1yu9bIUkZRB0E2tiBdZq5vx3n0NKBDRi1RLgBg==@ivan-palii.mongo.cosmos.azure.com:10255/?ssl=true&appName=@ivan-palii@");
             _userDb = _mongoClient.GetDatabase("Pulsar");
             _streamService = streamService;
         }
@@ -33,13 +32,7 @@ namespace StreamService.Controllers
         [HttpGet("{stream}")]
         public string CheckAction(string stream)
         {
-            var st = stream;
-            var channelsCollection = _userDb.GetCollection<Channel>("channels");
-            var filter = Builders<Channel>.Filter.Eq(channel => channel.userId, ObjectId.Parse("5f11f0e2a84f233764161184"));
-
-            var testres = channelsCollection.Find(filter).FirstOrDefault().Id;
-
-            return testres.ToString();
+            return "Hello from CheckAction";
         }
 
         [HttpPut("{stream}")]
