@@ -8,6 +8,8 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { ChannelService } from '../../services/channel/channel.service.service';
 import * as io from 'socket.io-client';
+import { environment } from "../../../environments/environment";
+
 @Component({
     selector: 'app-channel-page',
     templateUrl: './channel-page.component.html',
@@ -20,7 +22,7 @@ export class ChannelPageComponent implements OnInit {
     ) { }
     isChatRemoved = false;
     channel: any;
-    socket: SocketIOClient.Socket = io(`localhost:8081`);
+    socket: SocketIOClient.Socket = io(environment.apiUrl);
     ChannelGoOfflineEvent = new EventEmitter<boolean>();
     ngOnInit(): void {
         this.onResize();

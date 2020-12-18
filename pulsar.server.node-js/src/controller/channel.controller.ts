@@ -74,6 +74,7 @@ export async function getOnlineChannels(req: Request, res: Response, next: NextF
     try {
         const channels = await channelService.getOnlineChannels();
         res.json(new ResponseResult(channels));
+        logger.info('Get online channels - finished');
     } catch (err) {
         return next(err);
     }

@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 
 //#region Application constants
 
-app.set('port', 8081);
+app.set('port', process.env.PORT || 3000);
 
 //#endregion
 
@@ -54,7 +54,7 @@ app.use('/stream', StreamRouter);
 app.use(errorHandling);
 
 //#endregion
-
+console.log(secrets.MONGODB_URI)
 mongoose
     .connect(secrets.MONGODB_URI, {
         useNewUrlParser: true,

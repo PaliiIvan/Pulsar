@@ -3,5 +3,7 @@
     "appService.zipIgnorePattern": [
         "node_modules{,/**}",
         ".vscode{,/**}"
-    ]
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/5b87954e-06cd-4a68-ae30-57acdaa50cd0/resourceGroups/PetProjects/providers/Microsoft.Web/sites/pulsar-idetity-server",
+    "appService.deploySubpath": "."
 }

@@ -3,7 +3,7 @@ import { StreamService } from '../../services/stream/stream.service';
 import { Comment } from '../../models';
 import * as io from 'socket.io-client';
 import { StreamPlayerService } from '../../services/stream/stream-player.service';
-
+import { environment } from '../../../environments/environment';
 @Component({
     selector: 'app-chat',
     templateUrl: './chat.component.html',
@@ -16,7 +16,7 @@ export class ChatComponent implements OnInit, AfterContentInit {
     @Input() isOnline: boolean;
 
     comments: Comment[] = [];
-    socket: SocketIOClient.Socket = io(`localhost:8081`);
+    socket: SocketIOClient.Socket = io(environment.apiUrl);
 
     constructor(private streamService: StreamService, private streamPlayerService: StreamPlayerService) { }
 
@@ -29,8 +29,6 @@ export class ChatComponent implements OnInit, AfterContentInit {
 
             };
         }
-
-
     }
 
     ngOnInit(): void {

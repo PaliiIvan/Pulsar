@@ -31,12 +31,12 @@ export async function initiateStream(streamTitle: string, userId?: string) {
 
 export async function addCommentToStream(channelName: string, commentData: Comment) {
     const channel = await channelSchema.findOne({ channelName: channelName });
-    let streamDuration: number;
+
 
     if (!channel?.currentStream?.startDate?.getTime()) {
         throw Error('No stream time');
     }
-    streamDuration = Date.now() - channel.currentStream.startDate.getTime();
+    const streamDuration = Date.now() - channel.currentStream.startDate.getTime();
 
     commentData.streamDuration = streamDuration;
     channel.currentStream.comments?.push(commentData);
@@ -123,7 +123,7 @@ export async function getStream(id: string) {
     try {
         const stream = await streamRepo.getStream(id);
         if (stream == null) throw new NotFoundError(`Stream with id: ${id} not found`);
-        let channel = <Channel>stream.channel;
+        const channel = stream.channel as Channel;
 
         channelWithOfflineStream = {
             isOnline: false,
@@ -145,8 +145,8 @@ export async function getOfflineStreams() {
     const streamServer = `${secrets.STREAM_SERVER_URL}/saved/`;
     const streamsPreview = savedStreams.map((savedStream) => {
         return new ChannelPreview(
-            (<Channel>savedStream.channel).id,
-            (<Channel>savedStream.channel).channelName,
+            (savedStream.channel as Channel).id,
+            (savedStream.channel as Channel).channelName,
             savedStream.title,
             savedStream.id,
             `${streamServer}${savedStream.previewImage}`

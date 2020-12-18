@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   identityServerUrl: 'http://localhost:3001',
-  apiUrl: 'http://localhost:8081'
+  apiUrl: 'http://localhost:3000'
 };
 
 /*

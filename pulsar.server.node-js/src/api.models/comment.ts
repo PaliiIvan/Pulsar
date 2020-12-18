@@ -5,7 +5,7 @@ export class Comment {
     streamDuration: number;
     dateTime: Date
 
-    constructor(commentData: { userId: string, comment: string, streamDuration: number, userName: string }) {
+    constructor(commentData: { userId: string; comment: string; streamDuration: number; userName: string }) {
         this.userId = commentData.userId;
         this.userName = commentData.userName;
         this.comment = commentData.comment;

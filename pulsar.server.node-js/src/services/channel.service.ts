@@ -2,7 +2,7 @@ import * as channelRepo from '../features/channel/channel.repository';
 import { ChannelPreview } from '../api.models/channel-preview';
 import { NotFoundError } from '../utils/errors/server.errors';
 import * as uuid from 'uuid';
-import * as secrets from "../configs/secrets";
+import * as secrets from '../configs/secrets';
 
 export async function createChannel(userId: string, channelName: string) {
     const streamToken = uuid.v1() + '__';
@@ -14,10 +14,9 @@ export async function getChannelByUserId(userId: string) {
     const channel = await channelRepo.getChannelByUserId(userId);
     const streamServer = secrets.STREAM_SERVER_URL;
     const streamFormat = '.m3u8';
-    const channelDto = channel.toObject();
 
-    channelDto.streamToken = `${streamServer}/${channel.streamToken}${streamFormat}`
-    return channelDto;
+    channel.streamToken = `${streamServer}/${channel.streamToken}${streamFormat}`;
+    return channel;
 }
 
 export async function getOnlineChannels() {

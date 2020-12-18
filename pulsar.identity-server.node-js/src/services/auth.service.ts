@@ -12,7 +12,7 @@ import { formatString } from "../extensions/string.extensions";
 import { NotFoundError, NotAuthorizeError, ServerError } from "../api.models/server.errors";
 import { constants, files } from "../configs/global.variables";
 import { User } from "../api.models/user.model";
-import { SEND_GRID, BASE_URL, AUTH_SECRET_KEY } from "../configs/secrets";
+import { SEND_GRID, BASE_URL, AUTH_SECRET_KEY, CLIENT_URL } from "../configs/secrets";
 import { ValidationException } from "../util/exeptions/auth-error.parser";
 
 import * as userRepo from "../features/user/user.repository";
@@ -89,12 +89,12 @@ export async function logIn(email: string, password: string) {
     const user = await userRepo.findOne({ email: email, IsConfirmed: true });
 
     if (user == null)
-        throw new ValidationException([{ property: '', message: 'Email or password is incorrect' }]);
+        throw new ValidationException([{ property: "", message: "Email or password is incorrect" }]);
 
     const isPasswordCorrect = compareSync(password, user.password);
 
     if (!isPasswordCorrect)
-        throw new ValidationException([{ property: '', message: 'Email or password is incorrect' }]);
+        throw new ValidationException([{ property: "", message: "Email or password is incorrect" }]);
 
     const jsonWebToken = jwt.sign({
         email: user.email,
@@ -172,7 +172,7 @@ export async function authApiRequest(token: string) {
     const user = await userRepo.findOne({ _id: userId, IsConfirmed: true });
 
     if (user == null)
-        throw new NotFoundError('User not found', { userId: userId });
+        throw new NotFoundError("User not found", { userId: userId });
 
     logger.info("Checking User Token finished");
 
@@ -192,7 +192,7 @@ function _generateEmail(userId: string, userEmail: string, login: string, emailT
 
     let emailTemplate = readFileSync(fileLocation, { encoding: "utf8" });
 
-    const confirmationEmailLink = formatString(constants.CONFIRMATION_EMAIL_LINK, [constants.CLIENT_URL, userId, emailToken]);
+    const confirmationEmailLink = formatString(constants.CONFIRMATION_EMAIL_LINK, [CLIENT_URL, userId, emailToken]);
 
     emailTemplate = formatString(emailTemplate, [login, confirmationEmailLink]);
 
