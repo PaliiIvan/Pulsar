@@ -30,7 +30,7 @@
         "@types/bcrypt": "^3.0.0",
         "@types/jsonwebtoken": "^8.3.7",
         "@types/uuid": "^3.4.7",
-        "async": "^3.2.0",
+        "async": "^3.2.2",
         "bcrypt": "^4.0.0",
         "body-parser": "^1.19.0",
         "compression": "^1.7.4",
